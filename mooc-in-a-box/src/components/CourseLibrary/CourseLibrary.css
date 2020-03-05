@@ -7,14 +7,6 @@
   pointer-events: none;
 }
 
-.menu-button {
-  margin-right: 1em;
-}
-
-.title {
-  flex-grow: 1;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
