@@ -10,6 +10,8 @@ import {
   Link as RouterLink,
 } from "react-router-dom";
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
+import CourseOverview from './components/CourseOverview/CourseOverview';
+
 import Home from './components/Home/Home';
 
 
@@ -20,11 +22,12 @@ function App() {
         <nav>
         <AppBar position="static">
           <Toolbar>
-            <IconButton edge="start" className="menuButton" color="inherit" aria-label="menu">
+            <IconButton edge="start" className="menu-button" color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Button color="inherit" component={RouterLink} to="/">MOOC-In-A-Box</Button>
-            <Button color="inherit" component={RouterLink} to="/courseLibrary">Course Library</Button>
+            <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
+            <Button color="inherit" className="menu-button" component={RouterLink} to="/courseOverview">Course Overview</Button>
+            <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">Course Library</Button>
           </Toolbar>
         </AppBar>
         </nav>
@@ -37,6 +40,9 @@ function App() {
           </Route>
           <Route path="/courseLibrary">
             <CourseLibrary />
+          </Route>
+          <Route path="/courseOverview">
+            <CourseOverview />
           </Route>
         </Switch>
       </div>

@@ -1,0 +1,14 @@
+.paper {
+    text-align: center;
+    color: pink;
+    padding: 1em;
+    background-color: lightblue !important
+}
+
+.center {
+    text-align: center;
+}
+
+.courseOverview {
+    flex-grow: 1;
+}
