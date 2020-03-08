@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://MOOC-In-A-Box.github.io",
   "dependencies": {
+    "@firebase/firestore": "^1.12.0",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -15,7 +16,7 @@
     "react-dom": "^16.13.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "^3.4.0"
   },
   "scripts": {
     "predeploy": "npm run build",

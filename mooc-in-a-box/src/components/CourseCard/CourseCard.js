@@ -39,29 +39,30 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function CourseCard() {
+export default function CourseCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  console.log(props)
 
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        // avatar={
+        //   <Avatar aria-label="recipe" className={classes.avatar}>
+        //     R
+        //   </Avatar>
+        // }
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
+        title={props.course.title}
+        subheader={props.course.owner.displayName}
       />
       <CardMedia
         className={classes.media}
@@ -70,8 +71,10 @@ export default function CourseCard() {
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
+          {props.course.description}
+        </Typography> 
+        <Typography variant="body2" color="textSecondary" component="p">
+          {props.course.owner.displayName}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
