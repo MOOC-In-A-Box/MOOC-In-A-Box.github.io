@@ -11,24 +11,11 @@ import {
 } from "react-router-dom";
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
 import CourseOverview from './components/CourseOverview/CourseOverview';
-import firebaseInstance from './config/firebase';
 import Home from './components/Home/Home';
+import * as FirebaseService from '../src/service/firebase.service'
 
 
 function App() {
-
-  useEffect(() => {
-    // Update the document title using the browser API
-    console.log("Helloooo world!");
-    const db  = firebaseInstance.firestore();
-    db.collection("Users").get().then( (queryResults) => {
-        queryResults.forEach((doc) => {
-          console.log(`${doc.id} => ${doc.data()}`);
-          console.log(doc.data());
-        });
-      })
-  });
-
 
   return (
     <Router>
@@ -40,7 +27,6 @@ function App() {
               <MenuIcon />
             </IconButton>
             <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
-            <Button color="inherit" className="menu-button" component={RouterLink} to="/courseOverview">Course Overview</Button>
             <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">Course Library</Button>
           </Toolbar>
         </AppBar>
@@ -55,7 +41,7 @@ function App() {
           <Route path="/courseLibrary">
             <CourseLibrary />
           </Route>
-          <Route path="/courseOverview">
+          <Route path="/courseOverview/:id">
             <CourseOverview />
           </Route>
         </Switch>

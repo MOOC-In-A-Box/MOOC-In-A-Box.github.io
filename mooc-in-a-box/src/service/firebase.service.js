@@ -1,3 +1,6 @@
+// import * as firebase from "firebase/app";
+// import "firebase/firestore";
+// import "firebase/auth";
 import firebase from 'firebase'
 
 var firebaseConfig = {
@@ -10,6 +13,17 @@ var firebaseConfig = {
     appId: "1:594314585164:web:3ae152452d1c238af100e9",
     measurementId: "G-LXH34JCXZS"
   };
-const firebaseInstance = firebase.initializeApp(firebaseConfig);
 
-export default firebaseInstance;
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+
+export const getCourseById = courseId => {
+    return db.collection('Course')
+        .doc(courseId)
+        .get();
+};
+
+export const getAllCourses = () => {
+    return db.collection('Course').get();
+}
