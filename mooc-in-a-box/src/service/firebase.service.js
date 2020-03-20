@@ -27,3 +27,7 @@ export const getCourseById = courseId => {
 export const getAllCourses = () => {
     return db.collection('Course').get();
 }
+
+export const getAllUsers = () => {
+    return db.collection('Users').get();
+}

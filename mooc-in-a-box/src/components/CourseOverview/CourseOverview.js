@@ -97,7 +97,7 @@ function CourseOverviewNavigationPane() {
 
 function CourseOverviewCoursePane(props) {
     return (
-    <Paper className="paper">{props.course.title}</Paper>
+        <Paper className="paper">{props.course.title}</Paper>
     )
 }
 

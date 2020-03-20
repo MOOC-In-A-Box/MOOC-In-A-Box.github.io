@@ -12,6 +12,7 @@ import {
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
 import CourseOverview from './components/CourseOverview/CourseOverview';
 import Home from './components/Home/Home';
+import MyCourses from './components/MyCourses/MyCourses';
 import * as FirebaseService from '../src/service/firebase.service'
 import { render } from '@testing-library/react';
 
@@ -19,10 +20,15 @@ import { render } from '@testing-library/react';
 class App extends React.Component {
   constructor() {
     super();
-    this.state = {courses: []};
+    this.state = {
+      courses: [],
+      users: []
+    };
     this.fetchCourses = this.fetchCourses.bind(this);
+    this.fetchUsers = this.fetchUsers.bind(this);
     this.render = this.render.bind(this);
     this.fetchCourses();
+    this.fetchUsers();
   }
 
   useEffect() {
@@ -52,8 +58,23 @@ class App extends React.Component {
           this.setState({courses: courses});
         });
       });
-      console.log(courses)
     }
+
+    async fetchUsers(){
+      let users = [];
+      await FirebaseService.getAllUsers()
+        .then( (queryResults) => {
+          queryResults.forEach( (doc) => {
+            const user = doc.data();
+            user.id = doc.id;
+            users.push(user);
+            this.setState({
+              users
+            })
+          })
+        })
+    }
+
 
   render() {
     return (
@@ -66,7 +87,8 @@ class App extends React.Component {
                 <MenuIcon />
               </IconButton>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
-              <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">Course Library</Button>
+              <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
+              <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
             </Toolbar>
           </AppBar>
           </nav>
@@ -82,6 +104,9 @@ class App extends React.Component {
             </Route>
             <Route path="/courseOverview/:id">
               <CourseOverview />
+            </Route>
+            <Route path="/myCourses">
+              <MyCourses user={this.state.users[0]}></MyCourses>
             </Route>
           </Switch>
         </div>
