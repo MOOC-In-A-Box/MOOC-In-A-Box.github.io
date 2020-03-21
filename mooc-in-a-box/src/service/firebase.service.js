@@ -31,3 +31,9 @@ export const getAllCourses = () => {
 export const getAllUsers = () => {
     return db.collection('Users').get();
 }
+
+export const updateUser = (userId, updates) => {
+    return db.collection('Users')
+                .doc(userId)
+                .set(updates, { merge: true })
+}
