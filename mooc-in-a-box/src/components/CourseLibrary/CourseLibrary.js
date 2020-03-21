@@ -5,13 +5,8 @@ import CourseCard from '../CourseCard/CourseCard';
 import { render } from '@testing-library/react';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
-
-
-
-
-
-
-
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import {AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 
 
@@ -31,13 +26,32 @@ function SearchBarComponent(props) {
 }
 
 
+function SortByMenu(props){
+  return (
+    <Menu
+        id="simple-menu"
+        anchorEl={props.sortByElement}
+        keepMounted
+        open={Boolean(props.sortByElement)}
+        onClose={props.handleClose}
+      >
+        <MenuItem onClick={props.handleClose}>Newest</MenuItem>
+        <MenuItem onClick={props.handleClose}>Recommended</MenuItem>
+        <MenuItem onClick={props.handleClose}>Trending</MenuItem>
+    </Menu>
+  )
+}
+
 class CourseLibrary extends React.Component {
   constructor(props) {
     super(props);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClicked = this.handleSearchClicked.bind(this);
+    this.sortByClicked = this.sortByClicked.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.state = {
-      searchValue: ""
+      searchValue: "",
+      sortByElement: null
     }
   }
 
@@ -53,7 +67,22 @@ class CourseLibrary extends React.Component {
     console.log(this.state.searchValue);
   }
 
+  sortByClicked = event => {
+    this.setState({
+      sortByElement: event.currentTarget
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      sortByElement: null
+    });
+  };
+
   
+
+
+
   render() {
 
     let listItems = this.props.courses.map(function(item) {
@@ -69,7 +98,8 @@ class CourseLibrary extends React.Component {
       <div class="course-library">
         <AppBar position="static" className="course-library-app-bar">
             <Toolbar>
-              <Button color="inherit" className="menu-button">Sort By</Button>
+              <Button color="inherit" className="menu-button" onClick={this.sortByClicked}>Sort By</Button>
+              <SortByMenu handleClose={this.handleClose} sortByElement={this.state.sortByElement}></SortByMenu>
               <Button color="inherit" className="menu-button">Topic</Button>
               <Button color="inherit" className="menu-button">Organization</Button>
               <Button color="inherit" className="menu-button">My Courses</Button>
