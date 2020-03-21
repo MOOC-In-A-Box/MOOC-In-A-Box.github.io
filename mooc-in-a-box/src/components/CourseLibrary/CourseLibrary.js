@@ -3,58 +3,41 @@ import './CourseLibrary.css';
 import {Button} from '@material-ui/core';
 import CourseCard from '../CourseCard/CourseCard';
 import { render } from '@testing-library/react';
-import SearchIcon from '@material-ui/icons/Search';
-import TextField from '@material-ui/core/TextField';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import {AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import SearchBar from './CourseLibraryToolbar/SearchBar/SearchBar.component';
+import CourseLibraryMenu from './CourseLibraryToolbar/CourseLibraryToolbarMenu/CourseLibraryToolbarMenu.component'
 
-
-import * as FirebaseService from '../../service/firebase.service'
-
-
-function SearchBarComponent(props) {
-  console.log(props);
-  return(
-    <div className="search-bar">
-        <TextField value={props.searchValue} onChange={props.onChange} id="outlined-search" type="search" variant="outlined"  color="white"/>
-        <IconButton className="menu-button" onClick={props.onSearchClicked}>
-          <SearchIcon className="search-bar-icon" />
-        </IconButton>
-    </div>
-  )
-}
-
-
-function SortByMenu(props){
-  return (
-    <Menu
-        id="simple-menu"
-        anchorEl={props.sortByElement}
-        keepMounted
-        open={Boolean(props.sortByElement)}
-        onClose={props.handleClose}
-      >
-        <MenuItem onClick={props.handleClose}>Newest</MenuItem>
-        <MenuItem onClick={props.handleClose}>Recommended</MenuItem>
-        <MenuItem onClick={props.handleClose}>Trending</MenuItem>
-    </Menu>
-  )
-}
+import CourseLibraryToolbar from './CourseLibraryToolbar/CourseLibraryToolbar.component'
 
 class CourseLibrary extends React.Component {
   constructor(props) {
     super(props);
+    // Bind Search
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClicked = this.handleSearchClicked.bind(this);
+    // Bind Sort By
     this.sortByClicked = this.sortByClicked.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.sortByHandleClose = this.sortByHandleClose.bind(this);
+    // Bind Topic
+    this.topicClicked = this.topicClicked.bind(this);
+    this.topicHandleClose = this.topicHandleClose.bind(this);
+    // Bind Organization
+    this.organizationClicked = this.organizationClicked.bind(this);
+    this.organizationHandleClosed = this.organizationHandleClosed.bind(this);
+
+    this.buildMenuItems = this.buildMenuItems.bind(this);
+
     this.state = {
       searchValue: "",
-      sortByElement: null
+      sortByElement: null,
+      topicElement: null,
+      organizationElement: null,
     }
   }
 
+  /** Search Function */
   handleSearchChange(e){
     console.log("Key Entered!")
     this.setState({
@@ -67,23 +50,132 @@ class CourseLibrary extends React.Component {
     console.log(this.state.searchValue);
   }
 
+  /** Sort By Functions */
   sortByClicked = event => {
     this.setState({
       sortByElement: event.currentTarget
     });
   };
 
-  handleClose = () => {
+  sortByHandleClose = () => {
     this.setState({
       sortByElement: null
     });
   };
 
-  
+
+  /** Topic Functions */
+  topicClicked = event => {
+    this.setState({
+      topicElement: event.currentTarget
+    });
+  };
+
+  topicHandleClose = () => {
+    this.setState({
+      topicElement: null
+    });
+  };
+
+
+  /** Organization functions */
+  organizationClicked = event => {
+    this.setState({
+      organizationElement: event.currentTarget
+    });
+  };
+
+  organizationHandleClosed = () => {
+    this.setState({
+      organizationElement: null
+    });
+  };
+
+  buildMenuItems = () => {
+    const sortByInfo = {
+      buttonText: "Sort By",
+      menuId: "menu-sort-by",
+      clickedFunction: this.sortByClicked,
+      closeFunction: this.sortByHandleClose,
+      element: this.state.sortByElement,
+      menuOptions: [
+        {
+          display: "Newest",
+          associatedClickFunction:  this.sortByHandleClose
+        },
+        {
+          display: "Recommended",
+          associatedClickFunction:  this.sortByHandleClose
+        },
+        {
+          display: "Trending",
+          associatedClickFunction:  this.sortByHandleClose
+        }
+      ]
+    }
+
+    const topicInfo = {
+      buttonText: "Topic",
+      menuId: "menu-topic",
+      clickedFunction: this.topicClicked,
+      element: this.state.topicElement,
+      closeFunction: this.topicHandleClose,
+      menuOptions: [
+        {
+          display: "Science",
+          associatedClickFunction:  this.topicHandleClose
+        },
+        {
+          display: "Technology",
+          associatedClickFunction:  this.topicHandleClose
+        },
+        {
+          display: "History",
+          associatedClickFunction:  this.topicHandleClose
+        },
+        {
+          display: "Arts",
+          associatedClickFunction:  this.topicHandleClose
+        }
+      ]
+    }
+
+    const organizationInfo = {
+      buttonText: "Organization",
+      menuId: "menu-organization",
+      clickedFunction: this.organizationClicked,
+      element: this.state.organizationElement,
+      closeFunction: this.organizationHandleClosed,
+      menuOptions: [
+        {
+          display: "Required",
+          associatedClickFunction:  this.organizationHandleClosed
+        },
+        {
+          display: "Recommended",
+          associatedClickFunction:  this.organizationHandleClosed
+        },
+        {
+          display: "All Courses",
+          associatedClickFunction:  this.organizationHandleClosed
+        }
+      ]
+    }
+
+    return [sortByInfo, topicInfo, organizationInfo];
+  }
 
 
 
   render() {
+    // Mappings
+
+    const menuItems = this.buildMenuItems();
+    const searchInfo = {
+      value: this.state.searchValue,
+      onChange: this.handleSearchChange,
+      onClick: this.handleSearchClicked
+    }
 
     let listItems = this.props.courses.map(function(item) {
       return (
@@ -96,16 +188,7 @@ class CourseLibrary extends React.Component {
     
     return (
       <div class="course-library">
-        <AppBar position="static" className="course-library-app-bar">
-            <Toolbar>
-              <Button color="inherit" className="menu-button" onClick={this.sortByClicked}>Sort By</Button>
-              <SortByMenu handleClose={this.handleClose} sortByElement={this.state.sortByElement}></SortByMenu>
-              <Button color="inherit" className="menu-button">Topic</Button>
-              <Button color="inherit" className="menu-button">Organization</Button>
-              <Button color="inherit" className="menu-button">My Courses</Button>
-              <SearchBarComponent searchValue={this.state.searchValue} onChange={this.handleSearchChange} onSearchClicked={this.handleSearchClicked}></SearchBarComponent>
-              </Toolbar>
-          </AppBar>
+        <CourseLibraryToolbar menuItems={menuItems} searchInfo={searchInfo}></CourseLibraryToolbar>
           <div className="course-list">
             {listItems}
           </div>

@@ -55,22 +55,14 @@
   padding: 2rem;
 }
 
-.search-bar {
-  margin-left: auto !important;
-  color: white;
+#menu-sort-by .MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
+  margin-top: 2rem;
 }
 
-.search-bar-icon {
-  color: white
+#menu-topic .MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
+  margin-top: 2rem;
 }
 
-.search-bar .MuiOutlinedInput-notchedOutline {
-  border-color: white;
-}
-.white {
-  color: white
-}
-
-#outlined-search {
-  color: white
+#menu-organization .MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
+  margin-top: 2rem;
 }
