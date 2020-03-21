@@ -9,10 +9,18 @@ import {
   Route,
   Link as RouterLink,
 } from "react-router-dom";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+
+
+
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
 import CourseOverview from './components/CourseOverview/CourseOverview';
 import Home from './components/Home/Home';
 import MyCourses from './components/MyCourses/MyCourses';
+import UserProfile from './components/UserProfile/UserProfile';
+
+
 import * as FirebaseService from '../src/service/firebase.service'
 import { render } from '@testing-library/react';
 
@@ -89,6 +97,9 @@ class App extends React.Component {
               <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
+              <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
+                <AccountCircleIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
           </nav>
@@ -103,10 +114,13 @@ class App extends React.Component {
               <CourseLibrary courses={this.state.courses}/>
             </Route>
             <Route path="/courseOverview/:id">
-              <CourseOverview />
+              <CourseOverview service={FirebaseService}></CourseOverview>
             </Route>
             <Route path="/myCourses">
               <MyCourses user={this.state.users[0]}></MyCourses>
+            </Route>
+            <Route path="/profile">
+              <UserProfile user={this.state.users[0]}></UserProfile>
             </Route>
           </Switch>
         </div>

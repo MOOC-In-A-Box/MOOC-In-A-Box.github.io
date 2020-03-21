@@ -61,7 +61,7 @@ function CoursesDropdownComponent(props) {
                           props.courses.map( course => {
                             return (
                               <ListItem 
-                                button={true}
+                                button
                                 component={Link}
                                 to={`/courseOverview/${course.courseId}`}
                               >

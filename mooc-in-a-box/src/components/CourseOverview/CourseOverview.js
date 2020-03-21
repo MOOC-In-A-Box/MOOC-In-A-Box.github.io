@@ -19,7 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import * as FirebaseService from '../../service/firebase.service';
 
-import { useParams} from "react-router";
+import { useParams } from "react-router-dom";
 
 
 
@@ -101,20 +101,18 @@ function CourseOverviewCoursePane(props) {
     )
 }
 
-function CourseOverview() {
+function CourseOverview(props) {
 
     const [course, setCourse] = useState();
     const [error, setError] = useState();
-
     let { id } = useParams();
-
-    // setCourseId(id);
 
     useEffect(() => {
         if (id) {
-            console.log(id)
+            console.log(`ID: ${id}`);
             FirebaseService.getCourseById(id)
                 .then(courseResult => {
+                    console.log(courseResult.exists)
                     if (courseResult.exists) {
                         setError(null);
                         setCourse(courseResult.data());
