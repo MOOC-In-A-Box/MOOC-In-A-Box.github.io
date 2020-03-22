@@ -1,6 +1,10 @@
 import React from 'react';
 
 import Menu from '@material-ui/core/Menu';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import CourseLibraryToolbarMenuItem from './CourseLibraryToolbarMenuItem/CourseLibraryToolbarMenuItem.component';
 
@@ -17,6 +21,9 @@ function CourseLibraryToolbarMenu(props){
     )
   })
 
+  const onChangeFunction = (event) => {
+    props.closeFunction(event.target.value)
+  }
 
     return (
       <Menu
@@ -26,7 +33,14 @@ function CourseLibraryToolbarMenu(props){
           open={Boolean(props.element)}
           onClose={props.closeFunction}
         >
-          {menuItems}
+          <MenuItem>
+            <FormControl component="fieldset">
+            <FormLabel component="legend">{props.menuLabel}</FormLabel>
+            <RadioGroup aria-label="gender" name={props.radioGroupName} value={props.menuValue} onChange={onChangeFunction}>
+              {menuItems}
+            </RadioGroup>
+            </FormControl>
+          </MenuItem>
       </Menu>
     )
   }

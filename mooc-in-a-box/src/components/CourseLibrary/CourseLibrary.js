@@ -34,6 +34,10 @@ class CourseLibrary extends React.Component {
       sortByElement: null,
       topicElement: null,
       organizationElement: null,
+      sortFilterValue: null,
+      topicFilterValue: null,
+      organizationFilterValue:null
+
     }
   }
 
@@ -57,9 +61,11 @@ class CourseLibrary extends React.Component {
     });
   };
 
-  sortByHandleClose = () => {
+  sortByHandleClose = (value) => {
+    console.log(value);
     this.setState({
-      sortByElement: null
+      sortByElement: null,
+      sortFilterValue: value
     });
   };
 
@@ -71,12 +77,12 @@ class CourseLibrary extends React.Component {
     });
   };
 
-  topicHandleClose = () => {
+  topicHandleClose = (value) => {
     this.setState({
-      topicElement: null
+      topicElement: null,
+      topicFilterValue: value
     });
   };
-
 
   /** Organization functions */
   organizationClicked = event => {
@@ -85,9 +91,10 @@ class CourseLibrary extends React.Component {
     });
   };
 
-  organizationHandleClosed = () => {
+  organizationHandleClosed = (value) => {
     this.setState({
-      organizationElement: null
+      organizationElement: null,
+      organizationFilterValue: value
     });
   };
 
@@ -98,6 +105,8 @@ class CourseLibrary extends React.Component {
       clickedFunction: this.sortByClicked,
       closeFunction: this.sortByHandleClose,
       element: this.state.sortByElement,
+      radioGroupName: "menuRadio",
+      menuValue: this.state.sortFilterValue,
       menuOptions: [
         {
           display: "Newest",
@@ -120,6 +129,8 @@ class CourseLibrary extends React.Component {
       clickedFunction: this.topicClicked,
       element: this.state.topicElement,
       closeFunction: this.topicHandleClose,
+      radioGroupName: "topicRadio",
+      menuValue: this.state.topicFilterValue,
       menuOptions: [
         {
           display: "Science",
@@ -146,6 +157,8 @@ class CourseLibrary extends React.Component {
       clickedFunction: this.organizationClicked,
       element: this.state.organizationElement,
       closeFunction: this.organizationHandleClosed,
+      radioGroupName: "organizationRadio",
+      menuValue: this.state.organizationFilterValue,
       menuOptions: [
         {
           display: "Required",
@@ -169,6 +182,7 @@ class CourseLibrary extends React.Component {
 
   render() {
     // Mappings
+    console.log(this.state);
 
     const menuItems = this.buildMenuItems();
     const searchInfo = {

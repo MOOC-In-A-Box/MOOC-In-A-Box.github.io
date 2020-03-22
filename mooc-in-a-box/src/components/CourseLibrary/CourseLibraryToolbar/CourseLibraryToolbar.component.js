@@ -31,6 +31,7 @@ function CourseLibraryToolbar(props){
                 closeFunction = {menuItem.closeFunction}
                 options={menuItem.menuOptions}
                 menuId={menuItem.menuId}
+                menuLabel={menuItem.buttonText}
             >
             </CourseLibraryToolbarMenu>
         )
