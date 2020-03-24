@@ -134,48 +134,74 @@ function MyCourses(props) {
   if (props.user) {
     const courseComponentList = []
     console.log(props.user.favoritedCourses);
+    const hasCourses = false;
 
     
     if (props.user.currentCourses && props.user.currentCourses.length > 0){
       const element = <CurrentCoursesComponent currentCourses={props.user.currentCourses}></CurrentCoursesComponent>
       courseComponentList.push(element);
+      hasCourses = true;
     }
 
     if (props.user.pastCourses && props.user.currentCourses.pastCourses > 0){
       const element = <PastCoursesComponent pastCourses={props.user.pastCourses}></PastCoursesComponent>
       courseComponentList.push(element);
+      hasCourses = true;
+
     }
 
     if (props.user.favoritedCourses && props.user.favoritedCourses.length > 0){
       const element = <SavedCoursesComponent savedCourses={props.user.favoritedCourses}></SavedCoursesComponent>
       courseComponentList.push(element);
+      hasCourses = true;
+
     }
 
     if (props.user.createdCourses && props.user.createdCourses.length > 0){
       const element = <CreatedCoursesComponent createdCourses={props.user.createdCourses}></CreatedCoursesComponent>
       courseComponentList.push(element);
+      hasCourses = true;
+
+    }
+    if (hasCourses) {
+      return (
+        <div className="MyCourses">
+          <CssBaseline />
+          <Typography className="center" variant="h3" component="h3">
+              My Courses
+          </Typography>
+          <Container maxWidth="lg">
+            <Paper className="paper">
+              {
+                courseComponentList.map( element => element)
+              }
+            </Paper>
+          </Container>
+        </div>
+      );
+    } else {
+      return (
+        <div className="MyCourses">
+        <CssBaseline />
+            <Typography className="center" variant="h3" component="h3">
+                My Courses
+            </Typography>
+            <Container maxWidth="lg">
+              <Paper className="paper">
+                <h4>You don't have any courses saved yet!</h4>
+              </Paper>
+            </Container>
+          </div>
+        )
     }
 
-    return (
-      <div className="MyCourses">
-        <CssBaseline />
-        <Typography className="center" variant="h3" component="h3">
-            My Courses
-        </Typography>
-        <Container maxWidth="lg">
-          <Paper className="paper">
-            {
-              courseComponentList.map( element => element)
-            }
-          </Paper>
-        </Container>
-      </div>
-    );
+
   } else {
     return (
-        <div>
-            You don't have any course history!
-        </div>
+      <div>
+        Loading..
+        <CircularProgress></CircularProgress>
+      </div>
     )
   }
 
