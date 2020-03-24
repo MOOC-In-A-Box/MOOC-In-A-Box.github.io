@@ -99,9 +99,6 @@ class App extends React.Component {
           <nav>
           <AppBar position="static">
             <Toolbar>
-              <IconButton edge="start" className="menu-button" color="inherit" aria-label="menu">
-                <MenuIcon />
-              </IconButton>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
@@ -133,7 +130,7 @@ class App extends React.Component {
               <UserProfile user={this.state.currentUser}></UserProfile>
             </Route>
             <Route path="/createCourse">
-              <CreateCourse user={this.state.users[0]}></CreateCourse>
+              <CreateCourse user={this.state.currentUser}></CreateCourse>
             </Route>
           </Switch>
         </div>

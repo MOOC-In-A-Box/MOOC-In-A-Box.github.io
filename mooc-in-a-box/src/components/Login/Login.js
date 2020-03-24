@@ -15,23 +15,27 @@ class LoginPage extends React.Component {
   }
 
   async loginGoogle(event) {
-    // set a loading state
+    // TODO(jessi): set a loading state
     let user;
-    await FirebaseService.logUserInGoogle().then(u => {
+    await FirebaseService.logUserInUser(/* isGoog= */ true).then(u => {
       user = u;     
       this.props.completeLogin(user);
       this.props.history.push("/myCourses");
     }); 
-    //finally, unset loading state
+    // TODO(jessi): unset loading state
   }
 
-  loginFacebook(event) {
-    console.log("todo")
-    // let user = FirebaseService.logUserInFacebook();          
-    // console.log(user)
+  async loginFacebook(event) {
+    // TODO(jessi): set a loading state
+    await FirebaseService.logUserInUser(/* isGoog= */ false).then(u => {     
+      this.props.completeLogin(u);
+      this.props.history.push("/myCourses");
+    }); 
+    // TODO(jessi): unset loading state
   }
   
   render() {
+    // TODO(jessi): style these buttons, remove this page from nav
     return (
       <div className="login">
       <h1>Sign into Mooc in a Box</h1>
