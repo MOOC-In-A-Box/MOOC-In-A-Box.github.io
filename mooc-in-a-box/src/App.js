@@ -21,6 +21,7 @@ import CourseOverview from './components/CourseOverview/CourseOverview';
 import Home from './components/Home/Home';
 import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
+import CreateCourse from './components/CreateCourse/CreateCourse.component';
 
 
 import * as FirebaseService from '../src/service/firebase.service'
@@ -99,6 +100,7 @@ class App extends React.Component {
               <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
               <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
+              <Button color="inherit" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
               <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
                 <AccountCircleIcon />
               </IconButton>
@@ -123,6 +125,9 @@ class App extends React.Component {
             </Route>
             <Route path="/profile">
               <UserProfile user={this.state.users[0]}></UserProfile>
+            </Route>
+            <Route path="/createCourse">
+              <CreateCourse user={this.state.users[0]}></CreateCourse>
             </Route>
           </Switch>
         </div>

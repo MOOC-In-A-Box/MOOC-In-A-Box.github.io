@@ -18,6 +18,11 @@ function UserProfile(props) {
   const [oldDisplayName, setOldDiplayName] = useState(null);
   const [error, setError] = useState();
   const [isDisplayNameDialogOpen, setIsDisplayNameDialogOpen] = useState(false)
+  const [userInterests, setUserInterests] = useState(null);
+  const [oldUserInterests, setOldUserInterests] = useState(null);
+  const [isUserInterestsDialogOpen, setIsUserInterestsDialogOpen] = useState(false);
+
+
 
  function  handleDisplayNameClose(){
     setDisplayName(oldDisplayName)
@@ -46,8 +51,45 @@ function UserProfile(props) {
     setDisplayName(e.target.value);
   }
 
-  if (props.user && displayName === null){
+  /**
+   * Begin User Interests
+   */
+  function handleUserInterestsDialogClose(){
+    setUserInterests(oldUserInterests)
+    setIsUserInterestsDialogOpen(false)
+  }
+
+  function openUserInterestDialog(){
+    setOldUserInterests(userInterests)
+    setIsUserInterestsDialogOpen(true)
+  }
+
+  function onUserInterestsChange(e){
+    setUserInterests(e.target.value);
+  }
+
+  function handleUserInterestSubmit(){
+    FirebaseService.updateUser(props.user.id, {
+      interests: userInterests
+    }).then( result => {
+        setIsUserInterestsDialogOpen(false)
+        setUserInterests(userInterests)
+      })
+      .catch( err => {
+        console.log(err);
+      })
+  
+  }
+
+
+
+
+
+
+
+  if (props.user && displayName === null && userInterests === null){
     setDisplayName(props.user.displayName)
+    setUserInterests(props.user.interests)
   }
 
   if (props.user){
@@ -57,11 +99,29 @@ function UserProfile(props) {
         <Typography className="center" variant="h3" component="h3">
             User Profile
         </Typography>
+        <Container className="userProfile-bottom-padding" maxWidth="lg">
+          <Paper className="paper">
+
+            <UserProfileSection 
+              displayValue="User Interests" 
+              value={userInterests}
+              handleClose={handleUserInterestsDialogClose}
+              handleSubmit={handleUserInterestSubmit}  
+              isDialogOpen={isUserInterestsDialogOpen} 
+              openDialog={openUserInterestDialog}  
+              onChange={onUserInterestsChange}
+            ></UserProfileSection>
+
+          </Paper>
+        </Container>
+        <Divider />
+
+
         <Container maxWidth="lg">
           <Paper className="paper">
   
             <UserProfileSection 
-              displayKey={"displayName"} 
+              displayValue="Display Name" 
               value={displayName}
               handleClose={handleDisplayNameClose}
               handleSubmit={handleDisplayNameSubmit}  
@@ -70,9 +130,9 @@ function UserProfile(props) {
               onChange={onDisplayNameChange}
             ></UserProfileSection>
             <Divider />
-            <UserProfileSection displayKey="email" value={props.user.email}></UserProfileSection>
+            <UserProfileSection displayValue="Email" value={props.user.email}></UserProfileSection>
             <Divider />
-            <UserProfileSection displayKey="password" value={passwordValue}></UserProfileSection>
+            <UserProfileSection displayValue="Password" value={passwordValue}></UserProfileSection>
   
           </Paper>
         </Container>

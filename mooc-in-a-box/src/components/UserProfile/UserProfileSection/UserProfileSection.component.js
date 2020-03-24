@@ -16,7 +16,7 @@ function UserProfileSection(props){
     return (
       <div>
         <Typography align="center" variant="h6" component="h6">
-          <strong>{userKeyToDisplayMap[props.displayKey]}</strong>
+          <strong>{props.displayValue}</strong>
         </Typography>
         <Typography align="center" variant="body1" component="body1">
           <span>
