@@ -18,7 +18,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
 import CourseOverview from './components/CourseOverview/CourseOverview';
-import Home from './components/Home/Home';
+import Login from './components/Login/Login';
 import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 
@@ -32,13 +32,18 @@ class App extends React.Component {
     super();
     this.state = {
       courses: [],
-      users: []
+      users: [],
+      currentUser: undefined,
     };
     this.fetchCourses = this.fetchCourses.bind(this);
     this.fetchUsers = this.fetchUsers.bind(this);
     this.render = this.render.bind(this);
     this.fetchCourses();
-    this.fetchUsers();
+    // this.fetchUsers();
+  }
+
+  setUser = (user) => {
+    this.setState({currentUser: user})
   }
 
   useEffect() {
@@ -102,6 +107,7 @@ class App extends React.Component {
               <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
                 <AccountCircleIcon />
               </IconButton>
+              <span>{this.props.user?.name}</span>
             </Toolbar>
           </AppBar>
           </nav>
@@ -110,7 +116,7 @@ class App extends React.Component {
               renders the first one that matches the current URL. */}
           <Switch>
             <Route exact path="/">
-              <Home />
+              <Login completeLogin={this.setUser}/>
             </Route>
             <Route path="/courseLibrary">
               <CourseLibrary courses={this.state.courses}/>
@@ -119,10 +125,10 @@ class App extends React.Component {
               <CourseOverview service={FirebaseService}></CourseOverview>
             </Route>
             <Route path="/myCourses">
-              <MyCourses user={this.state.users[0]}></MyCourses>
+              <MyCourses user={this.state.currentUser}></MyCourses>
             </Route>
             <Route path="/profile">
-              <UserProfile user={this.state.users[0]}></UserProfile>
+              <UserProfile user={this.state.currentUser}></UserProfile>
             </Route>
           </Switch>
         </div>
