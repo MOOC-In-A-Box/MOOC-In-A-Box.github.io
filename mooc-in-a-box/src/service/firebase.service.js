@@ -2,6 +2,7 @@
 // import "firebase/firestore";
 // import "firebase/auth";
 import firebase from 'firebase'
+import { useRadioGroup } from '@material-ui/core';
 
 var firebaseConfig = {
     apiKey: "AIzaSyA8tAHYGUiNkFHq6452W4Qr79eibVmtRZA",
@@ -51,10 +52,13 @@ export const createUser = async (userAuth) => {
                 )
 }
 
-export const getUserById = userId => {
-    return db.collection('Users')
-        .doc(userId)
-        .get();
+export const getCurrentUser = () => {
+    var user = firebase.auth().currentUser;
+    if (user) {
+        return user;
+    } else {
+        return undefined;
+    }
 }
 
 export const logUserInUser = async (isGoog) => {
@@ -88,16 +92,7 @@ export const logUserInUser = async (isGoog) => {
              // Create new user
             await createUser(authUser).then(async () => {
                 // Get the new user to return
-               return await getUserById(authUser.uid).then(result => {
-                   if (result.exists) {
-                     currentUser = result.data();
-                     return result.data();
-                   } else {
-                       console.log("result doesn't exist");
-                   }
-                }).catch(error => {
-                    console.log(error);    
-                });
+                return getCurrentUser();
             }).catch( error => {
                 console.log(error);
             });
@@ -105,5 +100,25 @@ export const logUserInUser = async (isGoog) => {
         return currentUser;
     }).catch(function(error) {
         console.log(error);
+    });
+}
+
+export const signOut = async () => {
+    return await firebase.auth().signOut().then(function() {
+        return true;
+    }).catch(function(error) {
+        console.log(error);
+        return false;
+    });
+}
+
+export const deleteUser = async () => {
+    var user = firebase.auth().currentUser;
+
+   return await user.delete().then(function() {
+      return true;
+    }).catch(function(error) {
+        console.log(error);
+        return false;
     });
 }

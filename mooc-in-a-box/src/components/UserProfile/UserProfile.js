@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UserProfileSection from './UserProfileSection/UserProfileSection.component';
+import {Button} from '@material-ui/core';
+import { withRouter } from "react-router-dom";
 import * as FirebaseService from '../../service/firebase.service';
 
 const passwordValue = "*******";
@@ -78,14 +80,25 @@ function UserProfile(props) {
       .catch( err => {
         console.log(err);
       })
-  
   }
 
+  async function signOut(){
+    await FirebaseService.signOut().then((res) => {
+      if (res) {
+        props.history.push("/");
+      }
+      // TODO(jessi) handle error
+    });
+  }
 
-
-
-
-
+  async function deleteAccount(){
+    await FirebaseService.deleteUser().then((res) => {
+      if (res) {
+        props.history.push("/");
+      }
+      // TODO(jessi) handle error
+    });
+  }
 
   if (props.user && displayName === null && userInterests === null){
     setDisplayName(props.user.displayName)
@@ -133,7 +146,12 @@ function UserProfile(props) {
             <UserProfileSection displayValue="Email" value={props.user.email}></UserProfileSection>
             <Divider />
             <UserProfileSection displayValue="Password" value={passwordValue}></UserProfileSection>
-  
+            <Button color="inherit" className="menu-button" onClick={signOut}>
+              Sign out
+            </Button>
+            <Button color="inherit" className="menu-button" onClick={deleteAccount}>
+              Delete account
+            </Button>
           </Paper>
         </Container>
       </div>
@@ -149,4 +167,4 @@ function UserProfile(props) {
 
 }
 
-export default UserProfile;
+export default withRouter(UserProfile);
