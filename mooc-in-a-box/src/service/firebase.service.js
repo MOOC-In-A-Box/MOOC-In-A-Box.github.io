@@ -19,6 +19,10 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 
+export const getUserById = userId => {
+    return db.collection('Users').doc(userId).get();
+}
+
 export const getCourseById = courseId => {
     return db.collection('Course')
         .doc(courseId)

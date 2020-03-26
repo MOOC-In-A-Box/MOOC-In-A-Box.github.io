@@ -44,6 +44,7 @@ class App extends React.Component {
   }
 
   setUser = (user) => {
+    console.log("USER:", user);
     this.setState({currentUser: user})
   }
 
@@ -127,7 +128,7 @@ class App extends React.Component {
               <MyCourses user={this.state.currentUser}></MyCourses>
             </Route>
             <Route path="/profile">
-              <UserProfile user={this.state.currentUser}></UserProfile>
+              <UserProfile user={this.state.currentUser} updateUser={this.setUser}></UserProfile>
             </Route>
             <Route path="/createCourse">
               <CreateCourse user={this.state.currentUser}></CreateCourse>
