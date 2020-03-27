@@ -49,7 +49,6 @@ class App extends React.Component {
       .then( result => {
         const user = result.data();
         this.setState({currentUser: user}) 
-        this.fetchCourses();
       })
   }
 
