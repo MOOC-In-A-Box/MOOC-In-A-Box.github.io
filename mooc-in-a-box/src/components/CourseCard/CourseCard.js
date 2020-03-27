@@ -22,6 +22,10 @@ import {Link} from 'react-router-dom'
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
+    minWidth: 345,
+    maxHeight: 400,
+    minHeight: 400,
+    position: 'relative',
   },
   media: {
     height: 0,
@@ -40,6 +44,11 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: red[500],
   },
+  actionsRow: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0
+  }
 }));
 
 export default function CourseCard(props) {
@@ -52,7 +61,7 @@ export default function CourseCard(props) {
   console.log(props)
 
   return (
-    <Card className={classes.root}>
+    <Card variant="outlined" className={classes.root}>
       <CardHeader
         title={props.course.title}
         subheader={props.course.owner.displayName}
@@ -70,7 +79,7 @@ export default function CourseCard(props) {
           {props.course.owner.displayName}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions className={classes.actionsRow} disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>

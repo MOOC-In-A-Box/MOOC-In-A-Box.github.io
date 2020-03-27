@@ -40,7 +40,7 @@ class App extends React.Component {
     this.fetchUsers = this.fetchUsers.bind(this);
     this.render = this.render.bind(this);
     this.updateUser = this.updateUser.bind(this);
-    // this.fetchUsers();
+    this.fetchCourses();
   }
 
   updateUser(){
@@ -56,22 +56,13 @@ class App extends React.Component {
     console.log("USER:", user);
     this.setState({currentUser: user})
   }
-
-  useEffect() {
-    // Update the document title using the browser API
-    FirebaseService.getAllCourses().then( (queryResults) => {
-        queryResults.forEach((doc) => {
-          console.log(`${doc.id} => ${doc.data()}`);
-          console.log(doc.data());
-        });
-      })
-    }
     
     async fetchCourses() {
       let courses = [];
       await FirebaseService.getAllCourses().then( (queryResults) => {
         queryResults.forEach((doc) => {
           const course = doc.data();
+          console.log(course);
           const courseId = doc.id;
           course.owner.get().then(user => {
             course.owner = user.data();

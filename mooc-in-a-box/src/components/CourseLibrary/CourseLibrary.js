@@ -5,6 +5,8 @@ import CourseCard from '../CourseCard/CourseCard';
 import { render } from '@testing-library/react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@material-ui/core/Grid';
+
 import {AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import SearchBar from './CourseLibraryToolbar/SearchBar/SearchBar.component';
 import CourseLibraryMenu from './CourseLibraryToolbar/CourseLibraryToolbarMenu/CourseLibraryToolbarMenu.component'
@@ -14,6 +16,7 @@ import CourseLibraryToolbar from './CourseLibraryToolbar/CourseLibraryToolbar.co
 class CourseLibrary extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     // Bind Search
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClicked = this.handleSearchClicked.bind(this);
@@ -193,10 +196,9 @@ class CourseLibrary extends React.Component {
 
     let listItems = this.props.courses.map(function(item) {
       return (
-        <div className="CurrentCourse">
-          <CourseCard course={item}
-          ></CourseCard>
-        </div>
+          <Grid item s={4}>
+            <CourseCard course={item}></CourseCard>
+          </Grid>
       );
     });
     
@@ -204,7 +206,9 @@ class CourseLibrary extends React.Component {
       <div class="course-library">
         <CourseLibraryToolbar menuItems={menuItems} searchInfo={searchInfo}></CourseLibraryToolbar>
           <div className="course-list">
+          <Grid container spacing={3}>
             {listItems}
+          </Grid>
           </div>
       </div>
 
