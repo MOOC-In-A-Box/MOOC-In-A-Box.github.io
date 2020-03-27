@@ -48,6 +48,9 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 0,
     left: 0
+  }, 
+  content: {
+    paddingBottom: '1rem'
   }
 }));
 
@@ -71,7 +74,7 @@ export default function CourseCard(props) {
         image="/static/images/cards/paella.jpg"
         title="Paella dish"
       />
-      <CardContent>
+      <CardContent className={classes.content}>
         <Typography variant="body2" color="textSecondary" component="p">
           {props.course.description}
         </Typography> 
