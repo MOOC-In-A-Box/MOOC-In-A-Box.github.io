@@ -134,7 +134,7 @@ function MyCourses(props) {
   if (props.user) {
     const courseComponentList = []
     console.log(props.user.favoritedCourses);
-    const hasCourses = false;
+    let hasCourses = false;
 
     
     if (props.user.currentCourses && props.user.currentCourses.length > 0){

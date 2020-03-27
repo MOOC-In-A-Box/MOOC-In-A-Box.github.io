@@ -38,6 +38,7 @@ export const getAllUsers = () => {
 }
 
 export const updateUser = (userId, updates) => {
+    console.log("Update User Called");
     return db.collection('Users')
                 .doc(userId)
                 .set(updates, { merge: true })
@@ -125,4 +126,38 @@ export const deleteUser = async () => {
         console.log(error);
         return false;
     });
+}
+
+
+export const createCourse = async (user, courseInfo) => {
+    var storage = firebase.storage();
+    const userDocRef = db.doc(`Users/${user.id}`)
+    const lessonRef = db.doc(courseInfo.chapter.lessons);
+    courseInfo.chapter.lessons = lessonRef;
+    return db.collection('Course').add({
+        owner:  userDocRef,
+        title: courseInfo.title,
+        description: courseInfo.description,
+        chapter: courseInfo.chapter
+    })
+    .then( courseDoc => {
+        let usersCreatedCourses;
+        if (user.createdCourses && user.createdCourses.length > 0 ) {
+           usersCreatedCourses = user.createdCourses;
+        } else {
+          usersCreatedCourses = []
+        }
+        
+        const courseRef = db.doc(`Course/${courseDoc.id}`)
+        usersCreatedCourses.push(courseRef);
+        const updateObject = {
+            createdCourses: usersCreatedCourses
+          }
+
+        return updateUser(user.id, updateObject)
+          .then(userResult => {
+              console.log("Result from update User:", userResult);
+              return userResult;
+          })
+    })
 }

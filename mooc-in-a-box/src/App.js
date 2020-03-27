@@ -39,8 +39,18 @@ class App extends React.Component {
     this.fetchCourses = this.fetchCourses.bind(this);
     this.fetchUsers = this.fetchUsers.bind(this);
     this.render = this.render.bind(this);
-    this.fetchCourses();
+    this.updateUser = this.updateUser.bind(this);
     // this.fetchUsers();
+  }
+
+  updateUser(){
+    console.log(this.state);
+    FirebaseService.getUserById(this.state.currentUser.id)
+      .then( result => {
+        const user = result.data();
+        this.setState({currentUser: user}) 
+        this.fetchCourses();
+      })
   }
 
   setUser = (user) => {
@@ -128,10 +138,10 @@ class App extends React.Component {
               <MyCourses user={this.state.currentUser}></MyCourses>
             </Route>
             <Route path="/profile">
-              <UserProfile user={this.state.currentUser} updateUser={this.setUser}></UserProfile>
+              <UserProfile user={this.state.currentUser} updateUser={this.updateUser}></UserProfile>
             </Route>
             <Route path="/createCourse">
-              <CreateCourse user={this.state.currentUser}></CreateCourse>
+              <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
             </Route>
           </Switch>
         </div>

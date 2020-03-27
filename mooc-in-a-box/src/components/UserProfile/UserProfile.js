@@ -27,14 +27,7 @@ function UserProfile(props) {
   const [isUserInterestsDialogOpen, setIsUserInterestsDialogOpen] = useState(false);
 
 
- function updateUser() {
-   console.log("Update User is calllllleedddddd");
-    FirebaseService.getUserById(props.user.id)
-      .then( result => {
-        console.log("RESULT: ", result.data());
-        props.updateUser(result.data());
-      })
- }
+
  function  handleDisplayNameClose(){
     setDisplayName(oldDisplayName)
     setIsDisplayNameDialogOpen(false)
@@ -46,13 +39,12 @@ function UserProfile(props) {
     }).then( result => {
         setIsDisplayNameDialogOpen(false)
         setOldDiplayName(displayName)
-        updateUser();
+        props.updateUser();
 
       })
       .catch( err => {
         console.log(err);
       })
-  
   }
  
   function openDisplayNameDialog(){
@@ -87,8 +79,7 @@ function UserProfile(props) {
     }).then( result => {
         setIsUserInterestsDialogOpen(false)
         setUserInterests(userInterests)
-        updateUser();
-
+        props.updateUser();
       })
       .catch( err => {
         console.log(err);
