@@ -11,7 +11,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { withRouter } from "react-router-dom";
 import * as FirebaseService from '../../service/firebase.service';
 import CreateCourseDialog from './CreateCourseDialog/CreateCourseDialog.component';
+import CoursesDropdownComponent from '../CoursesDropdown/CoursesDropdown.component';
 
+
+function CreatedCoursesComponent(props){
+  console.log(`Created Courses Component Props: ${props}`);
+  return (
+    <div className="courses-section">
+      <h1> Saved Courses </h1>
+      <CoursesDropdownComponent courses={props.createdCourses} includeEditIcon={true}></CoursesDropdownComponent>
+    </div>
+  )
+}
 
 function CreateCourse(props) {
   console.log(props.user);
@@ -49,7 +60,7 @@ async function handleSubmit(courseInfo){
   const hasCurrentCourses = false
   let currnetCoursesSection = null;
   if (props.user && props.user.createdCourses && props.user.createdCourses.length > 0 ) {
-    currnetCoursesSection = <h3>You created some courses!</h3>
+    currnetCoursesSection = <CreatedCoursesComponent createdCourses={props.user.createdCourses}></CreatedCoursesComponent>
   } else {
     currnetCoursesSection = <h3>You have not created any courses</h3>
   }
