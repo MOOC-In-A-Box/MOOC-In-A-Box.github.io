@@ -79,7 +79,7 @@ function UserProfile(props) {
     }).then( result => {
         setIsUserInterestsDialogOpen(false)
         setUserInterests(userInterests)
-        props.updateUser();
+        props.updateUser(props.user.id);
       })
       .catch( err => {
         console.log(err);

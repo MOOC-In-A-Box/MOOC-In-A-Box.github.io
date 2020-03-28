@@ -32,7 +32,6 @@ function updateUser(user) {
 }
 
 async function handleSubmit(courseInfo){
-  console.log(props.user.id);
   courseInfo.owner = props.user.id;
 
   courseInfo.chapter = {
@@ -43,8 +42,8 @@ async function handleSubmit(courseInfo){
 
   const result = await FirebaseService.createCourse(props.user, courseInfo)
   setIsCreateCourseDialogOpen(false);
-  props.updateUser();  
   props.updateCourses();
+  props.updateUser(props.user.id);  
 }
 
   const hasCurrentCourses = false

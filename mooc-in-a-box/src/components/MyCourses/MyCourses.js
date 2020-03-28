@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './MyCourses.css';
+import {
+  Link as RouterLink,
+} from "react-router-dom";
 import {Button} from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -18,6 +21,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Link} from 'react-router-dom'
+
+import EditIcon from '@material-ui/icons/Edit';
+import { IconButton } from '@material-ui/core';
+
 
 
 /**
@@ -41,8 +48,7 @@ function generate(element) {
 
 
 function CoursesDropdownComponent(props) {
-  let numberOfCourses = props.courses.length;
-  console.log(numberOfCourses);
+  console.log("Courses Drop Down Props: ", props);  
   return (
     <ExpansionPanel>
             <ExpansionPanelSummary
@@ -50,7 +56,7 @@ function CoursesDropdownComponent(props) {
             aria-controls="panel1a-content"
             id="panel1a-header"
             >
-            <Typography variant="subtitle2">{numberOfCourses} Course(s)</Typography>
+            <Typography variant="subtitle2">{props.courses.length} Course(s)</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
             <Grid container spacing={2}>
@@ -60,15 +66,23 @@ function CoursesDropdownComponent(props) {
                         {
                           props.courses.map( course => {
                             return (
-                              <ListItem 
-                                button
-                                component={Link}
-                                to={`/courseOverview/${course.courseId}`}
-                              >
-                                  <ListItemText
-                                      primary={course.courseTitle}
-                                  />
-                              </ListItem>
+                              <span>
+                                <ListItem 
+                                >
+                                  <Button
+                                    component={RouterLink} 
+                                    to={`/courseOverview/${course.id}`}
+                                  >
+                                    {course.title}
+                                  </Button>
+                                  { props.includeEditIcon && 
+                                    <IconButton className="menu-button" color="inherit" aria-label="menu">
+                                      <EditIcon/>
+                                    </IconButton>
+                                  }
+                                </ListItem>
+                              </span>
+                              
                             )
                           })
                         }
@@ -122,7 +136,7 @@ function CreatedCoursesComponent(props){
   return (
     <div>
       <h1> Saved Courses </h1>
-      <CoursesDropdownComponent courses={props.createdCourses}></CoursesDropdownComponent>
+      <CoursesDropdownComponent courses={props.createdCourses} includeEditIcon={true}></CoursesDropdownComponent>
     </div>
   )
 }
@@ -130,35 +144,46 @@ function CreatedCoursesComponent(props){
 
 
 function MyCourses(props) {
-  console.log("My Courses Component: ", props.user);
-  if (props.user) {
+  console.log("My Courses Component: ", props);
+
+  const [user, setUser] = useState();
+  
+
+  React.useEffect(() => {
+    console.log("My Courses - Resetting State");
+    setUser(props.user);
+  }, [props]);
+
+
+  if (user) {
+    console.log("My Courses - My User ===", user);
     const courseComponentList = []
-    console.log(props.user.favoritedCourses);
+    console.log(user.favoritedCourses);
     let hasCourses = false;
 
     
-    if (props.user.currentCourses && props.user.currentCourses.length > 0){
-      const element = <CurrentCoursesComponent currentCourses={props.user.currentCourses}></CurrentCoursesComponent>
+    if (user.currentCourses && user.currentCourses.length > 0){
+      const element = <CurrentCoursesComponent currentCourses={user.currentCourses}></CurrentCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
     }
 
-    if (props.user.pastCourses && props.user.currentCourses.pastCourses > 0){
-      const element = <PastCoursesComponent pastCourses={props.user.pastCourses}></PastCoursesComponent>
-      courseComponentList.push(element);
-      hasCourses = true;
-
-    }
-
-    if (props.user.favoritedCourses && props.user.favoritedCourses.length > 0){
-      const element = <SavedCoursesComponent savedCourses={props.user.favoritedCourses}></SavedCoursesComponent>
+    if (user.pastCourses && user.pastCourse.length > 0){
+      const element = <PastCoursesComponent pastCourses={user.pastCourses}></PastCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
 
     }
 
-    if (props.user.createdCourses && props.user.createdCourses.length > 0){
-      const element = <CreatedCoursesComponent createdCourses={props.user.createdCourses}></CreatedCoursesComponent>
+    if (user.favoritedCourses && user.favoritedCourses.length > 0){
+      const element = <SavedCoursesComponent savedCourses={user.favoritedCourses}></SavedCoursesComponent>
+      courseComponentList.push(element);
+      hasCourses = true;
+
+    }
+
+    if (user.createdCourses && user.createdCourses.length > 0){
+      const element = <CreatedCoursesComponent createdCourses={user.createdCourses}></CreatedCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
 

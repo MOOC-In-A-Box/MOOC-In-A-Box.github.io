@@ -40,21 +40,39 @@ class App extends React.Component {
     this.fetchUsers = this.fetchUsers.bind(this);
     this.render = this.render.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.setUser = this.setUser.bind(this);
     this.fetchCourses();
   }
 
-  updateUser(){
-    console.log(this.state);
-    FirebaseService.getUserById(this.state.currentUser.id)
+  async updateUser(userId){
+    await FirebaseService.getUserById(userId)
       .then( result => {
         const user = result.data();
-        this.setState({currentUser: user}) 
+        
+        if (user.createdCourses && user.createdCourses.length > 0){
+          const newCourses =  user.createdCourses
+          .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+
+          console.log(newCourses);
+          user.createdCourses = user.createdCourses
+            .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+        }
+        if (user.pastCourses && user.pastCourses.length > 0){
+          user.pastCourses = user.pastCourses
+            .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+        }
+        if (user.favoritedCourses && user.favoritedCourses.length > 0){
+          user.favoritedCourses = user.favoritedCourses
+            .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+        }
+
+        this.setState({currentUser: user});
+ 
       })
   }
 
-  setUser = (user) => {
-    console.log("USER:", user);
-    this.setState({currentUser: user})
+  setUser(user){
+    this.updateUser(user.id);
   }
     
     async fetchCourses() {
