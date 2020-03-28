@@ -13,7 +13,7 @@ var firebaseConfig = {
     messagingSenderId: "594314585164",
     appId: "1:594314585164:web:3ae152452d1c238af100e9",
     measurementId: "G-LXH34JCXZS"
-  };
+};
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -38,24 +38,24 @@ export const getAllUsers = () => {
     return db.collection('Users').get();
 }
 
-export const updateUser = (userId, updates) => {
+export const updateUser = async (userId, updates) => {
     console.log("Update User Called");
     return db.collection('Users')
-                .doc(userId)
-                .set(updates, { merge: true })
+        .doc(userId)
+        .set(updates, { merge: true })
 }
 
 export const createUser = async (userAuth) => {
     return db.collection('Users')
-                .doc(userAuth.uid)
-                .set({
-                    id: userAuth.uid,
-                    name: userAuth.displayName,
-                    photoURL: userAuth.photoURL,
-                    email: userAuth.email,
-                },
-                    { merge: true }
-                )
+        .doc(userAuth.uid)
+        .set({
+            id: userAuth.uid,
+            name: userAuth.displayName,
+            photoURL: userAuth.photoURL,
+            email: userAuth.email,
+        },
+            { merge: true }
+        )
 }
 
 export const getCurrentUser = () => {
@@ -70,7 +70,7 @@ export const getCurrentUser = () => {
 export const logUserInUser = async (isGoog) => {
     let provider;
     isGoog ? provider = new firebase.auth.GoogleAuthProvider() :
-             provider = new firebase.auth.FacebookAuthProvider();
+        provider = new firebase.auth.FacebookAuthProvider();
     let users = [];
     let currentUser = undefined;
     let authUser = undefined;
@@ -78,15 +78,15 @@ export const logUserInUser = async (isGoog) => {
     // TODO(jessi): store this data so we don't need to fetch it, or directly ask for the user
     // once they log in and if no user exists create one. Sounds like work.
     await getAllUsers()
-        .then( (queryResults) => {
-          queryResults.forEach( (doc) => {
-            const user = doc.data();
-            user.id = doc.id;
-            users.push(user);
-          })
+        .then((queryResults) => {
+            queryResults.forEach((doc) => {
+                const user = doc.data();
+                user.id = doc.id;
+                users.push(user);
+            })
         });
 
-    return await firebase.auth().signInWithPopup(provider).then(async function(result) {
+    return await firebase.auth().signInWithPopup(provider).then(async function (result) {
         authUser = result.user;
         users.forEach(u => {
             if (u.id === authUser.uid) {
@@ -95,24 +95,25 @@ export const logUserInUser = async (isGoog) => {
         });
         // Didn't find an existing user.
         if (currentUser === undefined) {
-             // Create new user
+            // Create new user
             await createUser(authUser).then(async () => {
                 // Get the new user to return
                 return getCurrentUser();
-            }).catch( error => {
+            }).catch(error => {
                 console.log(error);
             });
         }
         return currentUser;
-    }).catch(function(error) {
+    }).catch(function (error) {
         console.log(error);
     });
 }
 
 export const signOut = async () => {
-    return await firebase.auth().signOut().then(function() {
+    return await firebase.auth().signOut().then(function () {
+        document.cookie = 'userid=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         return true;
-    }).catch(function(error) {
+    }).catch(function (error) {
         console.log(error);
         return false;
     });
@@ -121,9 +122,10 @@ export const signOut = async () => {
 export const deleteUser = async () => {
     var user = firebase.auth().currentUser;
 
-   return await user.delete().then(function() {
-      return true;
-    }).catch(function(error) {
+    return await user.delete().then(function () {
+        document.cookie = 'userid=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        return true;
+    }).catch(function (error) {
         console.log(error);
         return false;
     });
@@ -135,30 +137,26 @@ export const createCourse = async (user, courseInfo) => {
     const userDocRef = db.doc(`Users/${user.id}`)
     const lessonRef = db.doc(courseInfo.chapter.lessons);
     courseInfo.chapter.lessons = lessonRef;
-    return db.collection('Course').add({
-        owner:  userDocRef,
+    return await db.collection('Course').add({
+        owner: userDocRef,
         title: courseInfo.title,
         description: courseInfo.description,
         chapter: courseInfo.chapter
     })
-    .then( courseDoc => {
-        let usersCreatedCourses;
-        if (user.createdCourses && user.createdCourses.length > 0 ) {
-           usersCreatedCourses = user.createdCourses;
-        } else {
-          usersCreatedCourses = []
-        }
-        
-        const courseRef = db.doc(`Course/${courseDoc.id}`)
-        usersCreatedCourses.push(courseRef);
-        const updateObject = {
-            createdCourses: usersCreatedCourses
-          }
+        .then(async courseDoc => {
+            let usersCreatedCourses;
+            if (user.createdCourses && user.createdCourses.length > 0) {
+                usersCreatedCourses = user.createdCourses;
+            } else {
+                usersCreatedCourses = []
+            }
+            console.log(courseDoc);
+            const courseRef = db.doc(`Course/${courseDoc.id}`)
+            usersCreatedCourses.push(courseRef);
+            const updateObject = {
+                createdCourses: usersCreatedCourses
+            }
 
-        return updateUser(user.id, updateObject)
-          .then(userResult => {
-              console.log("Result from update User:", userResult);
-              return userResult;
-          })
-    })
+            return await updateUser(user.id, updateObject);
+        })
 }

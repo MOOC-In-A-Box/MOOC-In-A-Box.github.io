@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UserProfileSection from './UserProfileSection/UserProfileSection.component';
-import {Button} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
 import * as FirebaseService from '../../service/firebase.service';
 
@@ -28,104 +28,106 @@ function UserProfile(props) {
 
 
 
- function  handleDisplayNameClose(){
+  function handleDisplayNameClose() {
     setDisplayName(oldDisplayName)
     setIsDisplayNameDialogOpen(false)
   }
 
-  function handleDisplayNameSubmit(){
+  function handleDisplayNameSubmit() {
     FirebaseService.updateUser(props.user.id, {
       displayName
-    }).then( result => {
-        setIsDisplayNameDialogOpen(false)
-        setOldDiplayName(displayName)
-        props.updateUser();
+    }).then(result => {
+      setIsDisplayNameDialogOpen(false)
+      setOldDiplayName(displayName)
+      props.updateUser();
 
-      })
-      .catch( err => {
+    })
+      .catch(err => {
         console.log(err);
       })
   }
- 
-  function openDisplayNameDialog(){
+
+  function openDisplayNameDialog() {
     setOldDiplayName(displayName)
     setIsDisplayNameDialogOpen(true)
   }
 
-  function onDisplayNameChange(e){
+  function onDisplayNameChange(e) {
     setDisplayName(e.target.value);
   }
 
   /**
    * Begin User Interests
    */
-  function handleUserInterestsDialogClose(){
+  function handleUserInterestsDialogClose() {
     setUserInterests(oldUserInterests)
     setIsUserInterestsDialogOpen(false)
   }
 
-  function openUserInterestDialog(){
+  function openUserInterestDialog() {
     setOldUserInterests(userInterests)
     setIsUserInterestsDialogOpen(true)
   }
 
-  function onUserInterestsChange(e){
+  function onUserInterestsChange(e) {
     setUserInterests(e.target.value);
   }
 
-  function handleUserInterestSubmit(){
+  function handleUserInterestSubmit() {
     FirebaseService.updateUser(props.user.id, {
       interests: userInterests
-    }).then( result => {
-        setIsUserInterestsDialogOpen(false)
-        setUserInterests(userInterests)
-        props.updateUser(props.user.id);
-      })
-      .catch( err => {
+    }).then(result => {
+      setIsUserInterestsDialogOpen(false)
+      setUserInterests(userInterests)
+      props.updateUser(props.user.id);
+    })
+      .catch(err => {
         console.log(err);
       })
   }
 
-  async function signOut(){
+  async function signOut() {
     await FirebaseService.signOut().then((res) => {
       if (res) {
         props.history.push("/");
+        props.updateUser(undefined);
       }
       // TODO(jessi) handle error
     });
   }
 
-  async function deleteAccount(){
+  async function deleteAccount() {
     await FirebaseService.deleteUser().then((res) => {
       if (res) {
         props.history.push("/");
+        props.updateUser(undefined);
       }
       // TODO(jessi) handle error
     });
   }
 
-  if (props.user && displayName === null && userInterests === null){
+  if (props.user && displayName === null && userInterests === null) {
     setDisplayName(props.user.displayName)
     setUserInterests(props.user.interests)
   }
 
-  if (props.user){
+  if (props.user) {
     return (
       <div className="userProfile">
         <CssBaseline />
         <Typography className="center" variant="h3" component="h3">
-            User Profile
+          User Profile
         </Typography>
         <Container className="userProfile-bottom-padding" maxWidth="lg">
           <Paper className="paper">
 
-            <UserProfileSection 
-              displayValue="User Interests" 
+            <UserProfileSection
+              displayValue="User Interests"
               value={userInterests}
               handleClose={handleUserInterestsDialogClose}
-              handleSubmit={handleUserInterestSubmit}  
-              isDialogOpen={isUserInterestsDialogOpen} 
-              openDialog={openUserInterestDialog}  
+              handleSubmit={handleUserInterestSubmit}
+              isDialogOpen={isUserInterestsDialogOpen}
+              openDialog={openUserInterestDialog}
               onChange={onUserInterestsChange}
             ></UserProfileSection>
 
@@ -136,14 +138,14 @@ function UserProfile(props) {
 
         <Container maxWidth="lg">
           <Paper className="paper">
-  
-            <UserProfileSection 
-              displayValue="Display Name" 
+
+            <UserProfileSection
+              displayValue="Display Name"
               value={displayName}
               handleClose={handleDisplayNameClose}
-              handleSubmit={handleDisplayNameSubmit}  
-              isDialogOpen={isDisplayNameDialogOpen} 
-              openDialog={openDisplayNameDialog}  
+              handleSubmit={handleDisplayNameSubmit}
+              isDialogOpen={isDisplayNameDialogOpen}
+              openDialog={openDisplayNameDialog}
               onChange={onDisplayNameChange}
             ></UserProfileSection>
             <Divider />

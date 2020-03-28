@@ -3,7 +3,7 @@ import './MyCourses.css';
 import {
   Link as RouterLink,
 } from "react-router-dom";
-import {Button} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -20,7 +20,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import EditIcon from '@material-ui/icons/Edit';
 import { IconButton } from '@material-ui/core';
@@ -35,20 +35,20 @@ import CoursesDropdownComponent from '../CoursesDropdown/CoursesDropdown.compone
  * http://localhost:3000/courseOverview/rlfxOavBn4nPZLNTRMkL
  */
 
- /**
-  * 
-  * 
-  */
+/**
+ * 
+ * 
+ */
 
 
 
 function generate(element) {
   return React.cloneElement(element, {
-      key: element,
-    })
+    key: element,
+  })
 }
 
-function CurrentCoursesComponent(props){
+function CurrentCoursesComponent(props) {
   console.log(`Current Courses Component Props`, props);
   let numberOfCourses = props.currentCourses.length;
   console.log(numberOfCourses);
@@ -61,7 +61,7 @@ function CurrentCoursesComponent(props){
 }
 
 
-function PastCoursesComponent(props){
+function PastCoursesComponent(props) {
   console.log(`Past Courses Component Props: ${props}`);
   return (
     <div>
@@ -71,7 +71,7 @@ function PastCoursesComponent(props){
   )
 }
 
-function SavedCoursesComponent(props){
+function SavedCoursesComponent(props) {
   console.log(`Saved Courses Component Props: ${props}`);
   return (
     <div>
@@ -81,8 +81,8 @@ function SavedCoursesComponent(props){
   )
 }
 
-function CreatedCoursesComponent(props){
-  console.log(`Created Courses Component Props: ${props}`);
+function CreatedCoursesComponent(props) {
+  console.log("Created Courses Component Props: ", props);
   return (
     <div>
       <h1> Saved Courses </h1>
@@ -97,7 +97,7 @@ function MyCourses(props) {
   console.log("My Courses Component: ", props);
 
   const [user, setUser] = useState();
-  
+
 
   React.useEffect(() => {
     console.log("My Courses - Resetting State");
@@ -111,28 +111,28 @@ function MyCourses(props) {
     console.log(user.favoritedCourses);
     let hasCourses = false;
 
-    
-    if (user.currentCourses && user.currentCourses.length > 0){
+
+    if (user.currentCourses && user.currentCourses.length > 0) {
       const element = <CurrentCoursesComponent currentCourses={user.currentCourses}></CurrentCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
     }
 
-    if (user.pastCourses && user.pastCourse.length > 0){
+    if (user.pastCourses && user.pastCourse.length > 0) {
       const element = <PastCoursesComponent pastCourses={user.pastCourses}></PastCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
 
     }
 
-    if (user.favoritedCourses && user.favoritedCourses.length > 0){
+    if (user.favoritedCourses && user.favoritedCourses.length > 0) {
       const element = <SavedCoursesComponent savedCourses={user.favoritedCourses}></SavedCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
 
     }
 
-    if (user.createdCourses && user.createdCourses.length > 0){
+    if (user.createdCourses && user.createdCourses.length > 0) {
       const element = <CreatedCoursesComponent createdCourses={user.createdCourses}></CreatedCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
@@ -143,12 +143,12 @@ function MyCourses(props) {
         <div className="MyCourses">
           <CssBaseline />
           <Typography className="center" variant="h3" component="h3">
-              My Courses
+            My Courses
           </Typography>
           <Container maxWidth="lg">
             <Paper className="paper">
               {
-                courseComponentList.map( element => element)
+                courseComponentList.map(element => element)
               }
             </Paper>
           </Container>
@@ -157,17 +157,17 @@ function MyCourses(props) {
     } else {
       return (
         <div className="MyCourses">
-        <CssBaseline />
-            <Typography className="center" variant="h3" component="h3">
-                My Courses
+          <CssBaseline />
+          <Typography className="center" variant="h3" component="h3">
+            My Courses
             </Typography>
-            <Container maxWidth="lg">
-              <Paper className="paper">
-                <h4>You don't have any courses saved yet!</h4>
-              </Paper>
-            </Container>
-          </div>
-        )
+          <Container maxWidth="lg">
+            <Paper className="paper">
+              <h4>You don't have any courses saved yet!</h4>
+            </Paper>
+          </Container>
+        </div>
+      )
     }
 
 

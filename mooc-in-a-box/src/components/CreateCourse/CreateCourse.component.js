@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CreateCourse.css';
-import {Button} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -14,7 +14,7 @@ import CreateCourseDialog from './CreateCourseDialog/CreateCourseDialog.componen
 import CoursesDropdownComponent from '../CoursesDropdown/CoursesDropdown.component';
 
 
-function CreatedCoursesComponent(props){
+function CreatedCoursesComponent(props) {
   console.log(`Created Courses Component Props: ${props}`);
   return (
     <div className="courses-section">
@@ -29,37 +29,37 @@ function CreateCourse(props) {
   const [isCreateCourseDialogOpen, setIsCreateCourseDialogOpen] = useState(false);
 
 
-function handleCreateCourseDialogClose(){
-  setIsCreateCourseDialogOpen(false);
-}
-
-function openCreateCourseDialog(){
-  setIsCreateCourseDialogOpen(true);
-
-}
-
-function updateUser(user) {
-  console.log(user);
-}
-
-async function handleSubmit(courseInfo){
-  courseInfo.owner = props.user.id;
-
-  courseInfo.chapter = {
-    id: 0,
-    lessons: "Course/rlfxOavBn4nPZLNTRMkL/Lessons/kL5CwNARpoUhexocK7P4",
-    sectionTitle: `${courseInfo.title} - Section`
+  function handleCreateCourseDialogClose() {
+    setIsCreateCourseDialogOpen(false);
   }
 
-  const result = await FirebaseService.createCourse(props.user, courseInfo)
-  setIsCreateCourseDialogOpen(false);
-  props.updateCourses();
-  props.updateUser(props.user.id);  
-}
+  function openCreateCourseDialog() {
+    setIsCreateCourseDialogOpen(true);
+
+  }
+
+  function updateUser(user) {
+    console.log(user);
+  }
+
+  async function handleSubmit(courseInfo) {
+    courseInfo.owner = props.user.id;
+
+    courseInfo.chapter = {
+      id: 0,
+      lessons: "Course/rlfxOavBn4nPZLNTRMkL/Lessons/kL5CwNARpoUhexocK7P4",
+      sectionTitle: `${courseInfo.title} - Section`
+    }
+
+    await FirebaseService.createCourse(props.user, courseInfo)
+    setIsCreateCourseDialogOpen(false);
+    props.updateCourses();
+    props.updateUser(props.user.id);
+  }
 
   const hasCurrentCourses = false
   let currnetCoursesSection = null;
-  if (props.user && props.user.createdCourses && props.user.createdCourses.length > 0 ) {
+  if (props.user && props.user.createdCourses && props.user.createdCourses.length > 0) {
     currnetCoursesSection = <CreatedCoursesComponent createdCourses={props.user.createdCourses}></CreatedCoursesComponent>
   } else {
     currnetCoursesSection = <h3>You have not created any courses</h3>
@@ -69,29 +69,29 @@ async function handleSubmit(courseInfo){
   return (
     <div className="Home">
       <CssBaseline />
-        <Typography className="center" variant="h3" component="h3">
-          Classes You've Created
+      <Typography className="center" variant="h3" component="h3">
+        Classes You've Created
         </Typography>
-        <Container className="userProfile-bottom-padding" maxWidth="lg">
-          <Paper className="paper">
-            {
-              currnetCoursesSection     
-            }
-            <span>
-              <Button variant="contained" color="primary" onClick={openCreateCourseDialog}>
-                Create New Course
+      <Container className="userProfile-bottom-padding" maxWidth="lg">
+        <Paper className="paper">
+          {
+            currnetCoursesSection
+          }
+          <span>
+            <Button variant="contained" color="primary" onClick={openCreateCourseDialog}>
+              Create New Course
               </Button>
-            </span>
-          </Paper>
-        </Container>
-        <Divider />
+          </span>
+        </Paper>
+      </Container>
+      <Divider />
 
-        <CreateCourseDialog 
-          isOpen={isCreateCourseDialogOpen}
-          handleClose={handleCreateCourseDialogClose}
-          handleSubmit={handleSubmit}
-          user={props.user}
-        />
+      <CreateCourseDialog
+        isOpen={isCreateCourseDialogOpen}
+        handleClose={handleCreateCourseDialogClose}
+        handleSubmit={handleSubmit}
+        user={props.user}
+      />
 
 
     </div>

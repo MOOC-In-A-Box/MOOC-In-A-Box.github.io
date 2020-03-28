@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import {AppBar, Toolbar, IconButton, Typography, Button, } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { AppBar, Toolbar, IconButton, Typography, Button, } from '@material-ui/core';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,21 +8,13 @@ import {
   Link as RouterLink,
 } from "react-router-dom";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
-
-
-
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
 import CourseOverview from './components/CourseOverview/CourseOverview';
 import Login from './components/Login/Login';
 import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 import CreateCourse from './components/CreateCourse/CreateCourse.component';
-
-
 import * as FirebaseService from '../src/service/firebase.service'
-import { render } from '@testing-library/react';
-
 
 class App extends React.Component {
   constructor() {
@@ -41,103 +29,134 @@ class App extends React.Component {
     this.render = this.render.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.setUser = this.setUser.bind(this);
-    this.fetchCourses();
+    this.getUserOnLoad = this.getUserOnLoad.bind(this);
+    this.fetchCourses().then(() => {
+      this.getUserOnLoad();
+    });
   }
 
-  async updateUser(userId){
+  async updateUser(userId) {
+    if (!userId) {
+      this.setState({ currentUser: undefined });
+      return;
+    }
     await FirebaseService.getUserById(userId)
-      .then( result => {
+      .then(result => {
         const user = result.data();
-        
-        if (user.createdCourses && user.createdCourses.length > 0){
-          const newCourses =  user.createdCourses
-          .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+
+        if (user.createdCourses && user.createdCourses.length > 0) {
+          console.log(user.createdCourses)
+          const newCourses = user.createdCourses
+            .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
 
           console.log(newCourses);
+          console.log(this.state.courses);
           user.createdCourses = user.createdCourses
-            .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+            .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
-        if (user.pastCourses && user.pastCourses.length > 0){
+        if (user.pastCourses && user.pastCourses.length > 0) {
           user.pastCourses = user.pastCourses
-            .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+            .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
-        if (user.favoritedCourses && user.favoritedCourses.length > 0){
+        if (user.favoritedCourses && user.favoritedCourses.length > 0) {
           user.favoritedCourses = user.favoritedCourses
-            .map( courseRef => this.state.courses.find(course => course.id === courseRef.id));
+            .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
 
-        this.setState({currentUser: user});
- 
+        this.setState({ currentUser: user });
+
       })
   }
 
-  setUser(user){
-    this.updateUser(user.id);
-  }
-    
-    async fetchCourses() {
-      let courses = [];
-      await FirebaseService.getAllCourses().then( (queryResults) => {
-        queryResults.forEach((doc) => {
-          const course = doc.data();
-          console.log(course);
-          const courseId = doc.id;
-          course.owner.get().then(user => {
-            course.owner = user.data();
-          })
-          course.chapter.lessons.get().then(lesson => {
-            course.chapter.lessons = lesson.data();
-          })
-          course.id = courseId
-          courses.push(course);
-          this.setState({courses: courses});
-        });
-      });
+  getUserOnLoad() {
+    let user = FirebaseService.getCurrentUser();
+    if (user) {
+      this.updateUser(user.uid);
+    } else if (document.cookie.split(';').some((item) => item.trim().startsWith('userid='))) {
+      var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)userid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      this.updateUser(cookieValue);
+    } else {
+      this.updateUser(undefined);
     }
+    console.log('get current user')
+    console.log(this.state.currentUser)
+    // document.cookie = "userid=user.id";
+  }
 
-    async fetchUsers(){
-      let users = [];
-      await FirebaseService.getAllUsers()
-        .then( (queryResults) => {
-          queryResults.forEach( (doc) => {
-            const user = doc.data();
-            user.id = doc.id;
-            users.push(user);
-            this.setState({
-              users
-            })
+  setUser(user) {
+    this.updateUser(user.id);
+    document.cookie = `userid=${user.id}`;
+  }
+
+  async fetchCourses() {
+    console.log('fetching courses')
+    console.log(this.state.currentUser)
+    let courses = [];
+    await FirebaseService.getAllCourses().then((queryResults) => {
+      queryResults.forEach((doc) => {
+        const course = doc.data();
+        console.log(course);
+        const courseId = doc.id;
+        course.owner.get().then(user => {
+          course.owner = user.data();
+        })
+        course.chapter.lessons.get().then(lesson => {
+          course.chapter.lessons = lesson.data();
+        })
+        course.id = courseId
+        courses.push(course);
+        this.setState({ courses: courses });
+      });
+    });
+  }
+
+  async fetchUsers() {
+    let users = [];
+    await FirebaseService.getAllUsers()
+      .then((queryResults) => {
+        queryResults.forEach((doc) => {
+          const user = doc.data();
+          user.id = doc.id;
+          users.push(user);
+          this.setState({
+            users
           })
         })
-    }
-
+      })
+  }
 
   render() {
+
+    if (this.state.currentUser) {
+      console.log('logged in!')
+    }
+
     return (
       <Router>
         <div>
-          <nav>
-          <AppBar position="static">
-            <Toolbar>
-              <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button>
-              <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
-              <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
-              <Button color="inherit" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
-              <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
-                <AccountCircleIcon />
-              </IconButton>
-              <span>{this.props.user?.name}</span>
-            </Toolbar>
-          </AppBar>
+          <nav hidden={!this.state.currentUser}>
+            <AppBar position="static">
+              <Toolbar>
+                {/* <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button> */}
+                <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
+                <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
+                <Button color="inherit" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
+                <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
+                  <AccountCircleIcon />
+                </IconButton>
+                <span>{this.props.user?.name}</span>
+              </Toolbar>
+            </AppBar>
           </nav>
 
           {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
           <Switch>
             <Route exact path="/">
-              <Login completeLogin={this.setUser}/>
+              <Login completeLogin={this.setUser} />
             </Route>
             <Route path="/courseLibrary">
-              <CourseLibrary courses={this.state.courses}/>
+              <CourseLibrary courses={this.state.courses} />
             </Route>
             <Route path="/courseOverview/:id">
               <CourseOverview service={FirebaseService}></CourseOverview>
