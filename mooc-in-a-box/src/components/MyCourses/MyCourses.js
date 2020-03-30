@@ -75,7 +75,7 @@ function SavedCoursesComponent(props) {
   console.log(`Saved Courses Component Props: ${props}`);
   return (
     <div>
-      <h1> Saved Courses </h1>
+      <h1> Favorited Courses </h1>
       <CoursesDropdownComponent courses={props.savedCourses}></CoursesDropdownComponent>
     </div>
   )
@@ -85,7 +85,7 @@ function CreatedCoursesComponent(props) {
   console.log("Created Courses Component Props: ", props);
   return (
     <div>
-      <h1> Saved Courses </h1>
+      <h1> Created Courses </h1>
       <CoursesDropdownComponent courses={props.createdCourses} includeEditIcon={true}></CoursesDropdownComponent>
     </div>
   )

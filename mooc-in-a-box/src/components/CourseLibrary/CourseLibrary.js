@@ -6,17 +6,17 @@ import { render } from '@testing-library/react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
-
 import {AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import SearchBar from './CourseLibraryToolbar/SearchBar/SearchBar.component';
 import CourseLibraryMenu from './CourseLibraryToolbar/CourseLibraryToolbarMenu/CourseLibraryToolbarMenu.component'
-
 import CourseLibraryToolbar from './CourseLibraryToolbar/CourseLibraryToolbar.component'
+
+import * as FirebaseService from '../../service/firebase.service';
+
 
 class CourseLibrary extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     // Bind Search
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClicked = this.handleSearchClicked.bind(this);
@@ -31,6 +31,8 @@ class CourseLibrary extends React.Component {
     this.organizationHandleClosed = this.organizationHandleClosed.bind(this);
 
     this.buildMenuItems = this.buildMenuItems.bind(this);
+    this.favoriteClicked = this.favoriteClicked.bind(this);
+    this.removeFavoriteClicked = this.removeFavoriteClicked.bind(this);
 
     this.state = {
       searchValue: "",
@@ -46,15 +48,12 @@ class CourseLibrary extends React.Component {
 
   /** Search Function */
   handleSearchChange(e){
-    console.log("Key Entered!")
     this.setState({
       searchValue: e.target.value
     })
   }
 
   handleSearchClicked(e){
-    console.log("Search button clicked!")
-    console.log(this.state.searchValue);
   }
 
   /** Sort By Functions */
@@ -65,7 +64,6 @@ class CourseLibrary extends React.Component {
   };
 
   sortByHandleClose = (value) => {
-    console.log(value);
     this.setState({
       sortByElement: null,
       sortFilterValue: value
@@ -100,6 +98,19 @@ class CourseLibrary extends React.Component {
       organizationFilterValue: value
     });
   };
+
+  async favoriteClicked(course) {
+    console.log("You favorited...", course);
+    await FirebaseService.favoriteCourse(this.props.user, course);
+    this.props.updateUser(this.props.user.id)
+  }
+
+  async removeFavoriteClicked(course){
+    console.log("You unfavorited...", course);
+    await FirebaseService.removeFavoriteCourse(this.props.user, course);
+    this.props.updateUser(this.props.user.id)
+
+  }
 
   buildMenuItems = () => {
     const sortByInfo = {
@@ -181,26 +192,39 @@ class CourseLibrary extends React.Component {
     return [sortByInfo, topicInfo, organizationInfo];
   }
 
+  isCourseAFavorite = (user, course) => {
+    
+    if( user.favoritedCourses && user.favoritedCourses.length > 0 ){
+      return user.favoritedCourses
+        .find(favoritedCourse => favoritedCourse.id === course.id);
+    }
+    return false;
+  }
 
 
   render() {
     // Mappings
-    console.log(this.state);
-
     const menuItems = this.buildMenuItems();
+    const favoriteClicked = this.favoriteClicked;
+    const isCourseAFavorite = this.isCourseAFavorite;
+    const removeFavoriteClicked = this.removeFavoriteClicked
+
+    const user = this.props.user;
     const searchInfo = {
       value: this.state.searchValue,
       onChange: this.handleSearchChange,
       onClick: this.handleSearchClicked
     }
-
-    let listItems = this.props.courses.map(function(item) {
-      return (
-          <Grid item s={4}>
-            <CourseCard course={item}></CourseCard>
-          </Grid>
-      );
-    });
+    let listItems = []
+    if (user) {
+      listItems = this.props.courses.map(function(item) {
+        return (
+            <Grid item s={4}>
+              <CourseCard course={item} favoriteClicked={favoriteClicked} removeFavoriteClicked={removeFavoriteClicked} isCourseAFavorite={isCourseAFavorite(user, item)}></CourseCard>
+            </Grid>
+        );
+      });
+    }
     
     return (
       <div class="course-library">

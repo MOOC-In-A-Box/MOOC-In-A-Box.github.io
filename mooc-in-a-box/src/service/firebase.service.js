@@ -145,18 +145,50 @@ export const createCourse = async (user, courseInfo) => {
     })
         .then(async courseDoc => {
             let usersCreatedCourses;
-            if (user.createdCourses && user.createdCourses.length > 0) {
-                usersCreatedCourses = user.createdCourses;
+            if (user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
+                usersCreatedCourses = user.createdCoursesRefs;
             } else {
                 usersCreatedCourses = []
             }
-            console.log(courseDoc);
+
             const courseRef = db.doc(`Course/${courseDoc.id}`)
             usersCreatedCourses.push(courseRef);
             const updateObject = {
-                createdCourses: usersCreatedCourses
+                createdCoursesRefs: usersCreatedCourses
             }
 
             return await updateUser(user.id, updateObject);
         })
+}
+
+export const favoriteCourse = async (user, courseInfo) => {
+    const courseRef = db.doc(`Course/${courseInfo.id}`)
+    let favoritedCourses;
+
+    if (user.favoritedCoursesRefs && user.favoritedCoursesRefs.length > 0 ){
+        favoritedCourses = user.favoritedCoursesRefs;
+    } else {
+        favoritedCourses = []
+    }
+
+    favoritedCourses.push(courseRef);
+
+    const updateObject = {
+        favoritedCoursesRefs: favoritedCourses
+    }
+
+    return await updateUser(user.id, updateObject);
+}
+
+export const removeFavoriteCourse = async (user, courseInfo) => {
+    const courseRef = db.doc(`Course/${courseInfo.id}`)
+    const favoritedCourses = user.favoritedCoursesRefs;
+    favoritedCourses.splice(courseRef, 1);
+    
+    const updateObject = {
+        favoritedCoursesRefs: favoritedCourses
+    }
+
+    return await updateUser(user.id, updateObject);
+
 }

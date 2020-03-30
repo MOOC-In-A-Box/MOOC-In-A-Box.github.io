@@ -17,6 +17,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Button } from '@material-ui/core';
 import {Link} from 'react-router-dom'
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -57,17 +60,40 @@ const useStyles = makeStyles(theme => ({
 export default function CourseCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [isFavorited, setIsFavorited] = React.useState(false)
+
+
+  if ( props.isCourseAFavorite != isFavorited){
+    setIsFavorited(props.isCourseAFavorite);
+  }
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  console.log(props)
+
+  const favoriteButtonClicked = () => {
+    console.log(props.course);
+    if (isFavorited) {
+      setIsFavorited(false);
+      props.removeFavoriteClicked(props.course);
+    } else {
+      setIsFavorited(true);
+      props.favoriteClicked(props.course);
+    }
+   
+  }
 
   return (
     <Card variant="outlined" className={classes.root}>
       <CardHeader
         title={props.course.title}
         subheader={props.course.owner.displayName}
+        action={
+          <IconButton aria-label="add to favorites" onClick={favoriteButtonClicked}>
+           { isFavorited ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />  } 
+          </IconButton>
+        }
       />
       <CardMedia
         className={classes.media}
@@ -83,9 +109,6 @@ export default function CourseCard(props) {
         </Typography>
       </CardContent>
       <CardActions className={classes.actionsRow} disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
         <Button 
           variant="contained" 
           color="primary"

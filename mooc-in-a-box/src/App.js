@@ -44,22 +44,24 @@ class App extends React.Component {
       .then(result => {
         const user = result.data();
 
-        if (user.createdCourses && user.createdCourses.length > 0) {
-          console.log(user.createdCourses)
-          const newCourses = user.createdCourses
+        if (user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
+          console.log(user.createdCoursesRefs)
+          const newCourses = user.createdCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
 
           console.log(newCourses);
           console.log(this.state.courses);
-          user.createdCourses = user.createdCourses
+          user.createdCourses = user.createdCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
-        if (user.pastCourses && user.pastCourses.length > 0) {
-          user.pastCourses = user.pastCourses
+
+        if (user.pastCoursesRefs && user.pastCoursesRefs.length > 0) {
+          user.pastCourses = user.pastCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
-        if (user.favoritedCourses && user.favoritedCourses.length > 0) {
-          user.favoritedCourses = user.favoritedCourses
+
+        if (user.favoritedCoursesRefs && user.favoritedCoursesRefs.length > 0) {
+          user.favoritedCourses = user.favoritedCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
 
@@ -84,6 +86,7 @@ class App extends React.Component {
   }
 
   setUser(user) {
+    console.log("login", user);
     this.updateUser(user.id);
     document.cookie = `userid=${user.id}`;
   }
@@ -156,7 +159,7 @@ class App extends React.Component {
               <Login completeLogin={this.setUser} />
             </Route>
             <Route path="/courseLibrary">
-              <CourseLibrary courses={this.state.courses} />
+              <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser}/>
             </Route>
             <Route path="/courseOverview/:id">
               <CourseOverview service={FirebaseService}></CourseOverview>
