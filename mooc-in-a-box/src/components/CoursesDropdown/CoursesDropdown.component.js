@@ -43,7 +43,13 @@ function CoursesDropdownComponent(props) {
                                       {course.title}
                                     </Button>
                                     { props.includeEditIcon && 
-                                      <IconButton className="menu-button" color="inherit" aria-label="menu">
+                                      <IconButton 
+                                        className="menu-button" 
+                                        color="inherit" 
+                                        aria-label="menu"
+                                        component={RouterLink}
+                                        to={`/editCourse/${course.id}`}
+                                      >
                                         <EditIcon/>
                                       </IconButton>
                                     }

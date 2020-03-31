@@ -51,7 +51,7 @@ function EditCourse(props) {
         return (
             <div className="edit-course">
               <Typography className="center" variant="h3" component="h3">
-                  Course Overview
+                  Edit Course
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>

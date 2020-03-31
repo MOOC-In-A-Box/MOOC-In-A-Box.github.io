@@ -18,7 +18,7 @@ function CreatedCoursesComponent(props) {
   console.log(`Created Courses Component Props: ${props}`);
   return (
     <div className="courses-section">
-      <h1> Saved Courses </h1>
+      <h1> Courses You've Created </h1>
       <CoursesDropdownComponent courses={props.createdCourses} includeEditIcon={true}></CoursesDropdownComponent>
     </div>
   )
