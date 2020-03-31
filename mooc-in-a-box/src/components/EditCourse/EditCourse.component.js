@@ -14,9 +14,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
-import { IconButton } from '@material-ui/core';
 import EditCourseNavigationPane from './EditCourseNavigationPane/EditCourseNavigationPane.component';
 import EditCoursePane from './EditCoursePane/EditCoursePane.component';
+
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as FirebaseService from '../../service/firebase.service';

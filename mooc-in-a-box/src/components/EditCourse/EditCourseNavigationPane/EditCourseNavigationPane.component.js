@@ -15,6 +15,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import {Button} from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { IconButton } from '@material-ui/core';
 
 
 
@@ -58,12 +60,10 @@ function EditCourseNavigationPane() {
                                 />
                             </ListItem>,
                         )}
-                            <ListItem>
-                                <Button variant="contained" color="primary">
-                                    Add New Content
-                                </Button>
-                            </ListItem>
                         </List>
+                        <Button variant="contained" color="primary" className="add-content-btn">
+                            Add New Content
+                        </Button>
                     </div>
                     </Grid>
                 </Grid>
@@ -89,12 +89,10 @@ function EditCourseNavigationPane() {
                                 />
                             </ListItem>,
                         )}
-                            <ListItem>
-                                <Button variant="contained" color="primary">
-                                    Add New Content
-                                </Button>
-                            </ListItem>
                         </List>
+                        <Button variant="contained" color="primary" className="add-content-btn">
+                            Add New Content
+                        </Button>
                     </div>
                     </Grid>
                 </Grid>
