@@ -14,6 +14,8 @@ import Login from './components/Login/Login';
 import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 import CreateCourse from './components/CreateCourse/CreateCourse.component';
+import EditCourse from './components/EditCourse/EditCourse.component';
+
 import * as FirebaseService from '../src/service/firebase.service'
 
 class App extends React.Component {
@@ -172,6 +174,9 @@ class App extends React.Component {
             </Route>
             <Route path="/createCourse">
               <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
+            </Route>
+            <Route path="/editCourse/:id">
+              <EditCourse user={this.state.currentUser}></EditCourse>
             </Route>
           </Switch>
         </div>

@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import './CourseOverview.css';
+import React, { useEffect, useState } from 'react';
+import {
+  Link as RouterLink,
+  useParams
+} from "react-router-dom";
 
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import {Button} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
+import Grid from '@material-ui/core/Grid';
+import EditIcon from '@material-ui/icons/Edit';
+import { IconButton } from '@material-ui/core';
+import EditCourseNavigationPane from './EditCourseNavigationPane/EditCourseNavigationPane.component';
+import EditCoursePane from './EditCoursePane/EditCoursePane.component';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as FirebaseService from '../../service/firebase.service';
-import { useParams } from "react-router-dom";
 
-import CourseOverviewNavigationPane from './CourseOverviewNavigationPane/CourseOverviewNavigationPane.component';
-import CourseOverviewCoursePane from './CourseOverviewCoursePane/CourseOverviewCoursePane.component';
-
-
-function CourseOverview(props) {
-
+function EditCourse(props) {
+    // Get ID from Route Params
+    let { id } = useParams();
+    // Create State Variables
     const [course, setCourse] = useState();
     const [error, setError] = useState();
-    let { id } = useParams();
+
 
     useEffect(() => {
         if (id) {
@@ -47,19 +47,18 @@ function CourseOverview(props) {
       }
     }, [id]);
 
-    console.log(`Course Overiew: ${course}`)
     if (course){
         return (
-            <div className="courseOverview">
+            <div className="edit-course">
               <Typography className="center" variant="h3" component="h3">
                   Course Overview
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <CourseOverviewNavigationPane />
+                      <EditCourseNavigationPane />
                   </Grid>
                   <Grid item xs={8}>
-                       <CourseOverviewCoursePane course={course} />
+                       <EditCoursePane course={course} />
                   </Grid>
               </Grid>
             </div>
@@ -73,6 +72,7 @@ function CourseOverview(props) {
         )
     }
 
+
   }
-  
-  export default CourseOverview;
+
+  export default EditCourse;
