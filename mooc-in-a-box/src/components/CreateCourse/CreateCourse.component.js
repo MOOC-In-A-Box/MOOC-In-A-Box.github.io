@@ -70,7 +70,7 @@ function CreateCourse(props) {
     <div className="Home">
       <CssBaseline />
       <Typography className="center" variant="h3" component="h3">
-        Classes You've Created
+        Create A Course
         </Typography>
       <Container className="userProfile-bottom-padding" maxWidth="lg">
         <Paper className="paper">
