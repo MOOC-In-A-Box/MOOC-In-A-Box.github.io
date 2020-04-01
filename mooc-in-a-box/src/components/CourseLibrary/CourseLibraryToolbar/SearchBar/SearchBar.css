@@ -1,19 +1,19 @@
 .search-bar {
     margin-left: auto !important;
-    color: white;
+    color: black;
   }
   
   .search-bar-icon {
-    color: white
+    color: black
   }
   
   .search-bar .MuiOutlinedInput-notchedOutline {
-    border-color: white;
+    border-color: black;
   }
   .white {
     color: white
   }
   
   #outlined-search {
-    color: white
+    color: black
   }

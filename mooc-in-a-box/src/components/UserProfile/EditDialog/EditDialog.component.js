@@ -29,10 +29,10 @@ function EditDialog(props){
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={props.handleClose} color="primary">
+            <Button onClick={props.handleClose} color="secondary">
               Cancel
             </Button>
-            <Button onClick={props.handleSubmit} color="primary">
+            <Button onClick={props.handleSubmit} color="secondary">
               Submit
             </Button>
           </DialogActions>

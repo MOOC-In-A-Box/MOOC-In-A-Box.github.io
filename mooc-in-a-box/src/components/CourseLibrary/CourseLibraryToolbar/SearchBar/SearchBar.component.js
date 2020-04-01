@@ -9,7 +9,7 @@ import './SearchBar.css';
 function SearchBar(props) {
     return(
       <div className="search-bar">
-          <TextField value={props.searchValue} onChange={props.onChange} id="outlined-search" type="search" variant="outlined"  color="white"/>
+          <TextField value={props.searchValue} onChange={props.onChange} id="outlined-search" type="search" variant="outlined"  color="black"/>
           <IconButton className="menu-button" onClick={props.onSearchClicked}>
             <SearchIcon className="search-bar-icon" />
           </IconButton>

@@ -90,7 +90,7 @@ function EditCourseNavigationPane() {
                             </ListItem>,
                         )}
                             <ListItem>
-                                <Button variant="contained" color="primary">
+                                <Button variant="contained" color="secondary">
                                     Add New Content
                                 </Button>
                             </ListItem>
@@ -100,7 +100,7 @@ function EditCourseNavigationPane() {
                 </Grid>
             </ExpansionPanelDetails>
         </ExpansionPanel>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="secondary">
             Add New Lesson
         </Button>
 

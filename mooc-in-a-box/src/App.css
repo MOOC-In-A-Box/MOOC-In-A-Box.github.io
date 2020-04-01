@@ -7,8 +7,8 @@
   pointer-events: none;
 }
 
-.menu-button {
-  padding: 1em
+.main {
+  margin-right: 1em!important;
 }
 
 .title {

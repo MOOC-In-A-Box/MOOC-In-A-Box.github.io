@@ -111,7 +111,7 @@ export default function CourseCard(props) {
       <CardActions className={classes.actionsRow} disableSpacing>
         <Button 
           variant="contained" 
-          color="primary"
+          color="secondary"
           component={Link}
           to={`/courseOverview/${props.course.id}`}
           >

@@ -78,7 +78,7 @@ function CreateCourse(props) {
             currnetCoursesSection
           }
           <span>
-            <Button variant="contained" color="primary" onClick={openCreateCourseDialog}>
+            <Button variant="contained" color="secondary" onClick={openCreateCourseDialog}>
               Create New Course
               </Button>
           </span>

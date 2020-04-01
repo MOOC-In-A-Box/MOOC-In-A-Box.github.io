@@ -15,8 +15,34 @@ import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 import CreateCourse from './components/CreateCourse/CreateCourse.component';
 import EditCourse from './components/EditCourse/EditCourse.component';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'; 
 
 import * as FirebaseService from '../src/service/firebase.service'
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { // peaches
+      light: '#f44336',
+      main: '#f6eee7',
+      dark: '#dbbca1',
+    },
+    secondary: {  // purples
+      light: '#a17da5',
+      main: '#87618c',
+      dark: '#442b4a',
+    },
+  },
+  typography: { 
+     useNextVariants: true
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        textTransform: 'none',
+      },
+    },
+  },
+})
 
 class App extends React.Component {
   constructor() {
@@ -137,50 +163,51 @@ class App extends React.Component {
     }
 
     return (
-      <Router>
-        <div>
-          <nav hidden={!this.state.currentUser}>
-            <AppBar position="static">
-              <Toolbar>
-                {/* <Button color="inherit" className="menu-button" component={RouterLink} to="/">MOOC-In-A-Box</Button> */}
-                <Button color="inherit" className="menu-button" component={RouterLink} to="/myCourses">My Courses</Button>
-                <Button color="inherit" className="menu-button" component={RouterLink} to="/courseLibrary">All Courses</Button>
-                <Button color="inherit" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
-                <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
-                  <AccountCircleIcon />
-                </IconButton>
-                <span>{this.props.user?.name}</span>
-              </Toolbar>
-            </AppBar>
-          </nav>
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <div>
+            <nav hidden={!this.state.currentUser}>
+              <AppBar position="static">
+                <Toolbar>
+                  <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
+                  <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/courseLibrary">All Courses</Button>
+                  <Button variant="outlined" color="secondary" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
+                  <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
+                    <AccountCircleIcon />
+                  </IconButton>
+                  <span>{this.props.user?.name}</span>
+                </Toolbar>
+              </AppBar>
+            </nav>
 
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-          <Switch>
-            <Route exact path="/">
-              <Login completeLogin={this.setUser} />
-            </Route>
-            <Route path="/courseLibrary">
-              <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser}/>
-            </Route>
-            <Route path="/courseOverview/:id">
-              <CourseOverview service={FirebaseService}></CourseOverview>
-            </Route>
-            <Route path="/myCourses">
-              <MyCourses user={this.state.currentUser}></MyCourses>
-            </Route>
-            <Route path="/profile">
-              <UserProfile user={this.state.currentUser} updateUser={this.updateUser}></UserProfile>
-            </Route>
-            <Route path="/createCourse">
-              <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
-            </Route>
-            <Route path="/editCourse/:id">
-              <EditCourse user={this.state.currentUser}></EditCourse>
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+            {/* A <Switch> looks through its children <Route>s and
+                renders the first one that matches the current URL. */}
+            <Switch>
+              <Route exact path="/">
+                <Login completeLogin={this.setUser} />
+              </Route>
+              <Route path="/courseLibrary">
+                <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser}/>
+              </Route>
+              <Route path="/courseOverview/:id">
+                <CourseOverview service={FirebaseService}></CourseOverview>
+              </Route>
+              <Route path="/myCourses">
+                <MyCourses user={this.state.currentUser}></MyCourses>
+              </Route>
+              <Route path="/profile">
+                <UserProfile user={this.state.currentUser} updateUser={this.updateUser}></UserProfile>
+              </Route>
+              <Route path="/createCourse">
+                <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
+              </Route>
+              <Route path="/editCourse/:id">
+                <EditCourse user={this.state.currentUser}></EditCourse>
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </MuiThemeProvider>
     )
   }
 };
