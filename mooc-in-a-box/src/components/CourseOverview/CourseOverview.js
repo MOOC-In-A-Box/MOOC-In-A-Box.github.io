@@ -47,7 +47,7 @@ function CourseOverview(props) {
       }
     }, [id]);
 
-    console.log(`Course Overiew: ${course}`)
+    console.log("Course Overiew: ", course)
     if (course){
         return (
             <div className="courseOverview">
@@ -56,7 +56,7 @@ function CourseOverview(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <CourseOverviewNavigationPane />
+                      <CourseOverviewNavigationPane course={course} />
                   </Grid>
                   <Grid item xs={8}>
                        <CourseOverviewCoursePane course={course} />

@@ -131,9 +131,9 @@ class App extends React.Component {
         course.owner.get().then(user => {
           course.owner = user.data();
         })
-        course.chapter.lessons.get().then(lesson => {
-          course.chapter.lessons = lesson.data();
-        })
+        // course.chapter.lessons.get().then(lesson => {
+        //   course.chapter.lessons = lesson.data();
+        // })
         course.id = courseId
         courses.push(course);
         this.setState({ courses: courses });

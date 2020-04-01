@@ -141,7 +141,7 @@ export const createCourse = async (user, courseInfo) => {
         owner: userDocRef,
         title: courseInfo.title,
         description: courseInfo.description,
-        chapter: courseInfo.chapter
+        chapters: courseInfo.chapters
     })
         .then(async courseDoc => {
             let usersCreatedCourses;
@@ -190,5 +190,39 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
     }
 
     return await updateUser(user.id, updateObject);
+
+}
+
+
+export const updateCourse = async (courseId, updates) => {
+    console.log("Update Course Called");
+    return db.collection('Course')
+        .doc(courseId)
+        .set(updates, { merge: true })
+}
+
+export const addNewChapter = async (course, newChapterInfo) => {
+    const chapter = {} 
+    chapter.title = newChapterInfo.title;
+    chapter.description = newChapterInfo.description;
+    chapter.id = 0
+    chapter.lessonsRef = [];
+
+    if (course.chapters && course.chapters.length > 0){
+        course.chapters.push(chapter);
+    } else {
+        course.chapters = [];
+        course.chapters.push(chapter);
+    }
+
+    const updateObject = {
+        chapters: course.chapters
+    }
+
+    return await updateCourse(course.id, updateObject);
+
+}
+
+export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
 
 }
