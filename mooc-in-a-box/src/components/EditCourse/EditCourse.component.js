@@ -21,6 +21,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as FirebaseService from '../../service/firebase.service';
+import CreateChapterDialog from './CreateChapterDialog/CreateChapterDialog.component';
 
 function EditCourse(props) {
     // Get ID from Route Params
@@ -28,6 +29,37 @@ function EditCourse(props) {
     // Create State Variables
     const [course, setCourse] = useState();
     const [error, setError] = useState();
+    const [isCreateChapterDialogOpen, setIsCreateChapterDialogOpen] = useState(false);
+
+    function handleCreateChapterClose(){
+        setIsCreateChapterDialogOpen(false);
+    }
+
+    function openCreateChapterDialog(){
+        console.log("Opening Create Chapter Dialog");
+        setIsCreateChapterDialogOpen(true);
+    }
+
+    async function addNewChapter(chapterInfo){
+        console.log(course);
+        console.log(chapterInfo);
+        await FirebaseService.addNewChapter(course, chapterInfo);
+        FirebaseService.getCourseById(course.id)
+            .then( courseResult => {
+                if (courseResult.exists) {
+                    setError(null);
+                    const course = courseResult.data();
+                    course.id = id;
+                    setCourse(course);
+                    setIsCreateChapterDialogOpen(false);
+                } else {
+                    setError('Course Not Found');
+                    setCourse();
+                    setIsCreateChapterDialogOpen(false);
+                }
+            })
+    }
+
 
 
     useEffect(() => {
@@ -38,7 +70,9 @@ function EditCourse(props) {
                     console.log(courseResult.exists)
                     if (courseResult.exists) {
                         setError(null);
-                        setCourse(courseResult.data());
+                        const course = courseResult.data();
+                        course.id = id;
+                        setCourse(course);
                     } else {
                         setError('Course Not Found');
                         setCourse();
@@ -56,12 +90,14 @@ function EditCourse(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <EditCourseNavigationPane />
+                      <EditCourseNavigationPane openCreateChapterDialog={openCreateChapterDialog} />
                   </Grid>
                   <Grid item xs={8}>
                        <EditCoursePane course={course} />
                   </Grid>
               </Grid>
+            <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
+
             </div>
           );
     } else {

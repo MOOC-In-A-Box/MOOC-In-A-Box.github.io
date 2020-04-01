@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './EditCourseNavigationPane.css';
-
+import "../../CourseOverview.css";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -14,9 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import {Button} from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { IconButton } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+
 
 
 
@@ -33,21 +31,18 @@ function generate(element) {
     );
   }
 
-  
 
 
-function EditCourseNavigationPane(props) {
+function CourseOverviewChapterPanel(props) {
     console.log(props);
     return (
-        <Paper className="paper">
-
         <ExpansionPanel>
             <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
             >
-            <Typography variant="subtitle2">Topic 1</Typography>
+            <Typography variant="subtitle2">{props.chapter.title}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
             <Grid container spacing={2}>
@@ -62,49 +57,12 @@ function EditCourseNavigationPane(props) {
                             </ListItem>,
                         )}
                         </List>
-                        <Button variant="contained" color="primary" className="add-content-btn">
-                            Add New Content
-                        </Button>
                     </div>
                     </Grid>
                 </Grid>
             </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel>
-            <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-            >
-            <Typography variant="subtitle2">Topic 2</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <div>
-                        <List dense="true">
-                        {generate(
-                            <ListItem>
-                                <ListItemText
-                                    primary="SubTopic2"
-                                />
-                            </ListItem>,
-                        )}
-                        </List>
-                        <Button variant="contained" color="primary" className="add-content-btn">
-                            Add New Lesson
-                        </Button>
-                    </div>
-                    </Grid>
-                </Grid>
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <Button variant="contained" onClick={props.openCreateChapterDialog} color="primary">
-            Add New Chapter
-        </Button>
-
-    </Paper>
     )
 }
 
-export default EditCourseNavigationPane;
+export default CourseOverviewChapterPanel;

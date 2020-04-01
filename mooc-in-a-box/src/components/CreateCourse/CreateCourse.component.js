@@ -45,11 +45,15 @@ function CreateCourse(props) {
   async function handleSubmit(courseInfo) {
     courseInfo.owner = props.user.id;
 
-    courseInfo.chapter = {
+    const chapter = {
       id: 0,
       lessons: "Course/rlfxOavBn4nPZLNTRMkL/Lessons/kL5CwNARpoUhexocK7P4",
       sectionTitle: `${courseInfo.title} - Section`
     }
+
+    courseInfo.chapters = []
+    courseInfo.chapter = chapter;
+    // courseInfo.chapters.push(chapter);
 
     await FirebaseService.createCourse(props.user, courseInfo)
     setIsCreateCourseDialogOpen(false);

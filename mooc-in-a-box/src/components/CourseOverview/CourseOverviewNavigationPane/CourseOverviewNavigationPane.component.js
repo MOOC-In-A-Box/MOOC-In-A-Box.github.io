@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
+import CourseOverviewChapterPanel from './CourseOverviewChapterPanel/CourseOverviewChapterPanel.component'
 
 
 /**
@@ -33,64 +33,23 @@ function generate(element) {
   
 
 
-function CourseOverviewNavigationPane() {
+function CourseOverviewNavigationPane(props) {
+
+    console.log(props.course);
+
+    let courseNavigationPanels = [];
+    if (props.course && props.course.chapters && props.course.chapters.length > 0){
+      
+      courseNavigationPanels = props.course.chapters.map( chapter => 
+        <CourseOverviewChapterPanel chapter={chapter} />
+      )
+
+    }
+    
     return (
         <Paper className="paper">
-
-        <ExpansionPanel>
-            <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            >
-            <Typography variant="subtitle2">Topic 1</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <div>
-                        <List dense="true">
-                        {generate(
-                            <ListItem>
-                                <ListItemText
-                                    primary="SubTopic"
-                                />
-                            </ListItem>,
-                        )}
-                        </List>
-                    </div>
-                    </Grid>
-                </Grid>
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-            <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-            >
-            <Typography variant="subtitle2">Topic 2</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <div>
-                        <List dense="true">
-                        {generate(
-                            <ListItem>
-                                <ListItemText
-                                    primary="SubTopic2"
-                                />
-                            </ListItem>,
-                        )}
-                        </List>
-                    </div>
-                    </Grid>
-                </Grid>
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
-
-    </Paper>
+          {courseNavigationPanels}
+        </Paper>
     )
 }
 
