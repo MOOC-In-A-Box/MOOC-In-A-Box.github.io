@@ -62,10 +62,10 @@ function CreateChapterDialog(props){
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={props.handleClose} color="primary">
+            <Button onClick={props.handleClose} color="secondary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color="primary">
+            <Button onClick={handleSubmit} color="secondary">
               Submit
             </Button>
           </DialogActions>

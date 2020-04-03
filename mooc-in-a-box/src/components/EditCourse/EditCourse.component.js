@@ -50,6 +50,7 @@ function EditCourse(props) {
                     setError(null);
                     const course = courseResult.data();
                     course.id = id;
+                    console.log(course);
                     setCourse(course);
                     setIsCreateChapterDialogOpen(false);
                 } else {
@@ -90,7 +91,7 @@ function EditCourse(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <EditCourseNavigationPane openCreateChapterDialog={openCreateChapterDialog} />
+                      <EditCourseNavigationPane course={course} openCreateChapterDialog={openCreateChapterDialog} />
                   </Grid>
                   <Grid item xs={8}>
                        <EditCoursePane course={course} />

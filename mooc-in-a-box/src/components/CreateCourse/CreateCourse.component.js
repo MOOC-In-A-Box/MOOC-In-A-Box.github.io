@@ -12,10 +12,14 @@ import { withRouter } from "react-router-dom";
 import * as FirebaseService from '../../service/firebase.service';
 import CreateCourseDialog from './CreateCourseDialog/CreateCourseDialog.component';
 import CoursesDropdownComponent from '../CoursesDropdown/CoursesDropdown.component';
+import { useHistory } from "react-router-dom";
 
 
 function CreatedCoursesComponent(props) {
+
   console.log(`Created Courses Component Props: ${props}`);
+
+
   return (
     <div className="courses-section">
       <h1> Courses You've Created </h1>
@@ -27,6 +31,7 @@ function CreatedCoursesComponent(props) {
 function CreateCourse(props) {
   console.log(props.user);
   const [isCreateCourseDialogOpen, setIsCreateCourseDialogOpen] = useState(false);
+  const history = useHistory();
 
 
   function handleCreateCourseDialogClose() {
@@ -36,10 +41,6 @@ function CreateCourse(props) {
   function openCreateCourseDialog() {
     setIsCreateCourseDialogOpen(true);
 
-  }
-
-  function updateUser(user) {
-    console.log(user);
   }
 
   async function handleSubmit(courseInfo) {
@@ -55,10 +56,12 @@ function CreateCourse(props) {
     courseInfo.chapter = chapter;
     // courseInfo.chapters.push(chapter);
 
-    await FirebaseService.createCourse(props.user, courseInfo)
+    const response = await FirebaseService.createCourse(props.user, courseInfo)
     setIsCreateCourseDialogOpen(false);
-    props.updateCourses();
-    props.updateUser(props.user.id);
+    await props.updateCourses();
+    await props.updateUser(props.user.id);
+    // Navigate to Edit Course page
+    history.push(`/editCourse/${props.user.createdCoursesRefs[props.user.createdCoursesRefs.length - 1].id}`)
   }
 
   const hasCurrentCourses = false
