@@ -41,10 +41,15 @@ function EditCourseNavigationPane(props) {
     console.log(props);
 
 
+  function setChapterInContext(chapter){
+    props.setChapterInContext(chapter);
+  }
+
+
     let courseNavigationPanels = []
     if (props.course && props.course.chapters && props.course.chapters.length > 0){
         courseNavigationPanels = props.course.chapters.map( chapter => 
-          <EditCourseChapterPanel chapter={chapter} />
+          <EditCourseChapterPanel openLessonModal={props.openLessonModal} setChapterInContext={setChapterInContext} chapter={chapter} />
         )
       }
 

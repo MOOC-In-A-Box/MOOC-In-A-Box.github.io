@@ -22,6 +22,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as FirebaseService from '../../service/firebase.service';
 import CreateChapterDialog from './CreateChapterDialog/CreateChapterDialog.component';
+import CreateLessonDialog from './CreateLessonDialog/CreateLessonDialog.component';
 
 function EditCourse(props) {
     // Get ID from Route Params
@@ -30,14 +31,33 @@ function EditCourse(props) {
     const [course, setCourse] = useState();
     const [error, setError] = useState();
     const [isCreateChapterDialogOpen, setIsCreateChapterDialogOpen] = useState(false);
+    const [isCreateLessonDialogOpen, setIsCreateLessonDialogOpen] = useState(false);
+    const [chapterInContext, setChapterInContext] = useState();
+
 
     function handleCreateChapterClose(){
         setIsCreateChapterDialogOpen(false);
     }
 
+    function handleCreateLessonDialogClose(){
+        console.log("Create Lesson Dialog closed");
+        setIsCreateLessonDialogOpen(false);
+    }
+
     function openCreateChapterDialog(){
         console.log("Opening Create Chapter Dialog");
         setIsCreateChapterDialogOpen(true);
+    }
+
+    function openCreateLessonDialog(){
+        console.log("Opening Lesson Dialog");
+        setIsCreateLessonDialogOpen(true);
+    }
+
+
+    function addNewLesson(lessonInfo){
+        console.log(lessonInfo);
+        setIsCreateLessonDialogOpen(false);
     }
 
     async function addNewChapter(chapterInfo){
@@ -91,13 +111,14 @@ function EditCourse(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <EditCourseNavigationPane course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                      <EditCourseNavigationPane openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                   </Grid>
                   <Grid item xs={8}>
                        <EditCoursePane course={course} />
                   </Grid>
               </Grid>
-            <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
+              <CreateChapterDialog  isOpen={isCreateChapterDialogOpen}  handleSubmit={addNewChapter}    handleClose={handleCreateChapterClose} />
+              <CreateLessonDialog   isOpen={isCreateLessonDialogOpen}   handleSubmit={addNewLesson}     handleClose={handleCreateLessonDialogClose} />
 
             </div>
           );

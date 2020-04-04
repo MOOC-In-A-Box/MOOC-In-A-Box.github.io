@@ -31,6 +31,22 @@ function generate(element) {
 
 function EditCourseChapterPanel(props) {
     console.log(props);
+
+    let lessonItems = []
+    if (props.chapter && props.chapter.lessons && props.chapters.lessons.length > 0){
+        lessonItems = props.lessons.map( lesson => 
+          <ListItem>
+              <ListItemText primary={lesson.title}/>
+          </ListItem>
+        )
+      }
+
+
+      function openLessonModal(){
+        props.setChapterInContext(props.chapter);
+        props.openLessonModal(true);
+      }
+
     
     return (
         <ExpansionPanel>
@@ -46,14 +62,8 @@ function EditCourseChapterPanel(props) {
                 <Grid item xs={12} md={6}>
                     <div>
                         <List dense="true">
-                        {generate(
-                            <ListItem>
-                                <ListItemText
-                                    primary="SubTopic"
-                                />
-                            </ListItem>,
-                        )}
-                        <Button variant="contained" color="secondary" className="add-content-btn">
+                        {lessonItems}
+                        <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn">
                             Add New Content
                         </Button>
                         </List>
