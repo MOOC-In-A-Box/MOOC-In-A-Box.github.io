@@ -35,6 +35,20 @@ function generate(element) {
 
 function CourseOverviewChapterPanel(props) {
     console.log(props);
+
+    let lessonItems = []
+    if (props.chapter && props.chapter.lessons && props.chapters.lessons.length > 0){
+        lessonItems = props.lessons.map( lesson => 
+          <ListItem>
+              <ListItemText primary={lesson.title}/>
+          </ListItem>
+        )
+      } else {
+          lessonItems[0] = <ListItem> <ListItemText primary="No Lessons Added" /> </ListItem>
+      }
+
+
+
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary
@@ -49,13 +63,7 @@ function CourseOverviewChapterPanel(props) {
                 <Grid item xs={12} md={6}>
                     <div>
                         <List dense="true">
-                        {generate(
-                            <ListItem>
-                                <ListItemText
-                                    primary="SubTopic"
-                                />
-                            </ListItem>,
-                        )}
+                        {lessonItems}
                         </List>
                     </div>
                     </Grid>
