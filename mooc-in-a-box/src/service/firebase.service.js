@@ -222,13 +222,6 @@ export const addNewChapter = async (course, newChapterInfo) => {
 }
 
 export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
-    console.log("Inside Firebase Add New Lesson Function");
-    console.log("Current Course:" , course);
-    console.log("Chapter Information: ", chapterInfo);
-    console.log("Lesson Information: ", lessonInfo)
-
-    const url = `/Course/${course.id}/Lessons/`;
-    
 
     return await db.collection('Course').doc(course.id).collection('Lessons').add(lessonInfo)
         .then(async lessonDoc => {
@@ -237,7 +230,7 @@ export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
             const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonDoc.id}`);
             const chapters = course.chapters.map( chapter => {
                 if (chapter === chapterInfo){
-                    chapter.lessonsRef.push(url);
+                    chapter.lessonsRef.push(lessonRef);
                 }
                 return chapter
             });
@@ -245,9 +238,7 @@ export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
             const updateObject = {
                 chapters
             }
-
             return await updateCourse(course.id, updateObject)
         });
-  
-    // console.log(chapters);
 }
+

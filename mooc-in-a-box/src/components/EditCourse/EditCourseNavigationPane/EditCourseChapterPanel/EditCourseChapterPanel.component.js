@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 
+
 /**
  * Generate multiple function
  */
@@ -31,8 +32,11 @@ function generate(element) {
 
 function EditCourseChapterPanel(props) {
 
+    console.log("CHapter Panel -- ", props);
     let lessonItems = []
-    if (props.chapter && props.chapter.lessons && props.chapters.lessons.length > 0){
+
+
+    if (props.chapter && props.chapter.lessons && props.chapters.lessons.lessons > 0){
         lessonItems = props.lessons.map( lesson => 
           <ListItem>
               <ListItemText primary={lesson.title}/>

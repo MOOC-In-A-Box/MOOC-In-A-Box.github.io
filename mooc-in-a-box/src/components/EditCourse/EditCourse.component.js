@@ -92,8 +92,6 @@ function EditCourse(props) {
             })
     }
 
-
-
     useEffect(() => {
         if (id) {
             FirebaseService.getCourseById(id)
