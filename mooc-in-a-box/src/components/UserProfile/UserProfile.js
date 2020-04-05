@@ -37,9 +37,10 @@ function UserProfile(props) {
     FirebaseService.updateUser(props.user.id, {
       displayName
     }).then(result => {
+      console.log(result);
       setIsDisplayNameDialogOpen(false)
       setOldDiplayName(displayName)
-      props.updateUser();
+      props.updateUser(props.user.id);
 
     })
       .catch(err => {
