@@ -39,7 +39,6 @@ export const getAllUsers = () => {
 }
 
 export const updateUser = async (userId, updates) => {
-    console.log("Update User Called");
     return db.collection('Users')
         .doc(userId)
         .set(updates, { merge: true })
@@ -195,7 +194,6 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
 
 
 export const updateCourse = async (courseId, updates) => {
-    console.log("Update Course Called");
     return db.collection('Course')
         .doc(courseId)
         .set(updates, { merge: true })
@@ -224,5 +222,32 @@ export const addNewChapter = async (course, newChapterInfo) => {
 }
 
 export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
+    console.log("Inside Firebase Add New Lesson Function");
+    console.log("Current Course:" , course);
+    console.log("Chapter Information: ", chapterInfo);
+    console.log("Lesson Information: ", lessonInfo)
 
+    const url = `/Course/${course.id}/Lessons/`;
+    
+
+    return await db.collection('Course').doc(course.id).collection('Lessons').add(lessonInfo)
+        .then(async lessonDoc => {
+            console.log("Lesson Doc", lessonDoc)
+            console.log(`Course/${course.id}/Lessons/${lessonDoc.id}`);
+            const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonDoc.id}`);
+            const chapters = course.chapters.map( chapter => {
+                if (chapter === chapterInfo){
+                    chapter.lessonsRef.push(url);
+                }
+                return chapter
+            });
+
+            const updateObject = {
+                chapters
+            }
+
+            return await updateCourse(course.id, updateObject)
+        });
+  
+    // console.log(chapters);
 }

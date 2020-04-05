@@ -35,8 +35,6 @@ function generate(element) {
 
 function CourseOverviewNavigationPane(props) {
 
-    console.log(props.course);
-
     let courseNavigationPanels = [];
     if (props.course && props.course.chapters && props.course.chapters.length > 0){
       

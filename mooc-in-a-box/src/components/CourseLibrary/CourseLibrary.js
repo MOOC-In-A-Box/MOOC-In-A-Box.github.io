@@ -100,13 +100,11 @@ class CourseLibrary extends React.Component {
   };
 
   async favoriteClicked(course) {
-    console.log("You favorited...", course);
     await FirebaseService.favoriteCourse(this.props.user, course);
     this.props.updateUser(this.props.user.id)
   }
 
   async removeFavoriteClicked(course){
-    console.log("You unfavorited...", course);
     await FirebaseService.removeFavoriteCourse(this.props.user, course);
     this.props.updateUser(this.props.user.id)
 

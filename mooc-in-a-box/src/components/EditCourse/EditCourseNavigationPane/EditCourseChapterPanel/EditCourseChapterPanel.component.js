@@ -30,7 +30,6 @@ function generate(element) {
 
 
 function EditCourseChapterPanel(props) {
-    console.log(props);
 
     let lessonItems = []
     if (props.chapter && props.chapter.lessons && props.chapters.lessons.length > 0){

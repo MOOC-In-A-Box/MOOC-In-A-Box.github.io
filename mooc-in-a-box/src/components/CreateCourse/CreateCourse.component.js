@@ -17,9 +17,6 @@ import { useHistory } from "react-router-dom";
 
 function CreatedCoursesComponent(props) {
 
-  console.log(`Created Courses Component Props: ${props}`);
-
-
   return (
     <div className="courses-section">
       <h1> Courses You've Created </h1>
@@ -29,7 +26,6 @@ function CreatedCoursesComponent(props) {
 }
 
 function CreateCourse(props) {
-  console.log(props.user);
   const [isCreateCourseDialogOpen, setIsCreateCourseDialogOpen] = useState(false);
   const history = useHistory();
 

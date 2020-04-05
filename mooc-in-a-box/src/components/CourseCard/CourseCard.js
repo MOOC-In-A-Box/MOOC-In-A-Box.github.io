@@ -73,7 +73,6 @@ export default function CourseCard(props) {
   };
 
   const favoriteButtonClicked = () => {
-    console.log(props.course);
     if (isFavorited) {
       setIsFavorited(false);
       props.removeFavoriteClicked(props.course);

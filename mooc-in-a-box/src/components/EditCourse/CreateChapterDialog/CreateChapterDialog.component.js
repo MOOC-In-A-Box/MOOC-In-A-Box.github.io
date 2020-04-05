@@ -22,9 +22,7 @@ function CreateChapterDialog(props){
 
   }
 
-  function handleSubmit(){
-      console.log(`Title: ${title}`);
-      console.log(`Description: ${description}`);
+  function handleSubmit(e){
       const chapterInfo = {
           title,
           description

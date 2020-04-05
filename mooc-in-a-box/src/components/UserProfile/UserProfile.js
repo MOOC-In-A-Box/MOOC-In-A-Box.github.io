@@ -16,7 +16,6 @@ const passwordValue = "*******";
 
 function UserProfile(props) {
 
-  console.log(props);
 
   const [displayName, setDisplayName] = useState(null);
   const [oldDisplayName, setOldDiplayName] = useState(null);
@@ -37,7 +36,6 @@ function UserProfile(props) {
     FirebaseService.updateUser(props.user.id, {
       displayName
     }).then(result => {
-      console.log(result);
       setIsDisplayNameDialogOpen(false)
       setOldDiplayName(displayName)
       props.updateUser(props.user.id);

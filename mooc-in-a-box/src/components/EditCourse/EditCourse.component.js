@@ -40,29 +40,41 @@ function EditCourse(props) {
     }
 
     function handleCreateLessonDialogClose(){
-        console.log("Create Lesson Dialog closed");
         setIsCreateLessonDialogOpen(false);
     }
 
     function openCreateChapterDialog(){
-        console.log("Opening Create Chapter Dialog");
         setIsCreateChapterDialogOpen(true);
     }
 
     function openCreateLessonDialog(){
-        console.log("Opening Lesson Dialog");
         setIsCreateLessonDialogOpen(true);
     }
 
 
-    function addNewLesson(lessonInfo){
+    async function addNewLesson(lessonInfo){
+        console.log("Add New Lesson Called");
         console.log(lessonInfo);
         setIsCreateLessonDialogOpen(false);
+        await FirebaseService.addNewLesson(course, chapterInContext, lessonInfo);
+        FirebaseService.getCourseById(course.id)
+        .then( courseResult => {
+            if (courseResult.exists) {
+                setError(null);
+                const course = courseResult.data();
+                course.id = id;
+                setCourse(course);
+                setIsCreateChapterDialogOpen(false);
+            } else {
+                setError('Course Not Found');
+                setCourse();
+                setIsCreateChapterDialogOpen(false);
+            }
+        })
+
     }
 
     async function addNewChapter(chapterInfo){
-        console.log(course);
-        console.log(chapterInfo);
         await FirebaseService.addNewChapter(course, chapterInfo);
         FirebaseService.getCourseById(course.id)
             .then( courseResult => {
@@ -70,7 +82,6 @@ function EditCourse(props) {
                     setError(null);
                     const course = courseResult.data();
                     course.id = id;
-                    console.log(course);
                     setCourse(course);
                     setIsCreateChapterDialogOpen(false);
                 } else {
@@ -85,10 +96,8 @@ function EditCourse(props) {
 
     useEffect(() => {
         if (id) {
-            console.log(`ID: ${id}`);
             FirebaseService.getCourseById(id)
                 .then(courseResult => {
-                    console.log(courseResult.exists)
                     if (courseResult.exists) {
                         setError(null);
                         const course = courseResult.data();
@@ -118,7 +127,7 @@ function EditCourse(props) {
                   </Grid>
               </Grid>
               <CreateChapterDialog  isOpen={isCreateChapterDialogOpen}  handleSubmit={addNewChapter}    handleClose={handleCreateChapterClose} />
-              <CreateLessonDialog   isOpen={isCreateLessonDialogOpen}   handleSubmit={addNewLesson}     handleClose={handleCreateLessonDialogClose} />
+              <CreateLessonDialog   isOpen={isCreateLessonDialogOpen}   addNewLesson={addNewLesson}     handleClose={handleCreateLessonDialogClose} />
 
             </div>
           );

@@ -23,8 +23,7 @@ function CreateCourseDialog(props){
   }
 
   function handleSubmit(){
-      console.log(`Title: ${title}`);
-      console.log(`Description: ${description}`);
+
       const courseDetails = {
           title,
           description

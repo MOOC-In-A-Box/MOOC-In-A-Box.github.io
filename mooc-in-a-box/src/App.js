@@ -73,12 +73,10 @@ class App extends React.Component {
         const user = result.data();
 
         if (user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
-          console.log(user.createdCoursesRefs)
+
           const newCourses = user.createdCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
 
-          console.log(newCourses);
-          console.log(this.state.courses);
           user.createdCourses = user.createdCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
@@ -108,8 +106,6 @@ class App extends React.Component {
     } else {
       this.updateUser(undefined);
     }
-    console.log('get current user')
-    console.log(this.state.currentUser)
     // document.cookie = "userid=user.id";
   }
 
@@ -120,13 +116,10 @@ class App extends React.Component {
   }
 
   async fetchCourses() {
-    console.log('fetching courses')
-    console.log(this.state.currentUser)
     let courses = [];
     await FirebaseService.getAllCourses().then((queryResults) => {
       queryResults.forEach((doc) => {
         const course = doc.data();
-        console.log(course);
         const courseId = doc.id;
         course.owner.get().then(user => {
           course.owner = user.data();

@@ -31,10 +31,8 @@ function CourseOverview(props) {
 
     useEffect(() => {
         if (id) {
-            console.log(`ID: ${id}`);
             FirebaseService.getCourseById(id)
                 .then(courseResult => {
-                    console.log(courseResult.exists)
                     if (courseResult.exists) {
                         setError(null);
                         setCourse(courseResult.data());
@@ -47,7 +45,6 @@ function CourseOverview(props) {
       }
     }, [id]);
 
-    console.log("Course Overiew: ", course)
     if (course){
         return (
             <div className="courseOverview">

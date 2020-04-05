@@ -38,8 +38,6 @@ function generate(element) {
 
 
 function EditCourseNavigationPane(props) {
-    console.log(props);
-
 
   function setChapterInContext(chapter){
     props.setChapterInContext(chapter);

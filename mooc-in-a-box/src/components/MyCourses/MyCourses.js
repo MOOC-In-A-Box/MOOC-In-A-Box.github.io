@@ -49,9 +49,8 @@ function generate(element) {
 }
 
 function CurrentCoursesComponent(props) {
-  console.log(`Current Courses Component Props`, props);
   let numberOfCourses = props.currentCourses.length;
-  console.log(numberOfCourses);
+
   return (
     <div>
       <h1> Current Courses </h1>
@@ -62,7 +61,6 @@ function CurrentCoursesComponent(props) {
 
 
 function PastCoursesComponent(props) {
-  console.log(`Past Courses Component Props: ${props}`);
   return (
     <div>
       <h1> Past Courses </h1>
@@ -72,7 +70,6 @@ function PastCoursesComponent(props) {
 }
 
 function SavedCoursesComponent(props) {
-  console.log(`Saved Courses Component Props: ${props}`);
   return (
     <div>
       <h1> Favorited Courses </h1>
@@ -82,7 +79,6 @@ function SavedCoursesComponent(props) {
 }
 
 function CreatedCoursesComponent(props) {
-  console.log("Created Courses Component Props: ", props);
   return (
     <div>
       <h1> Created Courses </h1>
@@ -94,21 +90,16 @@ function CreatedCoursesComponent(props) {
 
 
 function MyCourses(props) {
-  console.log("My Courses Component: ", props);
 
   const [user, setUser] = useState();
 
-
   React.useEffect(() => {
-    console.log("My Courses - Resetting State");
     setUser(props.user);
   }, [props]);
 
 
   if (user) {
-    console.log("My Courses - My User ===", user);
     const courseComponentList = []
-    console.log(user.favoritedCourses);
     let hasCourses = false;
 
 
