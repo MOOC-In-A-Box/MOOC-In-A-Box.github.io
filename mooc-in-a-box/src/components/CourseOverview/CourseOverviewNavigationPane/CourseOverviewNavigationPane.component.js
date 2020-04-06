@@ -39,7 +39,7 @@ function CourseOverviewNavigationPane(props) {
     if (props.course && props.course.chapters && props.course.chapters.length > 0){
       
       courseNavigationPanels = props.course.chapters.map( chapter => 
-        <CourseOverviewChapterPanel setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} chapter={chapter} />
+        <CourseOverviewChapterPanel setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson}  setChapterInContext={props.setChapterInContext} chapter={chapter} />
       )
 
     }

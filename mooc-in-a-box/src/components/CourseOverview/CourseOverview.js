@@ -28,6 +28,8 @@ function CourseOverview(props) {
     const [course, setCourse] = useState();
     const [activeLesson, setActiveLesson] = useState();
     const [error, setError] = useState();
+    const [chapterInContext, setChapterInContext] = useState();
+
     let { id } = useParams();
 
 
@@ -72,10 +74,10 @@ function CourseOverview(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <CourseOverviewNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} course={course} />
+                      <CourseOverviewNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} course={course} />
                   </Grid>
                   <Grid item xs={8}>
-                       <CourseOverviewCoursePane activeLesson={activeLesson} course={course} />
+                       <CourseOverviewCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} />
                   </Grid>
               </Grid>
             </div>

@@ -33,6 +33,7 @@ function generate(element) {
 function EditCourseChapterPanel(props) {
 
     function listItemClicked(lesson){
+      props.setChapterInContext(props.chapter);
       props.setActiveLesson(lesson);
     }
 

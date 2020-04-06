@@ -110,7 +110,7 @@ function EditCourse(props) {
                       <EditCourseNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                   </Grid>
                   <Grid item xs={8}>
-                       <EditCoursePane activeLesson={activeLesson} course={course} />
+                       <EditCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} />
                   </Grid>
               </Grid>
               <CreateChapterDialog  isOpen={isCreateChapterDialogOpen}  handleSubmit={addNewChapter}    handleClose={handleCreateChapterClose} />

@@ -7,6 +7,12 @@ function EditCoursePane(props) {
     return (
         <Paper className="paper">
             <h1>{props.course.title}</h1>
+            {
+                props.activeChapter ?
+                <h2>Chapter: {props.activeChapter.title}</h2> :
+                <h2>No Chapter Selected </h2>
+
+            }
             { props.activeLesson ? 
                 <EditCourseLesson lesson={props.activeLesson} /> :
                <h3>No lesson selected</h3>
