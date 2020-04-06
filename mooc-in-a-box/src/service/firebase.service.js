@@ -242,3 +242,32 @@ export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
         });
 }
 
+
+export const getCourseByIdEvaluatePromise = courseId => {
+    return db.collection('Course')
+        .doc(courseId)
+        .get()
+        .then( courseResult => {
+            if (courseResult.exists) {
+                const course = courseResult.data();
+                course.id = courseId;
+                return course;
+            } else {
+                return null
+            }
+        });
+};
+
+export const getDocFromDocRef = docRef => {
+    return docRef.get()
+        .then( result => {
+            if(result.exists){
+                const myResult = result.data();
+                myResult.id = result.id; 
+                console.log(myResult);
+                return myResult;
+            }else {
+                return null;
+            }
+        })
+}

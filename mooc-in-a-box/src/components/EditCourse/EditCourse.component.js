@@ -92,21 +92,41 @@ function EditCourse(props) {
             })
     }
 
+
+    async function resolveLessons(chapter){
+        if (chapter.lessonsRef && chapter.lessonsRef.length > 0){
+            return Promise.all(
+                chapter.lessonsRef.map( async lessonRef => {
+                    const lesson = await FirebaseService.getDocFromDocRef(lessonRef) 
+                    return lesson;
+                })
+                ).then(results => {
+                    console.log(results);
+                    chapter.lessons = results;
+                    return chapter;
+                });
+                
+        } else {
+          return Promise.resolve(chapter);  
+        }
+    }
+
+    async function resolveChapters(chapters){
+        return Promise.all(chapters.map( chapter => resolveLessons(chapter)))
+    }
+
+    async function getCourseById(id){
+        const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
+        const hasLessons = false;
+        console.log("Course before if Statement", course);
+        course.chapters = await resolveChapters(course.chapters);
+        console.log("returning the course", course);
+        setCourse(course);
+    }
+
     useEffect(() => {
         if (id) {
-            FirebaseService.getCourseById(id)
-                .then(courseResult => {
-                    if (courseResult.exists) {
-                        setError(null);
-                        const course = courseResult.data();
-                        course.id = id;
-                        setCourse(course);
-                    } else {
-                        setError('Course Not Found');
-                        setCourse();
-                    }
-                })
-                .catch(() => setError('Course Get Fail'));
+           getCourseById(id);
       }
     }, [id]);
 

@@ -36,8 +36,8 @@ function EditCourseChapterPanel(props) {
     let lessonItems = []
 
 
-    if (props.chapter && props.chapter.lessons && props.chapters.lessons.lessons > 0){
-        lessonItems = props.lessons.map( lesson => 
+    if (props.chapter && props.chapter.lessons && props.chapter.lessons.length > 0){
+        lessonItems = props.chapter.lessons.map( lesson => 
           <ListItem>
               <ListItemText primary={lesson.title}/>
           </ListItem>
