@@ -36,7 +36,6 @@ function generate(element) {
 function CourseOverviewChapterPanel(props) {
 
     function listItemClicked(lesson){
-      console.log(lesson);
       props.setActiveLesson(lesson);
     }
 

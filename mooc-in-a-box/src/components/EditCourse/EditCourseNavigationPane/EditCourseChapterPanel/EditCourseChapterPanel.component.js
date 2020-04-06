@@ -32,13 +32,14 @@ function generate(element) {
 
 function EditCourseChapterPanel(props) {
 
-    console.log("CHapter Panel -- ", props);
+    function listItemClicked(lesson){
+      props.setActiveLesson(lesson);
+    }
+
     let lessonItems = []
-
-
     if (props.chapter && props.chapter.lessons && props.chapter.lessons.length > 0){
         lessonItems = props.chapter.lessons.map( lesson => 
-          <ListItem>
+          <ListItem onClick={() => listItemClicked(lesson)} id={lesson.id} button>
               <ListItemText primary={lesson.title}/>
           </ListItem>
         )

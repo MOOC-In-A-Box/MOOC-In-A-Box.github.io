@@ -33,6 +33,7 @@ function EditCourse(props) {
     const [isCreateChapterDialogOpen, setIsCreateChapterDialogOpen] = useState(false);
     const [isCreateLessonDialogOpen, setIsCreateLessonDialogOpen] = useState(false);
     const [chapterInContext, setChapterInContext] = useState();
+    const [activeLesson, setActiveLesson] = useState();
 
 
     function handleCreateChapterClose(){
@@ -106,10 +107,10 @@ function EditCourse(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <EditCourseNavigationPane openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                      <EditCourseNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                   </Grid>
                   <Grid item xs={8}>
-                       <EditCoursePane course={course} />
+                       <EditCoursePane activeLesson={activeLesson} course={course} />
                   </Grid>
               </Grid>
               <CreateChapterDialog  isOpen={isCreateChapterDialogOpen}  handleSubmit={addNewChapter}    handleClose={handleCreateChapterClose} />
