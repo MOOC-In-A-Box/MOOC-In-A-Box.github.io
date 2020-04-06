@@ -26,22 +26,41 @@ import CourseOverviewCoursePane from './CourseOverviewCoursePane/CourseOverviewC
 function CourseOverview(props) {
 
     const [course, setCourse] = useState();
+    const [activeLesson, setActiveLesson] = useState();
     const [error, setError] = useState();
     let { id } = useParams();
 
+
+    async function resolveLessons(chapter){
+        if (chapter.lessonsRef && chapter.lessonsRef.length > 0){
+            return Promise.all(
+                chapter.lessonsRef.map( async lessonRef => {
+                    const lesson = await FirebaseService.getDocFromDocRef(lessonRef)
+                    return lesson;
+                })
+                ).then(results => {
+                    chapter.lessons = results;
+                    return chapter;
+                });
+                
+        } else {
+          return Promise.resolve(chapter);  
+        }
+    }
+
+    async function resolveChapters(chapters){
+        return Promise.all(chapters.map( chapter => resolveLessons(chapter)))
+    }
+
+    async function getCourseById(id){
+        const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
+        course.chapters = await resolveChapters(course.chapters);
+        setCourse(course);
+    }
+
     useEffect(() => {
         if (id) {
-            FirebaseService.getCourseById(id)
-                .then(courseResult => {
-                    if (courseResult.exists) {
-                        setError(null);
-                        setCourse(courseResult.data());
-                    } else {
-                        setError('Course Not Found');
-                        setCourse();
-                    }
-                })
-                .catch(() => setError('Course Get Fail'));
+            getCourseById(id); 
       }
     }, [id]);
 
@@ -53,10 +72,10 @@ function CourseOverview(props) {
               </Typography>
               <Grid container spacing={3}>
                   <Grid item xs={4}>
-                      <CourseOverviewNavigationPane course={course} />
+                      <CourseOverviewNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} course={course} />
                   </Grid>
                   <Grid item xs={8}>
-                       <CourseOverviewCoursePane course={course} />
+                       <CourseOverviewCoursePane activeLesson={activeLesson} course={course} />
                   </Grid>
               </Grid>
             </div>

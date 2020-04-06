@@ -53,43 +53,15 @@ function EditCourse(props) {
 
 
     async function addNewLesson(lessonInfo){
-        console.log("Add New Lesson Called");
-        console.log(lessonInfo);
         setIsCreateLessonDialogOpen(false);
         await FirebaseService.addNewLesson(course, chapterInContext, lessonInfo);
-        FirebaseService.getCourseById(course.id)
-        .then( courseResult => {
-            if (courseResult.exists) {
-                setError(null);
-                const course = courseResult.data();
-                course.id = id;
-                setCourse(course);
-                setIsCreateChapterDialogOpen(false);
-            } else {
-                setError('Course Not Found');
-                setCourse();
-                setIsCreateChapterDialogOpen(false);
-            }
-        })
+        getCourseById(id);
 
     }
 
     async function addNewChapter(chapterInfo){
         await FirebaseService.addNewChapter(course, chapterInfo);
-        FirebaseService.getCourseById(course.id)
-            .then( courseResult => {
-                if (courseResult.exists) {
-                    setError(null);
-                    const course = courseResult.data();
-                    course.id = id;
-                    setCourse(course);
-                    setIsCreateChapterDialogOpen(false);
-                } else {
-                    setError('Course Not Found');
-                    setCourse();
-                    setIsCreateChapterDialogOpen(false);
-                }
-            })
+        getCourseById(id);
     }
 
 
@@ -101,7 +73,6 @@ function EditCourse(props) {
                     return lesson;
                 })
                 ).then(results => {
-                    console.log(results);
                     chapter.lessons = results;
                     return chapter;
                 });
@@ -117,10 +88,7 @@ function EditCourse(props) {
 
     async function getCourseById(id){
         const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
-        const hasLessons = false;
-        console.log("Course before if Statement", course);
         course.chapters = await resolveChapters(course.chapters);
-        console.log("returning the course", course);
         setCourse(course);
     }
 
