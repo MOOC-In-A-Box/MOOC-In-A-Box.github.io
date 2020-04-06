@@ -69,7 +69,7 @@ function EditCourseChapterPanel(props) {
                         <List dense="true">
                         {lessonItems}
                         <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn">
-                            Add New Content
+                            Add New Lesson
                         </Button>
                         </List>
                     </div>
