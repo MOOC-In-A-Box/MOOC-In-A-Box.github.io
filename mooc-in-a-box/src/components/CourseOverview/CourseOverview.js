@@ -33,28 +33,28 @@ function CourseOverview(props) {
     let { id } = useParams();
 
 
-    async function resolveLessons(chapter){
-        if (chapter.lessonsRef && chapter.lessonsRef.length > 0){
+    async function resolveLessons(chapter) {
+        if (chapter.lessonsRef && chapter.lessonsRef.length > 0) {
             return Promise.all(
-                chapter.lessonsRef.map( async lessonRef => {
+                chapter.lessonsRef.map(async lessonRef => {
                     const lesson = await FirebaseService.getDocFromDocRef(lessonRef)
                     return lesson;
                 })
-                ).then(results => {
-                    chapter.lessons = results;
-                    return chapter;
-                });
-                
+            ).then(results => {
+                chapter.lessons = results;
+                return chapter;
+            });
+
         } else {
-          return Promise.resolve(chapter);  
+            return Promise.resolve(chapter);
         }
     }
 
-    async function resolveChapters(chapters){
-        return Promise.all(chapters.map( chapter => resolveLessons(chapter)))
+    async function resolveChapters(chapters) {
+        return Promise.all(chapters.map(chapter => resolveLessons(chapter)))
     }
 
-    async function getCourseById(id){
+    async function getCourseById(id) {
         const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
         course.chapters = await resolveChapters(course.chapters);
         setCourse(course);
@@ -62,26 +62,23 @@ function CourseOverview(props) {
 
     useEffect(() => {
         if (id) {
-            getCourseById(id); 
-      }
+            getCourseById(id);
+        }
     }, [id]);
 
-    if (course){
+    if (course) {
         return (
             <div className="courseOverview">
-              <Typography className="center" variant="h3" component="h3">
-                  Course Overview
-              </Typography>
-              <Grid container spacing={3}>
-                  <Grid item xs={4}>
-                      <CourseOverviewNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} course={course} />
-                  </Grid>
-                  <Grid item xs={8}>
-                       <CourseOverviewCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} />
-                  </Grid>
-              </Grid>
+                <Grid container spacing={3}>
+                    <Grid item xs={4}>
+                        <CourseOverviewNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} course={course} />
+                    </Grid>
+                    <Grid item xs={8}>
+                        <CourseOverviewCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} />
+                    </Grid>
+                </Grid>
             </div>
-          );
+        );
     } else {
         return (
             <div>
@@ -91,6 +88,6 @@ function CourseOverview(props) {
         )
     }
 
-  }
-  
-  export default CourseOverview;
+}
+
+export default CourseOverview;

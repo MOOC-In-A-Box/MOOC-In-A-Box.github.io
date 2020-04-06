@@ -14,6 +14,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 import CourseOverviewChapterPanel from './CourseOverviewChapterPanel/CourseOverviewChapterPanel.component'
 
 
@@ -23,32 +25,41 @@ import CourseOverviewChapterPanel from './CourseOverviewChapterPanel/CourseOverv
 
 
 function generate(element) {
-    return [0, 1, 2].map(value =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
+  return [0, 1, 2].map(value =>
+    React.cloneElement(element, {
+      key: value,
+    }),
+  );
+}
 
-  
+
 
 
 function CourseOverviewNavigationPane(props) {
 
-    let courseNavigationPanels = [];
-    if (props.course && props.course.chapters && props.course.chapters.length > 0){
-      
-      courseNavigationPanels = props.course.chapters.map( chapter => 
-        <CourseOverviewChapterPanel setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson}  setChapterInContext={props.setChapterInContext} chapter={chapter} />
-      )
+  const courseOverviewClicked = () => {
+    props.setActiveLesson(undefined);
+    props.setChapterInContext(undefined);
+  }
 
-    }
-    
-    return (
-        <Paper className="paper">
-          {courseNavigationPanels}
-        </Paper>
+  let courseNavigationPanels = [];
+  if (props.course && props.course.chapters && props.course.chapters.length > 0) {
+
+    courseNavigationPanels = props.course.chapters.map(chapter =>
+      <CourseOverviewChapterPanel setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} setChapterInContext={props.setChapterInContext} chapter={chapter} />
     )
+
+  }
+
+  return (
+    <Paper className="paper">
+      <Button id="course-overview"
+        onClick={courseOverviewClicked}>
+        <h1>{props.course.title}</h1>
+      </Button>
+      {courseNavigationPanels}
+    </Paper>
+  )
 }
 
 export default CourseOverviewNavigationPane;
