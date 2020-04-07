@@ -180,16 +180,12 @@ export const favoriteCourse = async (user, courseInfo) => {
 }
 
 export const removeFavoriteCourse = async (user, courseInfo) => {
-    const courseRef = db.doc(`Course/${courseInfo.id}`)
-    const favoritedCourses = user.favoritedCoursesRefs;
-    favoritedCourses.splice(courseRef, 1);
-    
+    const favoritedCourses = user.favoritedCoursesRefs.filter(item => item.id !== courseInfo.id);    
     const updateObject = {
         favoritedCoursesRefs: favoritedCourses
     }
 
     return await updateUser(user.id, updateObject);
-
 }
 
 

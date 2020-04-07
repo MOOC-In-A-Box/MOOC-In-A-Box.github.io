@@ -38,6 +38,7 @@ function EditCourseChapterPanel(props) {
     }
 
     let lessonItems = []
+    
     if (props.chapter && props.chapter.lessons && props.chapter.lessons.length > 0){
         lessonItems = props.chapter.lessons.map( lesson => 
           <ListItem onClick={() => listItemClicked(lesson)} id={lesson.id} button>

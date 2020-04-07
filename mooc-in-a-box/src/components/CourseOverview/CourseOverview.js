@@ -27,7 +27,6 @@ function CourseOverview(props) {
 
     const [course, setCourse] = useState();
     const [activeLesson, setActiveLesson] = useState();
-    const [error, setError] = useState();
     const [chapterInContext, setChapterInContext] = useState();
 
     let { id } = useParams();
