@@ -1,22 +1,24 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import EditCourseLesson from './EditCourseLesson/EditCourseLesson.component';
+import { Button } from '@material-ui/core';
 
 
 function EditCoursePane(props) {
     return (
         <Paper className="paper">
-            <h1>{props.course.title}</h1>
-            {
-                props.activeChapter ?
-                <h2>Chapter: {props.activeChapter.title}</h2> :
-                <h2>No Chapter Selected </h2>
-
+            {props.activeChapter ?
+                <div>
+                    <h2>Chapter: {props.activeChapter.title}</h2>
+                    <EditCourseLesson lesson={props.activeLesson} />
+                </div> :
+                <div>
+                    <p>course overview</p>
+                    <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained">
+                        Edit Overview
+                    </Button>
+                </div>
             }
-            { props.activeLesson ? 
-                <EditCourseLesson lesson={props.activeLesson} /> :
-               <h3>No lesson selected</h3>
-           }
         </Paper>
     )
 }

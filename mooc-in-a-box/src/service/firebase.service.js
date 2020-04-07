@@ -164,7 +164,7 @@ export const favoriteCourse = async (user, courseInfo) => {
     const courseRef = db.doc(`Course/${courseInfo.id}`)
     let favoritedCourses;
 
-    if (user.favoritedCoursesRefs && user.favoritedCoursesRefs.length > 0 ){
+    if (user.favoritedCoursesRefs && user.favoritedCoursesRefs.length > 0) {
         favoritedCourses = user.favoritedCoursesRefs;
     } else {
         favoritedCourses = []
@@ -180,7 +180,7 @@ export const favoriteCourse = async (user, courseInfo) => {
 }
 
 export const removeFavoriteCourse = async (user, courseInfo) => {
-    const favoritedCourses = user.favoritedCoursesRefs.filter(item => item.id !== courseInfo.id);    
+    const favoritedCourses = user.favoritedCoursesRefs.filter(item => item.id !== courseInfo.id);
     const updateObject = {
         favoritedCoursesRefs: favoritedCourses
     }
@@ -195,14 +195,25 @@ export const updateCourse = async (courseId, updates) => {
         .set(updates, { merge: true })
 }
 
+export const updateCourseOverview = async (course, content) => {
+    const contentJSON = JSON.stringify(content);
+
+    const updateObject = {
+        overview: contentJSON
+    }
+
+    return await updateCourse(course.id, updateObject);
+
+}
+
 export const addNewChapter = async (course, newChapterInfo) => {
-    const chapter = {} 
+    const chapter = {}
     chapter.title = newChapterInfo.title;
     chapter.description = newChapterInfo.description;
     chapter.id = 0
     chapter.lessonsRef = [];
 
-    if (course.chapters && course.chapters.length > 0){
+    if (course.chapters && course.chapters.length > 0) {
         course.chapters.push(chapter);
     } else {
         course.chapters = [];
@@ -224,8 +235,8 @@ export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
             console.log("Lesson Doc", lessonDoc)
             console.log(`Course/${course.id}/Lessons/${lessonDoc.id}`);
             const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonDoc.id}`);
-            const chapters = course.chapters.map( chapter => {
-                if (chapter === chapterInfo){
+            const chapters = course.chapters.map(chapter => {
+                if (chapter === chapterInfo) {
                     chapter.lessonsRef.push(lessonRef);
                 }
                 return chapter
@@ -243,7 +254,7 @@ export const getCourseByIdEvaluatePromise = courseId => {
     return db.collection('Course')
         .doc(courseId)
         .get()
-        .then( courseResult => {
+        .then(courseResult => {
             if (courseResult.exists) {
                 const course = courseResult.data();
                 course.id = courseId;
@@ -256,13 +267,13 @@ export const getCourseByIdEvaluatePromise = courseId => {
 
 export const getDocFromDocRef = docRef => {
     return docRef.get()
-        .then( result => {
-            if(result.exists){
+        .then(result => {
+            if (result.exists) {
                 const myResult = result.data();
-                myResult.id = result.id; 
+                myResult.id = result.id;
                 console.log(myResult);
                 return myResult;
-            }else {
+            } else {
                 return null;
             }
         })

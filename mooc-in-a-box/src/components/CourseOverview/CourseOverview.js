@@ -43,7 +43,7 @@ function CourseOverview(props) {
 
     async function getCourseById(id) {
         const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
-        if (course.chapters){
+        if (course.chapters) {
             course.chapters = await resolveChapters(course.chapters);
         }
         setCourse(course);

@@ -1,0 +1,14 @@
+.paper {
+    text-align: center;
+    padding: 1em;
+    background-color: #f6eee7!important;
+}
+
+.center {
+    text-align: center;
+}
+
+.edit-course {
+    flex-grow: 1;
+    margin-top: 24px;
+}
