@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Paper from '@material-ui/core/Paper';
+import React from 'react';
 
 
 function CourseOverviewLesson(props) {

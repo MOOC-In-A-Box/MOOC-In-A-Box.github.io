@@ -31,7 +31,6 @@ function CreateLessonDialog(props){
 
 
   function handleSubmit(e){
-      console.log("Handle Submit Pressed")
       const lessonInfo = {
           title,
           description,

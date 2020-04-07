@@ -57,7 +57,8 @@ function EditCourse(props) {
 
 
     async function resolveLessons(chapter){
-        if (chapter.lessonsRef && chapter.lessonsRef.length > 0){
+        const lessonsRefLength = chapter.lessonsRef?.length;
+        if (lessonsRefLength > 0){
             return Promise.all(
                 chapter.lessonsRef.map( async lessonRef => {
                     const lesson = await FirebaseService.getDocFromDocRef(lessonRef) 
