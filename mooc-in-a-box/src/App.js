@@ -183,7 +183,7 @@ class App extends React.Component {
                 <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser}/>
               </Route>
               <Route path="/courseOverview/:id">
-                <CourseOverview service={FirebaseService}></CourseOverview>
+                <EditCourse editable={false} user={this.state.currentUser}></EditCourse>
               </Route>
               <Route path="/myCourses">
                 <MyCourses user={this.state.currentUser}></MyCourses>
@@ -195,7 +195,7 @@ class App extends React.Component {
                 <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
               </Route>
               <Route path="/editCourse/:id">
-                <EditCourse user={this.state.currentUser}></EditCourse>
+                <EditCourse editable={true} user={this.state.currentUser}></EditCourse>
               </Route>
             </Switch>
           </div>

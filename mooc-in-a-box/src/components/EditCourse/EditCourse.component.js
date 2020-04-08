@@ -115,24 +115,34 @@ function EditCourse(props) {
         }
     }, [id]);
 
+    let dialogs;
+    let viewPublishedCourseButton;
+    if (props.editable) {
+        dialogs = <div>
+            <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
+            <CreateLessonDialog isOpen={isCreateLessonDialogOpen} addNewLesson={addNewLesson} handleClose={handleCreateLessonDialogClose} />
+            <EditCourseOverviewDialog isOpen={isEditCourseOverviewDialogOpen} updateCourseOverview={updateCourseOverview} handleClose={handleEditCourseOverviewDialogClose} course={course} />
+        </div>
+
+        viewPublishedCourseButton = <Button variant="contained" color="secondary" onClick={viewPublished}> View Publised Course </Button>
+
+
+    }
+
+
     if (course) {
         return (
             <div className="edit-course">
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
-                        <EditCourseNavigationPane editable={true} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                        <EditCourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
                     <Grid item xs={8}>
-                        <EditCoursePane editable={true} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
+                        <EditCoursePane editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
                     </Grid>
-                    <Button variant="contained" color="secondary" onClick={viewPublished}>
-                        View Publised Course
-                    </Button>
+                    {viewPublishedCourseButton}
                 </Grid>
-                <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
-                <CreateLessonDialog isOpen={isCreateLessonDialogOpen} addNewLesson={addNewLesson} handleClose={handleCreateLessonDialogClose} />
-                <EditCourseOverviewDialog isOpen={isEditCourseOverviewDialogOpen} updateCourseOverview={updateCourseOverview} handleClose={handleEditCourseOverviewDialogClose} course={course} />
-
+                {dialogs}
             </div>
         );
     } else {
