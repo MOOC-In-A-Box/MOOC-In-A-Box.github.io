@@ -120,7 +120,7 @@ function EditCourse(props) {
             <div className="edit-course">
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
-                        <EditCourseNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                        <EditCourseNavigationPane editable={true} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
                     <Grid item xs={8}>
                         <EditCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />

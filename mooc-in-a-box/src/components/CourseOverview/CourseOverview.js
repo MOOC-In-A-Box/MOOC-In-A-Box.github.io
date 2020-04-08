@@ -5,9 +5,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useParams } from "react-router-dom";
 
 import * as FirebaseService from '../../service/firebase.service';
-import CourseOverviewNavigationPane from './CourseOverviewNavigationPane/CourseOverviewNavigationPane.component';
 import CourseOverviewCoursePane from './CourseOverviewCoursePane/CourseOverviewCoursePane.component';
-
+import EditCourseNavigationPane from '../EditCourse/EditCourseNavigationPane/EditCourseNavigationPane.component';
 
 function CourseOverview(props) {
 
@@ -60,7 +59,7 @@ function CourseOverview(props) {
             <div className="courseOverview">
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
-                        <CourseOverviewNavigationPane activeLesson={activeLesson} setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} course={course} />
+                        <EditCourseNavigationPane editable={false} activeLesson={activeLesson} setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} course={course} />
                     </Grid>
                     <Grid item xs={8}>
                         <CourseOverviewCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} />

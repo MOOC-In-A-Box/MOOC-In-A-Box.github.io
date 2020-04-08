@@ -40,18 +40,28 @@ function EditCourseChapterPanel(props) {
     let lessonItems = []
     
     const lessonsLength = props.chapter?.lessons?.length;
+    console.log(props.chapter);
     if (lessonsLength > 0){
         lessonItems = props.chapter.lessons.map( lesson => 
           <ListItem onClick={() => listItemClicked(lesson)} id={lesson.id} button>
               <ListItemText primary={lesson.title}/>
           </ListItem>
         )
-      }
+    } else {
+        lessonItems[0] = <ListItem> <ListItemText primary="No Lessons Added" /> </ListItem>
+    }
 
 
       function openLessonModal(){
         props.setChapterInContext(props.chapter);
         props.openLessonModal(true);
+      }
+
+
+      let addNewLessonButton;
+      
+      if(props.editable){
+       addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn"> Add New Lesson </Button>
       }
 
     
@@ -70,9 +80,7 @@ function EditCourseChapterPanel(props) {
                     <div>
                         <List dense="true">
                         {lessonItems}
-                        <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn">
-                            Add New Lesson
-                        </Button>
+                        {addNewLessonButton}
                         </List>
                     </div>
                     </Grid>

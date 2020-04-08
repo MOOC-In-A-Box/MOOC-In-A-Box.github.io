@@ -35,11 +35,18 @@ function EditCourseNavigationPane(props) {
 
   let courseNavigationPanels = []
   const chaptersLength = props.course?.chapters?.length;
+
   if (chaptersLength > 0) {
     courseNavigationPanels = props.course.chapters.map(chapter =>
-      <EditCourseChapterPanel setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} openLessonModal={props.openLessonModal} setChapterInContext={setChapterInContext} chapter={chapter} />
+      <EditCourseChapterPanel editable={props.editable} setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} openLessonModal={props.openLessonModal} setChapterInContext={setChapterInContext} chapter={chapter} />
     )
   }
+  
+  let addNewChapterButton;
+  if(props.editable){
+   addNewChapterButton = <Button variant="contained" onClick={props.openCreateChapterDialog} color="secondary"> Add New Chapter </Button> 
+  }
+
 
   return (
     <Paper className="paper">
@@ -48,10 +55,7 @@ function EditCourseNavigationPane(props) {
         <h1>{props.course.title}</h1>
       </Button>
       {courseNavigationPanels}
-      <Button variant="contained" onClick={props.openCreateChapterDialog} color="secondary">
-        Add New Chapter
-      </Button>
-
+      {addNewChapterButton}
     </Paper>
   )
 }
