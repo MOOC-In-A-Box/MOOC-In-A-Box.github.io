@@ -108,6 +108,7 @@ function CourseOverview(props) {
         const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
         course.chapters = await resolveChapters(course.chapters);
         setCourse(course);
+        console.log(course)
     }
 
     useEffect(() => {
@@ -125,10 +126,9 @@ function CourseOverview(props) {
             <EditCourseOverviewDialog isOpen={isEditCourseOverviewDialogOpen} updateCourseOverview={updateCourseOverview} handleClose={handleEditCourseOverviewDialogClose} course={course} />
         </div>
 
-        viewPublishedCourseButton = <Button variant="contained" color="secondary" onClick={viewPublished}> View Publised Course </Button>
-
-
+        viewPublishedCourseButton = <Button variant="contained" color="secondary" onClick={viewPublished}> View Published Course </Button>
     }
+
 
 
     if (course) {

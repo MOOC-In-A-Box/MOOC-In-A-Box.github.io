@@ -14,7 +14,7 @@ import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 import CreateCourse from './components/CreateCourse/CreateCourse.component';
 import CourseOverview from './components/CourseOverview/CourseOverview.component';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'; 
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import * as FirebaseService from '../src/service/firebase.service'
 
@@ -31,8 +31,8 @@ const theme = createMuiTheme({
       dark: '#442b4a',
     },
   },
-  typography: { 
-     useNextVariants: true
+  typography: {
+    useNextVariants: true
   },
   overrides: {
     MuiButton: {
@@ -105,7 +105,6 @@ class App extends React.Component {
     } else {
       this.updateUser(undefined);
     }
-    // document.cookie = "userid=user.id";
   }
 
   setUser(user) {
@@ -179,7 +178,7 @@ class App extends React.Component {
                 <Login completeLogin={this.setUser} />
               </Route>
               <Route path="/courseLibrary">
-                <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser}/>
+                <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser} />
               </Route>
               <Route path="/courseOverview/:id">
                 <CourseOverview editable={false} user={this.state.currentUser}></CourseOverview>

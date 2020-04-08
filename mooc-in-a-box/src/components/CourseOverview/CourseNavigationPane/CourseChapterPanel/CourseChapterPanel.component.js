@@ -16,56 +16,55 @@ import { Button } from '@material-ui/core';
 
 function CourseChapterPanel(props) {
 
-    function listItemClicked(lesson){
-      props.setChapterInContext(props.chapter);
-      props.setActiveLesson(lesson);
+    function listItemClicked(lesson) {
+        props.setChapterInContext(props.chapter);
+        props.setActiveLesson(lesson);
     }
 
     let lessonItems = []
-    
+
     const lessonsLength = props.chapter?.lessons?.length;
-    console.log(props.chapter);
-    if (lessonsLength > 0){
-        lessonItems = props.chapter.lessons.map( lesson => 
-          <ListItem onClick={() => listItemClicked(lesson)} id={lesson.id} button>
-              <ListItemText primary={lesson.title}/>
-          </ListItem>
+    if (lessonsLength > 0) {
+        lessonItems = props.chapter.lessons.map(lesson =>
+            <ListItem onClick={() => listItemClicked(lesson)} id={lesson.id} button>
+                <ListItemText primary={lesson.title} />
+            </ListItem>
         )
     } else {
         lessonItems[0] = <ListItem> <ListItemText primary="No Lessons Added" /> </ListItem>
     }
 
 
-      function openLessonModal(){
+    function openLessonModal() {
         props.setChapterInContext(props.chapter);
         props.openLessonModal(true);
-      }
+    }
 
-      let addNewLessonButton;
-      
-      if(props.editable){
-       addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn"> Add New Lesson </Button>
-      }
+    let addNewLessonButton;
 
-    
+    if (props.editable) {
+        addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn"> Add New Lesson </Button>
+    }
+
+
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
             >
-            <Typography variant="subtitle2">{props.chapter.title}</Typography>
+                <Typography variant="subtitle2">{props.chapter.title}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <div>
-                        <List dense="true">
-                        {lessonItems}
-                        {addNewLessonButton}
-                        </List>
-                    </div>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <div>
+                            <List dense="true">
+                                {lessonItems}
+                                {addNewLessonButton}
+                            </List>
+                        </div>
                     </Grid>
                 </Grid>
             </ExpansionPanelDetails>

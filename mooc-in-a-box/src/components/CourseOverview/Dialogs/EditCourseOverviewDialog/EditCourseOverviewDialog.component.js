@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 // import { Editor } from 'react-draft-wysiwyg';
-import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import { ContentState, Editor, EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function EditCourseOverviewDialog(props) {
@@ -29,18 +29,28 @@ function EditCourseOverviewDialog(props) {
 
   useEffect(() => {
 
-    if (contentState) {
-      const contentStateObj = JSON.parse(contentState);
-      // contentStateObj.blocks = [];  // working around a bug??
-      setEditorState(EditorState.createWithContent(convertFromRaw(contentStateObj)));
-    }
-    else {
-      setEditorState(EditorState.createEmpty());
-    }
+    // if (contentState) {
+    const contentStateObj = JSON.parse(contentState);
+    //   // contentStateObj.blocks = [];  // working around a bug??
+    // setEditorState(EditorState.createWithContent(convertFromRaw(contentStateObj)));
+    // }
+    // else {
+    // setEditorState(EditorState.createEmpty());
+    // }
+    setEditorState(EditorState.createWithContent(ContentState.createFromText("hello")));
   }, []);
 
   function onEditorStateChange(editorState) {
     setEditorState(editorState);
+  };
+
+  function handleKeyCommand(command) {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      setEditorState(newState);
+      return 'handled';
+    }
+    return 'not-handled';
   };
 
   return (
@@ -58,7 +68,8 @@ function EditCourseOverviewDialog(props) {
             // toolbarClassName="toolbarClassName"
             // wrapperClassName="wrapperClassName"
             // editorClassName="editorClassName"
-            onEditorStateChange={onEditorStateChange}
+            handleKeyCommand={handleKeyCommand}
+            onChange={onEditorStateChange}
           />
         </DialogContent>
         <DialogActions>
