@@ -123,7 +123,7 @@ function EditCourse(props) {
                         <EditCourseNavigationPane editable={true} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
                     <Grid item xs={8}>
-                        <EditCoursePane activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
+                        <EditCoursePane editable={true} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
                     </Grid>
                     <Button variant="contained" color="secondary" onClick={viewPublished}>
                         View Publised Course

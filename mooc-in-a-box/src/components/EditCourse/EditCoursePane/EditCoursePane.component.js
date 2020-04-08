@@ -5,6 +5,12 @@ import { Button } from '@material-ui/core';
 
 
 function EditCoursePane(props) {
+
+    let openEditCourseOverviewDialogButton;
+    if (props.editable){
+        openEditCourseOverviewDialogButton =  <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Overview </Button>
+    }
+
     return (
         <Paper className="paper">
             {props.activeChapter ?
@@ -14,9 +20,7 @@ function EditCoursePane(props) {
                 </div> :
                 <div>
                     <p>course overview</p>
-                    <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained">
-                        Edit Overview
-                    </Button>
+                    {openEditCourseOverviewDialogButton}
                 </div>
             }
         </Paper>
