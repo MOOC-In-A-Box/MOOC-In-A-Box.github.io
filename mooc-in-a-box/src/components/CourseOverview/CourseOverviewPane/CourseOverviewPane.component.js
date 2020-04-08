@@ -2,7 +2,8 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import CourseLesson from './CourseLesson/CourseLesson.component';
 import { Button } from '@material-ui/core';
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertFromRaw, ContentState } from "draft-js";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CourseOverviewPane(props) {
@@ -12,20 +13,23 @@ function CourseOverviewPane(props) {
         openEditCourseOverviewDialogButton = <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Overview </Button>
     }
 
-    const content = undefined;
-    // if (props.course.overview) {
-    //     const contentStateObj = JSON.parse(props.course.overview);
-    //     // contentStateObj.blocks = [];  // working around a bug??
-    //     const editorState = EditorState.createWithContent(convertFromRaw(contentStateObj));
-    //     content = <Editor
-    //         editorState={editorState}
-    //         readOnly={true}
-    //     />
-
-    // }
-    // else {
-    // setEditorState(EditorState.createEmpty());
-    // }
+    let content = undefined;
+    if (props.course.overview) {
+        const contentStateObj = JSON.parse(props.course.overview);
+        const editorState = EditorState.createWithContent(convertFromRaw(contentStateObj));
+        content = <Editor
+            toolbarHidden
+            editorState={editorState}
+            readOnly={true}
+        />
+    }
+    else {
+        content = <Editor
+            toolbarHidden
+            editorState={EditorState.createWithContent(ContentState.createFromText("No text entered."))}
+            readOnly={true}
+        />
+    }
 
     return (
         <Paper className="paper">

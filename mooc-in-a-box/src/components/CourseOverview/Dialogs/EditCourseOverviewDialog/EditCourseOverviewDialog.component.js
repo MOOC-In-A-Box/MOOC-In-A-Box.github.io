@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
+import './EditCourseOverviewDialog.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-// import { Editor } from 'react-draft-wysiwyg';
-import { ContentState, Editor, EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function EditCourseOverviewDialog(props) {
@@ -16,28 +16,19 @@ function EditCourseOverviewDialog(props) {
   const [contentState, setContentState] = useState(props.course.overview);
   const [editorState, setEditorState] = useState();
 
-  // handle initial content
-
   function handleSubmit(e) {
-    // parse from editor state
-    // setOverview(e.target.value);
-
     const currentContentState = editorState.getCurrentContent();
     setContentState(convertToRaw(currentContentState));
-    props.updateCourseOverview(currentContentState);
+    props.updateCourseOverview(convertToRaw(currentContentState));
   }
 
   useEffect(() => {
-
-    // if (contentState) {
-    const contentStateObj = JSON.parse(contentState);
-    //   // contentStateObj.blocks = [];  // working around a bug??
-    // setEditorState(EditorState.createWithContent(convertFromRaw(contentStateObj)));
-    // }
-    // else {
-    // setEditorState(EditorState.createEmpty());
-    // }
-    setEditorState(EditorState.createWithContent(ContentState.createFromText("hello")));
+    if (contentState) {
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(contentState))));
+    }
+    else {
+      setEditorState(EditorState.createEmpty());
+    }
   }, []);
 
   function onEditorStateChange(editorState) {
@@ -65,11 +56,9 @@ function EditCourseOverviewDialog(props) {
             </DialogContentText>
           <Editor
             editorState={editorState}
-            // toolbarClassName="toolbarClassName"
-            // wrapperClassName="wrapperClassName"
-            // editorClassName="editorClassName"
+            editorClassName="editor-textbox"
             handleKeyCommand={handleKeyCommand}
-            onChange={onEditorStateChange}
+            onEditorStateChange={onEditorStateChange}
           />
         </DialogContent>
         <DialogActions>
