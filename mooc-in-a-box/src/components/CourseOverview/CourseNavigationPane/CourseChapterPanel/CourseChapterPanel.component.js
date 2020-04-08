@@ -14,23 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 
-
-/**
- * Generate multiple function
- */
-
-
-function generate(element) {
-    return [0, 1, 2].map(value =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
-
-
-
-function EditCourseChapterPanel(props) {
+function CourseChapterPanel(props) {
 
     function listItemClicked(lesson){
       props.setChapterInContext(props.chapter);
@@ -56,7 +40,6 @@ function EditCourseChapterPanel(props) {
         props.setChapterInContext(props.chapter);
         props.openLessonModal(true);
       }
-
 
       let addNewLessonButton;
       
@@ -90,4 +73,4 @@ function EditCourseChapterPanel(props) {
     )
 }
 
-export default EditCourseChapterPanel;
+export default CourseChapterPanel;

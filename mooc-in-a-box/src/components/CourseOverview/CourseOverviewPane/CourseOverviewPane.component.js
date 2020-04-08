@@ -1,10 +1,10 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import EditCourseLesson from './EditCourseLesson/EditCourseLesson.component';
+import CourseLesson from './CourseLesson/CourseLesson.component';
 import { Button } from '@material-ui/core';
 
 
-function EditCoursePane(props) {
+function CourseOverviewPane(props) {
 
     let openEditCourseOverviewDialogButton;
     if (props.editable){
@@ -16,7 +16,7 @@ function EditCoursePane(props) {
             {props.activeChapter ?
                 <div>
                     <h2>Chapter: {props.activeChapter.title}</h2>
-                    <EditCourseLesson lesson={props.activeLesson} />
+                    <CourseLesson lesson={props.activeLesson} />
                 </div> :
                 <div>
                     <p>course overview</p>
@@ -27,4 +27,4 @@ function EditCoursePane(props) {
     )
 }
 
-export default EditCoursePane;
+export default CourseOverviewPane;

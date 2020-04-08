@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-function CreateLessonDialog(props) {
+function EditCourseOverviewDialog(props) {
   const [overview, setOverview] = useState();
   const [contentState, setContentState] = useState(props.course.overview);
   const [editorState, setEditorState] = useState();
@@ -74,4 +74,4 @@ function CreateLessonDialog(props) {
   )
 }
 
-export default CreateLessonDialog
+export default EditCourseOverviewDialog

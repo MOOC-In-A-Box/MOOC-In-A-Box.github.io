@@ -9,12 +9,11 @@ import {
 } from "react-router-dom";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
-import CourseOverview from './components/CourseOverview/CourseOverview';
 import Login from './components/Login/Login';
 import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 import CreateCourse from './components/CreateCourse/CreateCourse.component';
-import EditCourse from './components/EditCourse/EditCourse.component';
+import CourseOverview from './components/CourseOverview/CourseOverview.component';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'; 
 
 import * as FirebaseService from '../src/service/firebase.service'
@@ -183,7 +182,7 @@ class App extends React.Component {
                 <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser}/>
               </Route>
               <Route path="/courseOverview/:id">
-                <EditCourse editable={false} user={this.state.currentUser}></EditCourse>
+                <CourseOverview editable={false} user={this.state.currentUser}></CourseOverview>
               </Route>
               <Route path="/myCourses">
                 <MyCourses user={this.state.currentUser}></MyCourses>
@@ -195,7 +194,7 @@ class App extends React.Component {
                 <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
               </Route>
               <Route path="/editCourse/:id">
-                <EditCourse editable={true} user={this.state.currentUser}></EditCourse>
+                <CourseOverview editable={true} user={this.state.currentUser}></CourseOverview>
               </Route>
             </Switch>
           </div>

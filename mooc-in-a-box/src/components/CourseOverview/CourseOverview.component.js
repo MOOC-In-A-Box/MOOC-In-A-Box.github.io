@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './EditCourse.css';
+import './CourseOverview.css';
 import {
     Link as RouterLink,
     useParams
@@ -10,13 +10,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { withRouter } from "react-router-dom";
 import { Button } from '@material-ui/core';
 import * as FirebaseService from '../../service/firebase.service';
-import EditCourseNavigationPane from './EditCourseNavigationPane/EditCourseNavigationPane.component';
-import EditCoursePane from './EditCoursePane/EditCoursePane.component';
-import CreateChapterDialog from './CreateChapterDialog/CreateChapterDialog.component';
-import CreateLessonDialog from './CreateLessonDialog/CreateLessonDialog.component';
-import EditCourseOverviewDialog from './EditCourseOverviewDialog/EditCourseOverviewDialog.component';
+import CourseNavigationPane from './CourseNavigationPane/CourseNavigationPane.component';
 
-function EditCourse(props) {
+import CourseOverviewPane from './CourseOverviewPane/CourseOverviewPane.component';
+import CreateChapterDialog from './Dialogs/CreateChapterDialog/CreateChapterDialog.component';
+import CreateLessonDialog from './Dialogs/CreateLessonDialog/CreateLessonDialog.component';
+import EditCourseOverviewDialog from './Dialogs/EditCourseOverviewDialog/EditCourseOverviewDialog.component';
+
+function CourseOverview(props) {
     // Get ID from Route Params
     let { id } = useParams();
     // Create State Variables
@@ -135,10 +136,10 @@ function EditCourse(props) {
             <div className="edit-course">
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
-                        <EditCourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                        <CourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
                     <Grid item xs={8}>
-                        <EditCoursePane editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
+                        <CourseOverviewPane editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
                     </Grid>
                     {viewPublishedCourseButton}
                 </Grid>
@@ -157,4 +158,4 @@ function EditCourse(props) {
 
 }
 
-export default withRouter(EditCourse);
+export default withRouter(CourseOverview);

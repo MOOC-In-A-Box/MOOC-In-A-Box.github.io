@@ -1,9 +1,9 @@
 import React from 'react';
-import './EditCourseNavigationPane.css';
+import './CourseNavigationPane.css';
 import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
 
-import EditCourseChapterPanel from './EditCourseChapterPanel/EditCourseChapterPanel.component';
+import CourseChapterPanel from './CourseChapterPanel/CourseChapterPanel.component';
 
 
 /**
@@ -22,7 +22,7 @@ function generate(element) {
 
 
 
-function EditCourseNavigationPane(props) {
+function CourseNavigationPane(props) {
 
   function setChapterInContext(chapter) {
     props.setChapterInContext(chapter);
@@ -38,7 +38,7 @@ function EditCourseNavigationPane(props) {
 
   if (chaptersLength > 0) {
     courseNavigationPanels = props.course.chapters.map(chapter =>
-      <EditCourseChapterPanel editable={props.editable} setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} openLessonModal={props.openLessonModal} setChapterInContext={setChapterInContext} chapter={chapter} />
+      <CourseChapterPanel editable={props.editable} setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} openLessonModal={props.openLessonModal} setChapterInContext={setChapterInContext} chapter={chapter} />
     )
   }
   
@@ -60,4 +60,4 @@ function EditCourseNavigationPane(props) {
   )
 }
 
-export default EditCourseNavigationPane;
+export default CourseNavigationPane;
