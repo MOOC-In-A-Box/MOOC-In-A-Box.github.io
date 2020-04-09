@@ -21,6 +21,7 @@ function EditCourseLesson(props) {
     let urlDefaultValue = "Eo-KmOd3i7s";
 
 
+
     if(props.lesson){
         return (
             <div>
@@ -28,7 +29,7 @@ function EditCourseLesson(props) {
                 <h6>Link: {props.lesson.video}</h6>
                 <strong>Description: </strong>
                 <p>{props.lesson.description}</p>
-                <YouTube videoId="DkS5H3Of4-E" opts={opts} onReady={_onReady} />
+                <YouTube videoId={urlDefaultValue} opts={opts} onReady={_onReady} />
             </div>
         )
     } else {
