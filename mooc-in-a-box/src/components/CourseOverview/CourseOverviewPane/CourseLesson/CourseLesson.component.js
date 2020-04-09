@@ -1,7 +1,26 @@
 import React from 'react';
-
+import YouTube from 'react-youtube';
 
 function EditCourseLesson(props) {
+
+
+    function _onReady(event) {
+        // access to player in all event handlers via event.target
+        event.target.pauseVideo();
+      }
+
+      const opts = {
+        height: '390',
+        width: '640',
+        playerVars: {
+          // https://developers.google.com/youtube/player_parameters
+          autoplay: 1,
+        },
+      };
+   
+    let urlDefaultValue = "Eo-KmOd3i7s";
+
+
     if(props.lesson){
         return (
             <div>
@@ -9,6 +28,7 @@ function EditCourseLesson(props) {
                 <h6>Link: {props.lesson.video}</h6>
                 <strong>Description: </strong>
                 <p>{props.lesson.description}</p>
+                <YouTube videoId="DkS5H3Of4-E" opts={opts} onReady={_onReady} />
             </div>
         )
     } else {
