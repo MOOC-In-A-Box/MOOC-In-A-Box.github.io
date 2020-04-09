@@ -6,6 +6,7 @@ import {
   Switch,
   Route,
   Link as RouterLink,
+  Redirect
 } from "react-router-dom";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
@@ -50,6 +51,7 @@ class App extends React.Component {
       courses: [],
       users: [],
       currentUser: undefined,
+      loadingUser: true
     };
     this.fetchCourses = this.fetchCourses.bind(this);
     this.fetchUsers = this.fetchUsers.bind(this);
@@ -65,6 +67,7 @@ class App extends React.Component {
   async updateUser(userId) {
     if (!userId) {
       this.setState({ currentUser: undefined });
+      this.setState({ loadingUser: false });
       return;
     }
     await FirebaseService.getUserById(userId)
@@ -91,6 +94,7 @@ class App extends React.Component {
         }
 
         this.setState({ currentUser: user });
+        this.setState({ loadingUser: false });
 
       })
   }
@@ -108,7 +112,6 @@ class App extends React.Component {
   }
 
   setUser(user) {
-    console.log("login", user);
     this.updateUser(user.id);
     document.cookie = `userid=${user.id}`;
   }
@@ -149,9 +152,15 @@ class App extends React.Component {
 
   render() {
 
-    if (this.state.currentUser) {
-      console.log('logged in!')
-    }
+    // If not logged in redirect to the login page with redirect info. Url will
+    // briefly flash to login while we figure out if we have a user.
+    const PrivateRoute = ({ isLoggedIn, ...props }) =>
+      this.state.currentUser
+        ? <Route {...props} />
+        : <Redirect to={{
+          pathname: '/login',
+          state: { from: props.location }
+        }} />
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -160,13 +169,12 @@ class App extends React.Component {
             <nav hidden={!this.state.currentUser}>
               <AppBar position="static">
                 <Toolbar>
-                  <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
                   <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/courseLibrary">All Courses</Button>
+                  <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
                   <Button variant="outlined" color="secondary" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
                   <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
                     <AccountCircleIcon />
                   </IconButton>
-                  <span>{this.props.user?.name}</span>
                 </Toolbar>
               </AppBar>
             </nav>
@@ -174,27 +182,27 @@ class App extends React.Component {
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
             <Switch>
-              <Route exact path="/">
-                <Login completeLogin={this.setUser} />
+              <Route exact path="/login">
+                <Login completeLogin={this.setUser} user={this.state.currentUser} loadingUser={this.state.loadingUser} />
               </Route>
-              <Route path="/courseLibrary">
+              <PrivateRoute path="/(courseLibrary|)">
                 <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser} />
-              </Route>
-              <Route path="/courseOverview/:id">
+              </PrivateRoute>
+              <PrivateRoute path="/courseOverview/:id">
                 <CourseOverview editable={false} user={this.state.currentUser}></CourseOverview>
-              </Route>
-              <Route path="/myCourses">
+              </PrivateRoute>
+              <PrivateRoute path="/myCourses">
                 <MyCourses user={this.state.currentUser}></MyCourses>
-              </Route>
-              <Route path="/profile">
+              </PrivateRoute>
+              <PrivateRoute path="/profile">
                 <UserProfile user={this.state.currentUser} updateUser={this.updateUser}></UserProfile>
-              </Route>
-              <Route path="/createCourse">
+              </PrivateRoute>
+              <PrivateRoute path="/createCourse">
                 <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
-              </Route>
-              <Route path="/editCourse/:id">
+              </PrivateRoute>
+              <PrivateRoute path="/editCourse/:id">
                 <CourseOverview editable={true} user={this.state.currentUser}></CourseOverview>
-              </Route>
+              </PrivateRoute>
             </Switch>
           </div>
         </Router>
