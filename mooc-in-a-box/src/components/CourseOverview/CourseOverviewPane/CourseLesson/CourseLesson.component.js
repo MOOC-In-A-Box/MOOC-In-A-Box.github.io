@@ -18,9 +18,18 @@ function EditCourseLesson(props) {
         },
       };
    
-    let urlDefaultValue = "Eo-KmOd3i7s";
+    
+    const defaultVideoId = "BKorP55Aqvg"
+    const url = props.lesson?.video;
 
-
+    let urlValue;
+    if (url.includes("youtube") && (url.includes("v="))) {
+        const myParamters = url.split("?");
+        var searchParams = new URLSearchParams(myParamters[1]);
+        urlValue = searchParams.get('v');
+    } else { 
+        urlValue = defaultVideoId;
+    }
 
     if(props.lesson){
         return (
@@ -29,7 +38,7 @@ function EditCourseLesson(props) {
                 <h6>Link: {props.lesson.video}</h6>
                 <strong>Description: </strong>
                 <p>{props.lesson.description}</p>
-                <YouTube videoId={urlDefaultValue} opts={opts} onReady={_onReady} />
+                <YouTube videoId={urlValue} opts={opts} onReady={_onReady} />
             </div>
         )
     } else {
