@@ -11,11 +11,11 @@ const YoutubeComponentConfig = {
         height: '390',
         width: '640',
         playerVars: {
-            autoplay: 1,
+            autoplay: 0,
         },
-      },
-      videoId: "BKorP55Aqvg"
-      
+    },
+    videoId: "BKorP55Aqvg"
+
 }
 
 
@@ -24,19 +24,19 @@ function EditCourseLesson(props) {
     function _onReady(event) {
         // access to player in all event handlers via event.target
         event.target.pauseVideo();
-      }
+    }
 
 
-    function goToPreviousLesson(){
+    function goToPreviousLesson() {
         props.navigateToPreviousLesson(props.lesson);
-    }  
+    }
 
-    function goToNextLesson(){
+    function goToNextLesson() {
         props.navigateToNextLesson(props.lesson);
     }
 
-    function getButtonDiv(){
-        if (props.isFirstLesson && props.isLastLesson){
+    function getButtonDiv() {
+        if (props.isFirstLesson && props.isLastLesson) {
             return '';
         } else if (props.isFirstLesson) {
 
@@ -60,7 +60,7 @@ function EditCourseLesson(props) {
 
         } else {
 
-            return(
+            return (
                 <div className="button-div">
                     <Button variant="contained" onClick={goToPreviousLesson} className="previous-button" startIcon={<ArrowBackIosIcon />}>
                         Previous Lesson
@@ -73,18 +73,18 @@ function EditCourseLesson(props) {
         }
     }
 
-    function getVideoConfig(){
-        const youtubeConfig = {...YoutubeComponentConfig};
+    function getVideoConfig() {
+        const youtubeConfig = { ...YoutubeComponentConfig };
         const url = props.lesson?.video;
         if (url && url.includes("youtube") && (url.includes("v="))) {
             const myParamters = url.split("?");
             var searchParams = new URLSearchParams(myParamters[1]);
             youtubeConfig.videoId = searchParams.get('v');
-        } 
-       return youtubeConfig; 
+        }
+        return youtubeConfig;
     }
 
-    if(props.lesson){
+    if (props.lesson) {
         const youtubeConfig = getVideoConfig();
 
         return (
