@@ -13,16 +13,40 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CourseOverviewPane(props) {
 
-    function navigateToNextLesson(lesson){
-        console.log("NAVIGATE TO NEXT LESSON FROM: ", lesson);
-        const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
-        props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson + 1]);
+    let lessonArray = [];
+    for (let i = 0; i < props.course.chapters.length; i++) {
+        for (let j = 0; j < props.course.chapters[i].lessons?.length; j++) {
+            lessonArray.push(props.course.chapters[i].lessons[j]);
+        }
     }
 
-    function navigateToPreviousLesson(lesson){
+    function navigateToNextLesson(lesson) {
+        console.log("NAVIGATE TO NEXT LESSON FROM: ", lesson);
+        const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
+        if (indexOfCurrentLesson !== props.activeChapter.lessons.length - 1) {
+            props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson + 1]);
+            return;
+        } else {
+            const activeChapterIndex = props.course.chapters.indexOf(props.activeChapter);
+            const nextChapter = props.course.chapters[activeChapterIndex + 1];
+            props.setChapterInContext(nextChapter);
+            props.setActiveLesson(nextChapter.lessons[0]);
+        }
+    }
+
+    function navigateToPreviousLesson(lesson) {
         console.log("NAVIGATE TO PREVIOUS LESSON FROM: ", lesson);
         const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
-        props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson - 1]);
+
+        if (indexOfCurrentLesson !== 0) {
+            props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson - 1]);
+            return;
+        } else {
+            const activeChapterIndex = props.course.chapters.indexOf(props.activeChapter);
+            const prevChapter = props.course.chapters[activeChapterIndex - 1];
+            props.setChapterInContext(prevChapter);
+            props.setActiveLesson(prevChapter.lessons[prevChapter.lessons.length - 1]);
+        }
 
     }
 
@@ -50,31 +74,44 @@ function CourseOverviewPane(props) {
         />
     }
 
-    function getLessonInformation(){
-        // props.activeChapter.lessons
-        const lengthOfLessons = props.activeChapter.lessons.length;
-        const indexOfActiveLesson = props.activeChapter.lessons.indexOf(props.activeLesson);
-        return [(indexOfActiveLesson === 0), (indexOfActiveLesson === (lengthOfLessons - 1))]
+    function getLessonInformation() {
+        let prevLesson, nextLesson, prevChapter, nextChapter = false;
+
+        const currentLessonIndex = lessonArray.indexOf(props.activeLesson);
+        const currentLessonIndexInChapter = props.activeChapter.lessons.indexOf(props.activeLesson);
+        const numLessonsInChapter = props.activeChapter.lessons.length;
+        const numChapters = props.course.chapters.length;
+        const activeChapterIndex = props.course.chapters.indexOf(props.activeChapter);
+
+        prevLesson = currentLessonIndexInChapter > 0;
+        nextLesson = currentLessonIndexInChapter < numLessonsInChapter - 1;
+        prevChapter = currentLessonIndexInChapter === 0 && currentLessonIndex > 0
+        nextChapter = currentLessonIndexInChapter === numLessonsInChapter - 1
+            && currentLessonIndex < lessonArray.length - 1
+            && activeChapterIndex !== numChapters - 1;
+
+        return [prevLesson, nextLesson, prevChapter, nextChapter]
     }
 
 
-    let isFirstLesson, isLastLesson = false;
+    let prevLesson, nextLesson, prevChapter, nextChapter = false;
     if (props.activeLesson) {
-        [ isFirstLesson, isLastLesson ] = getLessonInformation();
+        [prevLesson, nextLesson, prevChapter, nextChapter] = getLessonInformation();
     }
-    // if (props.activeLesson)
 
     return (
         <Paper className="paper">
             {props.activeChapter ?
                 <div>
                     <h2>Chapter: {props.activeChapter.title}</h2>
-                    <CourseLesson 
-                        navigateToNextLesson={navigateToNextLesson} 
+                    <CourseLesson
+                        navigateToNextLesson={navigateToNextLesson}
                         navigateToPreviousLesson={navigateToPreviousLesson}
-                        isFirstLesson={isFirstLesson} 
-                        isLastLesson={isLastLesson} 
-                        lesson={props.activeLesson} 
+                        prevLesson={prevLesson}
+                        nextLesson={nextLesson}
+                        prevChapter={prevChapter}
+                        nextChapter={nextChapter}
+                        lesson={props.activeLesson}
                     />
                 </div> :
                 <div>

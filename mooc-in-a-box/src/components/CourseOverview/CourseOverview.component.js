@@ -140,7 +140,7 @@ function CourseOverview(props) {
                         <CourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} chapterInContext={chapterInContext} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
                     <Grid item xs={8}>
-                        <CourseOverviewPane setActiveLesson={setActiveLesson} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
+                        <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
                     </Grid>
                     {viewPublishedCourseButton}
                 </Grid>

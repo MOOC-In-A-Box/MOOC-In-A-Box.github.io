@@ -38,39 +38,30 @@ function EditCourseLesson(props) {
     function getButtonDiv() {
         if (props.isFirstLesson && props.isLastLesson) {
             return '';
-        } else if (props.isFirstLesson) {
-
-            return (
-                <div className="button-div">
-                    <Button variant="contained" onClick={goToNextLesson} className="next-button" endIcon={<ArrowForwardIosIcon />}>
-                        Next Lesson
-                    </Button>
-                </div>
-            );
-
-        } else if (props.isLastLesson) {
-
-            return (
-                <div className="button-div">
-                    <Button variant="contained" onClick={goToPreviousLesson} className="previous-button" startIcon={<ArrowBackIosIcon />}>
-                        Previous Lesson
-                    </Button>
-                </div>
-            );
-
-        } else {
-
-            return (
-                <div className="button-div">
-                    <Button variant="contained" onClick={goToPreviousLesson} className="previous-button" startIcon={<ArrowBackIosIcon />}>
-                        Previous Lesson
-                    </Button>
-                    <Button variant="contained" onClick={goToNextLesson} className="next-button" endIcon={<ArrowForwardIosIcon />}>
-                        Next Lesson
-                    </Button>
-                </div>
-            );
         }
+
+        let leftButton, rightButton;
+
+        if (props.nextLesson || props.nextChapter) {
+            leftButton =
+                <Button variant="contained" onClick={goToNextLesson} className="next-button" color="secondary" endIcon={<ArrowForwardIosIcon />}>
+                    {props.nextLesson ? "Next Lesson" : "Next Chapter"}
+                </Button>
+        }
+
+        if (props.prevLesson || props.prevChapter) {
+            rightButton =
+                <Button variant="contained" onClick={goToPreviousLesson} className="previous-button" color="secondary" startIcon={<ArrowBackIosIcon />}>
+                    {props.prevLesson ? "Previous Lesson" : "Previous Chapter"}
+                </Button>
+        }
+
+        return (
+            <div className="button-div">
+                {leftButton}
+                {rightButton}
+            </div>
+        )
     }
 
     function getVideoConfig() {

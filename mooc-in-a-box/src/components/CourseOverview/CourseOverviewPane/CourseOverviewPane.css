@@ -1,6 +1,4 @@
 .next-button {
-    background-color: green !important;
-    color: whitesmoke !important;
     right: 0;
     position: absolute !important;
 
@@ -13,8 +11,6 @@
 }
 
 .previous-button {
-    background-color: red !important;
-    color: whitesmoke !important;
     left: 0;
     position: absolute !important;
 }
