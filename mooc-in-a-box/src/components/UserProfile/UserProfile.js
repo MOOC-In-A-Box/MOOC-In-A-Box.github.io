@@ -121,6 +121,7 @@ function UserProfile(props) {
           <Paper className="paper">
 
             <UserProfileSection
+              isEditable={true}
               displayValue="User Interests"
               value={userInterests}
               handleClose={handleUserInterestsDialogClose}
@@ -128,6 +129,7 @@ function UserProfile(props) {
               isDialogOpen={isUserInterestsDialogOpen}
               openDialog={openUserInterestDialog}
               onChange={onUserInterestsChange}
+              isEditable={true}
             ></UserProfileSection>
 
           </Paper>
@@ -139,6 +141,7 @@ function UserProfile(props) {
           <Paper className="paper">
 
             <UserProfileSection
+              isEditable={true}
               displayValue="Display Name"
               value={displayName}
               handleClose={handleDisplayNameClose}
@@ -146,17 +149,22 @@ function UserProfile(props) {
               isDialogOpen={isDisplayNameDialogOpen}
               openDialog={openDisplayNameDialog}
               onChange={onDisplayNameChange}
-            ></UserProfileSection>
+            />
             <Divider />
-            <UserProfileSection displayValue="Email" value={props.user.email}></UserProfileSection>
+            <UserProfileSection 
+              isEditable={false} 
+              displayValue="Email" 
+              value={props.user.email}
+            />
             <Divider />
-            <UserProfileSection displayValue="Password" value={passwordValue}></UserProfileSection>
-            <Button color="inherit" className="menu-button" onClick={signOut}>
-              Sign out
-            </Button>
-            <Button color="inherit" className="menu-button" onClick={deleteAccount}>
-              Delete account
-            </Button>
+            <div className="logout-btns">
+              <Button color="inherit" className="menu-button" onClick={signOut}>
+                Sign out
+              </Button>
+              <Button color="inherit" className="menu-button" onClick={deleteAccount}>
+                Delete account
+              </Button>
+            </div>
           </Paper>
         </Container>
       </div>

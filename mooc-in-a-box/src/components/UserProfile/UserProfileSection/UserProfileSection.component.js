@@ -13,6 +13,16 @@ const userKeyToDisplayMap = {
   }
 
 function UserProfileSection(props){
+    function getEditIconIfNecessary(){
+      return props.isEditable ? 
+        <IconButton className="menu-button" color="inherit" aria-label="menu">
+          <EditIcon onClick={props.openDialog}/>
+        </IconButton>
+        :
+        <div></div>
+    }
+
+
     return (
       <div>
         <Typography align="center" variant="h6" component="h6">
@@ -20,10 +30,8 @@ function UserProfileSection(props){
         </Typography>
         <Typography align="center" variant="body1" component="body1">
           <span>
-          {props.value}
-            <IconButton className="menu-button" color="inherit" aria-label="menu">
-              <EditIcon onClick={props.openDialog}/>
-            </IconButton>
+            {props.value}
+            {getEditIconIfNecessary()}
           </span>
         </Typography>
         <EditDialog 
