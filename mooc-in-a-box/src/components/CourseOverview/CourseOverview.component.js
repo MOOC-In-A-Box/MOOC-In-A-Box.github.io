@@ -79,6 +79,7 @@ function CourseOverview(props) {
     async function addNewChapter(chapterInfo) {
         await FirebaseService.addNewChapter(course, chapterInfo);
         getCourseById(id);
+        setIsCreateChapterDialogOpen(false);
     }
 
 

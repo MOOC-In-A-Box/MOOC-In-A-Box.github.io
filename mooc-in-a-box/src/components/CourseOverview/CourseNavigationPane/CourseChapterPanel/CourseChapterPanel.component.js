@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
+import './CourseChapterPanel.css';
 
 function CourseChapterPanel(props) {
 
@@ -63,16 +64,12 @@ function CourseChapterPanel(props) {
                 <Typography variant="subtitle2">{props.chapter.title}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <div>
-                            <List dense="true">
-                                {lessonItems}
-                                {addNewLessonButton}
-                            </List>
-                        </div>
-                    </Grid>
-                </Grid>
+                
+                <List dense="true" className="lessons-list">
+                    {lessonItems}
+                    {addNewLessonButton}
+                </List>
+
             </ExpansionPanelDetails>
         </ExpansionPanel>
     )
