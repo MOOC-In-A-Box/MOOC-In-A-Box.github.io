@@ -4,9 +4,28 @@ import CourseLesson from './CourseLesson/CourseLesson.component';
 import { Button } from '@material-ui/core';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
+
+import './CourseOverviewPane.css'
+
+
+
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CourseOverviewPane(props) {
+
+    function navigateToNextLesson(lesson){
+        console.log("NAVIGATE TO NEXT LESSON FROM: ", lesson);
+        const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
+        props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson + 1]);
+    }
+
+    function navigateToPreviousLesson(lesson){
+        console.log("NAVIGATE TO PREVIOUS LESSON FROM: ", lesson);
+        const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
+        props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson - 1]);
+
+    }
+
 
     let openEditCourseOverviewDialogButton;
     if (props.editable) {
@@ -31,12 +50,32 @@ function CourseOverviewPane(props) {
         />
     }
 
+    function getLessonInformation(){
+        // props.activeChapter.lessons
+        const lengthOfLessons = props.activeChapter.lessons.length;
+        const indexOfActiveLesson = props.activeChapter.lessons.indexOf(props.activeLesson);
+        return [(indexOfActiveLesson === 0), (indexOfActiveLesson === (lengthOfLessons - 1))]
+    }
+
+
+    let isFirstLesson, isLastLesson = false;
+    if (props.activeLesson) {
+        [ isFirstLesson, isLastLesson ] = getLessonInformation();
+    }
+    // if (props.activeLesson)
+
     return (
         <Paper className="paper">
             {props.activeChapter ?
                 <div>
                     <h2>Chapter: {props.activeChapter.title}</h2>
-                    <CourseLesson lesson={props.activeLesson} />
+                    <CourseLesson 
+                        navigateToNextLesson={navigateToNextLesson} 
+                        navigateToPreviousLesson={navigateToPreviousLesson}
+                        isFirstLesson={isFirstLesson} 
+                        isLastLesson={isLastLesson} 
+                        lesson={props.activeLesson} 
+                    />
                 </div> :
                 <div>
                     {content}

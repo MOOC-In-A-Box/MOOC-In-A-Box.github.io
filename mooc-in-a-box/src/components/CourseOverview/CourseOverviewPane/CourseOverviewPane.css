@@ -1,0 +1,20 @@
+.next-button {
+    background-color: green !important;
+    color: whitesmoke !important;
+    right: 0;
+    position: absolute !important;
+
+}
+
+.button-div {
+    position: relative;
+    height: 2rem;
+    padding-top: 1rem;
+}
+
+.previous-button {
+    background-color: red !important;
+    color: whitesmoke !important;
+    left: 0;
+    position: absolute !important;
+}

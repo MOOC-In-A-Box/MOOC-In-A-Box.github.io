@@ -38,7 +38,7 @@ function CourseNavigationPane(props) {
 
   if (chaptersLength > 0) {
     courseNavigationPanels = props.course.chapters.map(chapter =>
-      <CourseChapterPanel editable={props.editable} setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} openLessonModal={props.openLessonModal} setChapterInContext={setChapterInContext} chapter={chapter} />
+      <CourseChapterPanel editable={props.editable} setActiveLesson={props.setActiveLesson} activeLesson={props.activeLesson} openLessonModal={props.openLessonModal} chapterInContext={props.chapterInContext} setChapterInContext={setChapterInContext} chapter={chapter} />
     )
   }
   

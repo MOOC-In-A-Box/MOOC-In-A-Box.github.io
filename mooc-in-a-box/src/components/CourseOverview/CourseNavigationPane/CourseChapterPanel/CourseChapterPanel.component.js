@@ -25,11 +25,15 @@ function CourseChapterPanel(props) {
 
     const lessonsLength = props.chapter?.lessons?.length;
     if (lessonsLength > 0) {
-        lessonItems = props.chapter.lessons.map(lesson =>
-            <ListItem onClick={() => listItemClicked(lesson)} id={lesson.id} button>
-                <ListItemText primary={lesson.title} />
-            </ListItem>
-        )
+        lessonItems = props.chapter.lessons.map(lesson => {
+            const isActiveLesson = (lesson === props.activeLesson);
+
+            return (
+                <ListItem selected={isActiveLesson} onClick={() => listItemClicked(lesson)} id={lesson.id} button>
+                    <ListItemText primary={lesson.title} />
+                </ListItem>
+            )
+        });
     } else {
         lessonItems[0] = <ListItem> <ListItemText primary="No Lessons Added" /> </ListItem>
     }
@@ -48,7 +52,9 @@ function CourseChapterPanel(props) {
 
 
     return (
-        <ExpansionPanel>
+        <ExpansionPanel
+            defaultExpanded={props.chapter === props.chapterInContext}
+        >
             <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
