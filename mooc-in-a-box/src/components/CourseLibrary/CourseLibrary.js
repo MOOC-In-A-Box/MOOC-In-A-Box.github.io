@@ -33,7 +33,6 @@ class CourseLibrary extends React.Component {
     this.buildMenuItems = this.buildMenuItems.bind(this);
     this.favoriteClicked = this.favoriteClicked.bind(this);
     this.removeFavoriteClicked = this.removeFavoriteClicked.bind(this);
-
     this.state = {
       searchValue: "",
       sortByElement: null,
@@ -41,15 +40,19 @@ class CourseLibrary extends React.Component {
       organizationElement: null,
       sortFilterValue: null,
       topicFilterValue: null,
-      organizationFilterValue:null
-
+      organizationFilterValue:null,
+      activeCourses: props.courses
     }
   }
 
   /** Search Function */
   handleSearchChange(e){
+    const searchValue = e.target.value;
+    console.log(searchValue);
+    const activeCourses = this.props.courses.filter(course => course.title.includes(searchValue))
     this.setState({
-      searchValue: e.target.value
+      searchValue,
+      activeCourses
     })
   }
 
@@ -215,7 +218,8 @@ class CourseLibrary extends React.Component {
     }
     let listItems = []
     if (user) {
-      listItems = this.props.courses.map(function(item) {
+
+      listItems = this.state.activeCourses.map(function(item) {
         return (
             <Grid item s={4}>
               <CourseCard course={item} favoriteClicked={favoriteClicked} removeFavoriteClicked={removeFavoriteClicked} isCourseAFavorite={isCourseAFavorite(user, item)}></CourseCard>
