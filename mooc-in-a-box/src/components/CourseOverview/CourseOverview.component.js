@@ -106,7 +106,7 @@ function CourseOverview(props) {
     }
 
     async function getCourseById(id) {
-        const course = await FirebaseService.getCourseByIdEvaluatePromise(id);
+        const course = await FirebaseService.getCourseById(id);
         course.chapters = await resolveChapters(course.chapters);
         setCourse(course);
         console.log(course)
