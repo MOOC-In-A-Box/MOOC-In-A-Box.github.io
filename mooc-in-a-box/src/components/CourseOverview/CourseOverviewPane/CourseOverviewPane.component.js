@@ -50,10 +50,16 @@ function CourseOverviewPane(props) {
 
     }
 
+    function openLessonModal() {
+        props.openLessonModal(/**addLesson=*/false);
+    }
+
 
     let openEditCourseOverviewDialogButton;
+    let addNewLessonButton;
     if (props.editable) {
         openEditCourseOverviewDialogButton = <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Overview </Button>
+        addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn"> Edit Lesson </Button>
     }
 
     let content = undefined;
@@ -77,18 +83,20 @@ function CourseOverviewPane(props) {
     function getLessonInformation() {
         let prevLesson, nextLesson, prevChapter, nextChapter = false;
 
-        const currentLessonIndex = lessonArray.indexOf(props.activeLesson);
-        const currentLessonIndexInChapter = props.activeChapter.lessons.indexOf(props.activeLesson);
-        const numLessonsInChapter = props.activeChapter.lessons.length;
-        const numChapters = props.course.chapters.length;
-        const activeChapterIndex = props.course.chapters.indexOf(props.activeChapter);
+        if (props.activeLesson) {
+            const currentLessonIndex = lessonArray.indexOf(props.activeLesson);
+            const currentLessonIndexInChapter = props.activeChapter.lessons.indexOf(props.activeLesson);
+            const numLessonsInChapter = props.activeChapter.lessons.length;
+            const numChapters = props.course.chapters.length;
+            const activeChapterIndex = props.course.chapters.indexOf(props.activeChapter);
 
-        prevLesson = currentLessonIndexInChapter > 0;
-        nextLesson = currentLessonIndexInChapter < numLessonsInChapter - 1;
-        prevChapter = currentLessonIndexInChapter === 0 && currentLessonIndex > 0
-        nextChapter = currentLessonIndexInChapter === numLessonsInChapter - 1
-            && currentLessonIndex < lessonArray.length - 1
-            && activeChapterIndex !== numChapters - 1;
+            prevLesson = currentLessonIndexInChapter > 0;
+            nextLesson = currentLessonIndexInChapter < numLessonsInChapter - 1;
+            prevChapter = currentLessonIndexInChapter === 0 && currentLessonIndex > 0
+            nextChapter = currentLessonIndexInChapter === numLessonsInChapter - 1
+                && currentLessonIndex < lessonArray.length - 1
+                && activeChapterIndex !== numChapters - 1;
+        }
 
         return [prevLesson, nextLesson, prevChapter, nextChapter]
     }
@@ -113,6 +121,7 @@ function CourseOverviewPane(props) {
                         nextChapter={nextChapter}
                         lesson={props.activeLesson}
                     />
+                    {addNewLessonButton}
                 </div> :
                 <div>
                     {content}

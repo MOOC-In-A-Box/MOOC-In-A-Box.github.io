@@ -160,7 +160,7 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
 export const updateCourse = async (courseId, updates) => {
     return db.collection('Course')
         .doc(courseId)
-        .set(updates, { merge: true })
+        .set(updates, { merge: true });
 }
 
 
@@ -189,6 +189,7 @@ export const addNewChapter = async (course, newChapterInfo) => {
     chapter.lessonsRef = [];
 
     if (course.chapters && course.chapters.length > 0) {
+        chapter.id = course.chapters.length;
         course.chapters.push(chapter);
     } else {
         course.chapters = [];
@@ -203,26 +204,30 @@ export const addNewChapter = async (course, newChapterInfo) => {
 
 }
 
-export const addNewLesson = async (course, chapterInfo, lessonInfo) => {
+export const updateLesson = async (course, chapterInfo, lessonInfo, add) => {
+    if (add) { // For initial lesson creation.
+        delete lessonInfo.id; // cuz undefined is not allowed
+        return await db.collection('Course').doc(course.id).collection('Lessons').add(lessonInfo)
+            .then(async lessonDoc => {
+                const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonDoc.id}`);
+                const chapters = course.chapters.map(chapter => {
+                    if (chapter === chapterInfo) {
+                        chapter.lessonsRef.push(lessonRef);
+                    }
+                    return chapter
+                });
 
-    return await db.collection('Course').doc(course.id).collection('Lessons').add(lessonInfo)
-        .then(async lessonDoc => {
-            console.log("Lesson Doc", lessonDoc)
-            console.log(`Course/${course.id}/Lessons/${lessonDoc.id}`);
-            const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonDoc.id}`);
-            const chapters = course.chapters.map(chapter => {
-                if (chapter === chapterInfo) {
-                    chapter.lessonsRef.push(lessonRef);
+                const updateObject = {
+                    chapters
                 }
-                return chapter
+                return await updateCourse(course.id, updateObject)
             });
-
-            const updateObject = {
-                chapters
-            }
-            return await updateCourse(course.id, updateObject)
-        });
+    } else {
+        const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonInfo.id}`);
+        return await lessonRef.set(lessonInfo, { merge: true });
+    }
 }
+
 
 /*
 * -----------------------------------------------------------
@@ -296,7 +301,6 @@ export const getDocFromDocRef = docRef => {
             if (result.exists) {
                 const myResult = result.data();
                 myResult.id = result.id;
-                console.log(myResult);
                 return myResult;
             } else {
                 return null;

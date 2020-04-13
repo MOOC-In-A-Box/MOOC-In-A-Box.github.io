@@ -13,8 +13,6 @@ function CreateLessonDialog(props) {
   const [title, setTitle] = useState();
   const [video, setVideo] = useState();
 
-
-
   function onCourseTitleChange(e) {
     setTitle(e.target.value);
   }
@@ -28,22 +26,42 @@ function CreateLessonDialog(props) {
     setVideo(e.target.value);
   }
 
-
-
   function handleSubmit(e) {
-    const lessonInfo = {
-      title,
-      description,
-      video
+    const id = props.lesson?.id ? props.lesson.id : undefined;
+    let titleUpdate = title;
+    let descrUpdate = description;
+    let videoUpdate = video;
+    if (props.lesson) {
+      titleUpdate = titleUpdate ? titleUpdate : props.lesson.title;
+      descrUpdate = descrUpdate ? descrUpdate : props.lesson.description;
+      videoUpdate = videoUpdate ? videoUpdate : props.lesson.video;
     }
-    props.addNewLesson(lessonInfo);
+    const lessonInfo = {
+      id,
+      title: titleUpdate,
+      description: descrUpdate,
+      video: videoUpdate
+    }
+    props.updateLesson(lessonInfo, props.add);
+  }
 
+  let initialTitle;
+  let initialDescription;
+  let initialVideo;
+  if (!props.add && props.lesson) {
+    initialTitle = props.lesson.title;
+    initialDescription = props.lesson.description;
+    initialVideo = props.lesson.video;
+  } else {
+    initialTitle = "";
+    initialDescription = "";
+    initialVideo = "";
   }
 
   return (
     <div>
       <Dialog open={props.isOpen} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Create New Lesson</DialogTitle>
+        <DialogTitle id="form-dialog-title">{props.add ? "Create New" : "Edit"} Lesson</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Add a new lesson to your course
@@ -56,6 +74,7 @@ function CreateLessonDialog(props) {
             onChange={onCourseTitleChange}
             type="text"
             color="secondary"
+            defaultValue={initialTitle}
             fullWidth
           />
           <TextField
@@ -65,6 +84,7 @@ function CreateLessonDialog(props) {
             onChange={onCourseDescriptionChange}
             type="text"
             color="secondary"
+            defaultValue={initialDescription}
             fullWidth
           />
           <TextField
@@ -74,6 +94,7 @@ function CreateLessonDialog(props) {
             onChange={onVideoUrlChange}
             type="text"
             color="secondary"
+            defaultValue={initialVideo}
             fullWidth
           />
         </DialogContent>

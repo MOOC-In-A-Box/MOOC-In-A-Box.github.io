@@ -42,7 +42,8 @@ function CourseOverview(props) {
         setIsCreateLessonDialogOpen(false);
     }
 
-    function openCreateLessonDialog() {
+    function openCreateLessonDialog(addLesson) {
+        props.addLesson = addLesson;
         setIsCreateLessonDialogOpen(true);
     }
 
@@ -63,10 +64,12 @@ function CourseOverview(props) {
     }
 
 
-    async function addNewLesson(lessonInfo) {
+    async function updateLesson(lessonInfo, add) {
         setIsCreateLessonDialogOpen(false);
-        await FirebaseService.addNewLesson(course, chapterInContext, lessonInfo);
-        getCourseById(id);
+        await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(() => {
+            getCourseById(id);
+            // TODO (jessi): make this go to the new lesson when adding.
+        }).catch((err) => { console.log(err) });
     }
 
     async function updateCourseOverview(overview) {
@@ -109,7 +112,6 @@ function CourseOverview(props) {
         const course = await FirebaseService.getCourseById(id);
         course.chapters = await resolveChapters(course.chapters);
         setCourse(course);
-        console.log(course)
     }
 
     useEffect(() => {
@@ -123,7 +125,7 @@ function CourseOverview(props) {
     if (props.editable) {
         dialogs = <div>
             <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
-            <CreateLessonDialog isOpen={isCreateLessonDialogOpen} addNewLesson={addNewLesson} handleClose={handleCreateLessonDialogClose} />
+            <CreateLessonDialog isOpen={isCreateLessonDialogOpen} add={props.addLesson} lesson={activeLesson} updateLesson={updateLesson} handleClose={handleCreateLessonDialogClose} />
             <EditCourseOverviewDialog isOpen={isEditCourseOverviewDialogOpen} updateCourseOverview={updateCourseOverview} handleClose={handleEditCourseOverviewDialogClose} course={course} />
         </div>
 
@@ -140,7 +142,7 @@ function CourseOverview(props) {
                         <CourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} chapterInContext={chapterInContext} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
                     <Grid item xs={8}>
-                        <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} />
+                        <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} openLessonModal={openCreateLessonDialog} />
                     </Grid>
                     {viewPublishedCourseButton}
                 </Grid>

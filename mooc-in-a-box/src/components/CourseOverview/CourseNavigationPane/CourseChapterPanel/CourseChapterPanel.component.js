@@ -42,7 +42,7 @@ function CourseChapterPanel(props) {
 
     function openLessonModal() {
         props.setChapterInContext(props.chapter);
-        props.openLessonModal(true);
+        props.openLessonModal(/**addLesson=*/true);
     }
 
     let addNewLessonButton;
@@ -64,7 +64,7 @@ function CourseChapterPanel(props) {
                 <Typography variant="subtitle2">{props.chapter.title}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-                
+
                 <List dense="true" className="lessons-list">
                     {lessonItems}
                     {addNewLessonButton}
