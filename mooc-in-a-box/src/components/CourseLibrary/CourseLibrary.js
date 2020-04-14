@@ -48,8 +48,13 @@ class CourseLibrary extends React.Component {
   /** Search Function */
   handleSearchChange(e){
     const searchValue = e.target.value;
+    const searchValueLowerCase = searchValue.toLowerCase();
     console.log(searchValue);
-    const activeCourses = this.props.courses.filter(course => course.title.includes(searchValue))
+    const activeCourses = this.props.courses.filter(course => 
+      ( course.title?.toLowerCase().includes(searchValueLowerCase) 
+      || course.description?.toLowerCase().includes(searchValueLowerCase) 
+      || course.owner.displayName?.toLowerCase().includes(searchValueLowerCase) 
+      ))
     this.setState({
       searchValue,
       activeCourses
