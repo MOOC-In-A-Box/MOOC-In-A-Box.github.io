@@ -7,6 +7,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertFromRaw, ContentState, convertToRaw, RichUtils } from "draft-js";
+
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CreateLessonDialog(props) {
   const [description, setDescription] = useState();
@@ -15,6 +19,20 @@ function CreateLessonDialog(props) {
   const [isDescriptionError, setIsDescriptionError] = useState(false);
   const [isTitleError, setIsTitleError] = useState(false);
   const [isYoutubeError, setIsYoutubeError] = useState(false);
+  const [editorState, setEditorState] = useState();
+
+  function onEditorStateChange(editorState) {
+    setEditorState(editorState);
+  };
+
+  function handleKeyCommand(command) {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      setEditorState(newState);
+      return 'handled';
+    }
+    return 'not-handled';
+  };
 
   function onCourseTitleChange(e) {
     setTitle(e.target.value);
@@ -29,23 +47,19 @@ function CreateLessonDialog(props) {
     setVideo(e.target.value);
   }
 
-  function isValidTitle(){
-    console.log("TITLE: ", title);
-    if (title && title.length > 0){
+  function isValidTitle() {
+    if (title && title.length > 0) {
       setIsTitleError(false)
       return true;
     } else {
       setIsTitleError(true);
-      console.log("TITLE ERROR: ", isTitleError)
       return false;
     }
 
   }
 
   function isValidDescription() {
-    console.log("DESCRIPTION: ", description);
-
-    if (description && description.length > 0){
+    if (description && (isJson(description) || description.length > 0)) {
       setIsDescriptionError(false)
       return true;
     } else {
@@ -54,8 +68,11 @@ function CreateLessonDialog(props) {
     }
   }
 
-  function isValidYoutubeURL(){
-    if (video && video.includes("youtube") && (video.includes("v="))) {
+  function isValidYoutubeURL() {
+    if (video === undefined || video.length === 0) {
+      setIsYoutubeError(false);
+      return true;
+    } else if (video && video.includes("youtube") && (video.includes("v="))) {
       setIsYoutubeError(false);
       return true;
     } else {
@@ -67,18 +84,31 @@ function CreateLessonDialog(props) {
   function handleSubmit(e) {
     const id = props.lesson?.id ? props.lesson.id : undefined;
 
-    if( isValidTitle() && isValidDescription() && isValidYoutubeURL() ){
+    const currentContentState = editorState.getCurrentContent();
+    const descriptionJSON = JSON.stringify(convertToRaw(currentContentState));
+    setDescription(descriptionJSON);
+    console.log(descriptionJSON);
+    console.log(convertToRaw(currentContentState));
+    console.log(description);
+
+    const tempVideo = "";
+    if (isValidTitle() && isValidDescription() && isValidYoutubeURL()) {
+      if (video === undefined || video.length === 0) {
+        setVideo(""); // So firebase won't die with undefined.
+      } else {
+        tempVideo = video;
+      }
       const lessonInfo = {
         id,
         title,
-        description,
-        video
+        description: descriptionJSON,
+        video: tempVideo,
       }
       props.updateLesson(lessonInfo, props.add);
-    } 
+    }
   }
 
-  function handleClose(){
+  function handleClose() {
     // Reset State
     setTitle();
     setVideo();
@@ -86,20 +116,42 @@ function CreateLessonDialog(props) {
     setIsTitleError(false);
     setIsDescriptionError(false);
     setIsYoutubeError(false);
+    setEditorState(EditorState.createEmpty());
     props.handleClose();
   }
 
-  useEffect( () => {
+  function isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  useEffect(() => {
     if (!props.add && props.lesson) {
-      console.log("Coming in here....");
       setTitle(props.lesson.title);
       setDescription(props.lesson.description);
       setVideo(props.lesson.video);
+      if (props.lesson.description) {
+        if (isJson(props.lesson.description)) {
+          setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(props.lesson.description))));
+        } else {
+          // For backwards compatibility
+          setEditorState(EditorState.createWithContent(ContentState.createFromText(props.lesson.description)));
+        }
+      }
+      else {
+        setEditorState(EditorState.createEmpty());
+      }
     } else {
       setTitle()
       setDescription()
       setVideo()
+      setEditorState(EditorState.createEmpty());
     }
+
   }, [props]);
 
   return (
@@ -107,11 +159,11 @@ function CreateLessonDialog(props) {
       <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{props.add ? "Create New" : "Edit"} Lesson</DialogTitle>
         <DialogContent>
-          {props.add ? 
+          {props.add ?
             <DialogContentText>
               Add a new lesson to your course
             </DialogContentText>
-          :
+            :
             <DialogContentText>
               Edit existing lesson
             </DialogContentText>
@@ -127,28 +179,15 @@ function CreateLessonDialog(props) {
             onChange={onCourseTitleChange}
             type="text"
             color="secondary"
-            value={title}  
+            value={title}
             helperText={isTitleError ? "Title is a required field" : ""}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            required
-            error={isDescriptionError}
-            id="description"
-            label="Lesson Description"
-            onChange={onCourseDescriptionChange}
-            type="text"
-            color="secondary"
-            value={description}
-            helperText={isDescriptionError ? "Description is a required field" : ""}
             fullWidth
           />
           <TextField
             margin="dense"
             error={isYoutubeError}
             id="video"
-            label="Video URL"
+            label="Video URL (optional)"
             onChange={onVideoUrlChange}
             type="text"
             color="secondary"
@@ -156,6 +195,12 @@ function CreateLessonDialog(props) {
             helperText={isYoutubeError ? "Youtube URL is malformed. It must have the form: https://www.youtube.com?v=<SomeCharacterString>" : ""}
 
             fullWidth
+          />
+          <Editor
+            editorState={editorState}
+            editorClassName="editor-textbox"
+            handleKeyCommand={handleKeyCommand}
+            onEditorStateChange={onEditorStateChange}
           />
         </DialogContent>
         <DialogActions>

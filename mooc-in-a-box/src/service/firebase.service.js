@@ -224,6 +224,9 @@ export const updateLesson = async (course, chapterInfo, lessonInfo, add) => {
             });
     } else {
         const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonInfo.id}`);
+        // if (lessonInfo.description) {
+        //     lessonInfo.description = JSON.stringify(lessonInfo.description);
+        // }
         return await lessonRef.set(lessonInfo, { merge: true });
     }
 }

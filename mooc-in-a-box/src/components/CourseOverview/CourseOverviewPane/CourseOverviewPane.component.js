@@ -5,10 +5,7 @@ import { Button } from '@material-ui/core';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
 
-import './CourseOverviewPane.css'
-
-
-
+import './CourseOverviewPane.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CourseOverviewPane(props) {
@@ -21,7 +18,6 @@ function CourseOverviewPane(props) {
     }
 
     function navigateToNextLesson(lesson) {
-        console.log("NAVIGATE TO NEXT LESSON FROM: ", lesson);
         const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
         if (indexOfCurrentLesson !== props.activeChapter.lessons.length - 1) {
             props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson + 1]);
@@ -35,7 +31,6 @@ function CourseOverviewPane(props) {
     }
 
     function navigateToPreviousLesson(lesson) {
-        console.log("NAVIGATE TO PREVIOUS LESSON FROM: ", lesson);
         const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
 
         if (indexOfCurrentLesson !== 0) {

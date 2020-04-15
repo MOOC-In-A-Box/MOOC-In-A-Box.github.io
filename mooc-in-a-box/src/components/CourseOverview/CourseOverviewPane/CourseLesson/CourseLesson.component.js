@@ -3,6 +3,9 @@ import YouTube from 'react-youtube';
 import { Button } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertFromRaw, ContentState } from "draft-js";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // Youtube Constants
 
@@ -78,6 +81,34 @@ function EditCourseLesson(props) {
         return youtubeConfig;
     }
 
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    let content = undefined;
+    if (props.lesson?.description && isJson(props.lesson.description)) {
+        const contentStateObj = JSON.parse(props.lesson.description);
+        const editorState = EditorState.createWithContent(convertFromRaw(contentStateObj));
+        content = <Editor
+            toolbarHidden
+            editorState={editorState}
+            readOnly={true}
+        />
+    }
+    else {
+        const text = props.lesson?.description ? props.lesson.description : "No text entered.";
+        content = <Editor
+            toolbarHidden
+            editorState={EditorState.createWithContent(ContentState.createFromText(text))}
+            readOnly={true}
+        />
+    }
+
     if (props.lesson) {
         const youtubeConfig = getVideoConfig();
 
@@ -86,15 +117,16 @@ function EditCourseLesson(props) {
                 <h3>{props.lesson.title}</h3>
                 <h6>Link: {props.lesson.video}</h6>
                 <strong>Description: </strong>
-                <p>{props.lesson.description}</p>
+                {/* <p>{props.lesson.description}</p> */}
+                {content}
                 {
-                    hasYoutubeVideo 
-                    ?
+                    hasYoutubeVideo
+                        ?
                         <YouTube videoId={youtubeConfig.videoId} opts={youtubeConfig.opts} onReady={_onReady} />
-                    :
+                        :
                         ""
                 }
-                
+
                 {getButtonDiv()}
             </div>
         )

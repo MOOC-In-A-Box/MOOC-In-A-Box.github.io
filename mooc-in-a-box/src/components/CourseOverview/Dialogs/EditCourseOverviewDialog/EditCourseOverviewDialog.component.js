@@ -11,7 +11,6 @@ import { EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function EditCourseOverviewDialog(props) {
-  const [overview, setOverview] = useState();
   const [contentState, setContentState] = useState(props.course.overview);
   const [editorState, setEditorState] = useState();
 
