@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import YouTube from 'react-youtube';
 import { Button } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -20,6 +20,8 @@ const YoutubeComponentConfig = {
 
 
 function EditCourseLesson(props) {
+
+    let hasYoutubeVideo = false;
 
     function _onReady(event) {
         // access to player in all event handlers via event.target
@@ -71,6 +73,7 @@ function EditCourseLesson(props) {
             const myParamters = url.split("?");
             var searchParams = new URLSearchParams(myParamters[1]);
             youtubeConfig.videoId = searchParams.get('v');
+            hasYoutubeVideo = true;
         }
         return youtubeConfig;
     }
@@ -84,7 +87,14 @@ function EditCourseLesson(props) {
                 <h6>Link: {props.lesson.video}</h6>
                 <strong>Description: </strong>
                 <p>{props.lesson.description}</p>
-                <YouTube videoId={youtubeConfig.videoId} opts={youtubeConfig.opts} onReady={_onReady} />
+                {
+                    hasYoutubeVideo 
+                    ?
+                        <YouTube videoId={youtubeConfig.videoId} opts={youtubeConfig.opts} onReady={_onReady} />
+                    :
+                        ""
+                }
+                
                 {getButtonDiv()}
             </div>
         )
