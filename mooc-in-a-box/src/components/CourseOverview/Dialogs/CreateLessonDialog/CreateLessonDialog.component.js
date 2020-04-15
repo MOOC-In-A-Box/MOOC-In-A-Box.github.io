@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,6 +12,9 @@ function CreateLessonDialog(props) {
   const [description, setDescription] = useState();
   const [title, setTitle] = useState();
   const [video, setVideo] = useState();
+  const [isDescriptionError, setIsDescriptionError] = useState(false);
+  const [isTitleError, setIsTitleError] = useState(false);
+  const [isYoutubeError, setIsYoutubeError] = useState(false);
 
   function onCourseTitleChange(e) {
     setTitle(e.target.value);
@@ -26,75 +29,132 @@ function CreateLessonDialog(props) {
     setVideo(e.target.value);
   }
 
-  function handleSubmit(e) {
-    const id = props.lesson?.id ? props.lesson.id : undefined;
-    let titleUpdate = title;
-    let descrUpdate = description;
-    let videoUpdate = video;
-    if (props.lesson) {
-      titleUpdate = titleUpdate ? titleUpdate : props.lesson.title;
-      descrUpdate = descrUpdate ? descrUpdate : props.lesson.description;
-      videoUpdate = videoUpdate ? videoUpdate : props.lesson.video;
+  function isValidTitle(){
+    console.log("TITLE: ", title);
+    if (title && title.length > 0){
+      setIsTitleError(false)
+      return true;
+    } else {
+      setIsTitleError(true);
+      console.log("TITLE ERROR: ", isTitleError)
+      return false;
     }
-    const lessonInfo = {
-      id,
-      title: titleUpdate,
-      description: descrUpdate,
-      video: videoUpdate
-    }
-    props.updateLesson(lessonInfo, props.add);
+
   }
 
-  let initialTitle;
-  let initialDescription;
-  let initialVideo;
-  if (!props.add && props.lesson) {
-    initialTitle = props.lesson.title;
-    initialDescription = props.lesson.description;
-    initialVideo = props.lesson.video;
-  } else {
-    initialTitle = "";
-    initialDescription = "";
-    initialVideo = "";
+  function isValidDescription() {
+    console.log("DESCRIPTION: ", description);
+
+    if (description && description.length > 0){
+      setIsDescriptionError(false)
+      return true;
+    } else {
+      setIsDescriptionError(true);
+      return false;
+    }
   }
+
+  function isValidYoutubeURL(){
+    if (video && video.includes("youtube") && (video.includes("v="))) {
+      setIsYoutubeError(false);
+      return true;
+    } else {
+      setIsYoutubeError(true);
+      return false;
+    }
+  }
+
+  function handleSubmit(e) {
+    const id = props.lesson?.id ? props.lesson.id : undefined;
+
+    if( isValidTitle() && isValidDescription() && isValidYoutubeURL() ){
+      const lessonInfo = {
+        id,
+        title,
+        description,
+        video
+      }
+      props.updateLesson(lessonInfo, props.add);
+    } 
+  }
+
+  function handleClose(){
+    // Reset State
+    setTitle();
+    setVideo();
+    setDescription();
+    setIsTitleError(false);
+    setIsDescriptionError(false);
+    setIsYoutubeError(false);
+    props.handleClose();
+  }
+
+  useEffect( () => {
+    if (!props.add && props.lesson) {
+      console.log("Coming in here....");
+      setTitle(props.lesson.title);
+      setDescription(props.lesson.description);
+      setVideo(props.lesson.video);
+    } else {
+      setTitle()
+      setDescription()
+      setVideo()
+    }
+  }, [props]);
 
   return (
     <div>
-      <Dialog open={props.isOpen} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{props.add ? "Create New" : "Edit"} Lesson</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Add a new lesson to your course
+          {props.add ? 
+            <DialogContentText>
+              Add a new lesson to your course
             </DialogContentText>
+          :
+            <DialogContentText>
+              Edit existing lesson
+            </DialogContentText>
+          }
+
           <TextField
             autoFocus
+            required
             margin="dense"
+            error={isTitleError}
             id="title"
             label="Lesson Title"
             onChange={onCourseTitleChange}
             type="text"
             color="secondary"
-            defaultValue={initialTitle}
+            value={title}  
+            helperText={isTitleError ? "Title is a required field" : ""}
             fullWidth
           />
           <TextField
             margin="dense"
+            required
+            error={isDescriptionError}
             id="description"
             label="Lesson Description"
             onChange={onCourseDescriptionChange}
             type="text"
             color="secondary"
-            defaultValue={initialDescription}
+            value={description}
+            helperText={isDescriptionError ? "Description is a required field" : ""}
             fullWidth
           />
           <TextField
             margin="dense"
+            error={isYoutubeError}
             id="video"
             label="Video URL"
             onChange={onVideoUrlChange}
             type="text"
             color="secondary"
-            defaultValue={initialVideo}
+            value={video}
+            helperText={isYoutubeError ? "Youtube URL is malformed. It must have the form: https://www.youtube.com?v=<SomeCharacterString>" : ""}
+
             fullWidth
           />
         </DialogContent>

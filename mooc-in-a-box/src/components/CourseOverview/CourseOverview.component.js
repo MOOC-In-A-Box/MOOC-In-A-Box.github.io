@@ -28,6 +28,7 @@ function CourseOverview(props) {
     const [isEditCourseOverviewDialogOpen, setIsEditCourseOverviewDialogOpen] = useState(false);
     const [chapterInContext, setChapterInContext] = useState();
     const [activeLesson, setActiveLesson] = useState();
+    const [addLesson, setAddLesson] = useState();
 
 
     function handleCreateChapterClose() {
@@ -43,7 +44,7 @@ function CourseOverview(props) {
     }
 
     function openCreateLessonDialog(addLesson) {
-        props.addLesson = addLesson;
+        setAddLesson(addLesson);
         setIsCreateLessonDialogOpen(true);
     }
 
@@ -125,7 +126,7 @@ function CourseOverview(props) {
     if (props.editable) {
         dialogs = <div>
             <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
-            <CreateLessonDialog isOpen={isCreateLessonDialogOpen} add={props.addLesson} lesson={activeLesson} updateLesson={updateLesson} handleClose={handleCreateLessonDialogClose} />
+            <CreateLessonDialog isOpen={isCreateLessonDialogOpen} add={addLesson} lesson={activeLesson} updateLesson={updateLesson} handleClose={handleCreateLessonDialogClose} />
             <EditCourseOverviewDialog isOpen={isEditCourseOverviewDialogOpen} updateCourseOverview={updateCourseOverview} handleClose={handleEditCourseOverviewDialogClose} course={course} />
         </div>
 
