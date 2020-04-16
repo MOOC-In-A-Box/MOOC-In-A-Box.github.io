@@ -12,20 +12,18 @@ function CreateChapterDialog(props) {
   const [description, setDescription] = useState();
   const [title, setTitle] = useState();
 
-
   function onCourseTitleChange(e) {
     setTitle(e.target.value);
   }
 
   function onCourseDescriptionChange(e) {
     setDescription(e.target.value);
-
   }
 
   function handleSubmit(e) {
     const chapterInfo = {
       title,
-      description
+      description,
     }
 
     props.handleSubmit(chapterInfo);

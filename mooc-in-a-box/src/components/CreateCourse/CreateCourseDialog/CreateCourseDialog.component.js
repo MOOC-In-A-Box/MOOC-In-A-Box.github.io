@@ -4,13 +4,21 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import InputLabel from '@material-ui/core/InputLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import './CreateCourseDialog.css'
+
 
 function CreateCourseDialog(props) {
   const [description, setDescription] = useState();
   const [title, setTitle] = useState();
+  const [editorState, setEditorState] = useState();
+  const [overview, setOverview] = useState();
 
 
   function onCourseTitleChange(e) {
@@ -22,13 +30,27 @@ function CreateCourseDialog(props) {
 
   }
 
+  function handleKeyCommand(command) {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      setEditorState(newState);
+      setOverview(convertToRaw(newState.getCurrentContent()));
+
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
+
+
   function handleSubmit() {
 
     const courseDetails = {
       title,
-      description
+      description,
+      overview
     }
-
+    console.log(courseDetails);
     props.handleSubmit(courseDetails);
   }
 
@@ -56,10 +78,22 @@ function CreateCourseDialog(props) {
             id="description"
             label="Course Description"
             onChange={onCourseDescriptionChange}
+            helperText="This is the text that is shown on the Course Card in the course library"
             type="text"
             color="secondary"
             fullWidth
           />
+          <h4>Course Overview:</h4>
+          <div className="course-overview-section">
+            <Editor
+              editorState={editorState}
+              editorClassName="editor-textbox"
+              handleKeyCommand={handleKeyCommand}
+              onEditorStateChange={setEditorState}
+              label="Course Overview"
+
+            />
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleClose} color="secondary">

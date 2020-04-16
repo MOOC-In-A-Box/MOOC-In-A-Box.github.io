@@ -102,13 +102,15 @@ export const getAllCourses = () => {
 
 export const createCourse = async (user, courseInfo) => {
     const userDocRef = db.doc(`Users/${user.id}`)
-    const lessonRef = db.doc(courseInfo.chapter.lessons);
-    courseInfo.chapter.lessons = lessonRef;
+
+    // const lessonRef = db.doc(courseInfo.chapter.lessons);
+    // courseInfo.chapter.lessons = lessonRef;
     return await db.collection('Course').add({
         owner: userDocRef,
         title: courseInfo.title,
         description: courseInfo.description,
-        chapters: courseInfo.chapters
+        chapters: courseInfo.chapters,
+        overview: JSON.stringify(courseInfo.overview)
     })
         .then(async courseDoc => {
             let usersCreatedCourses;
