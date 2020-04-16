@@ -23,6 +23,8 @@ function CreateLessonDialog(props) {
 
   function onEditorStateChange(editorState) {
     setEditorState(editorState);
+    const currentContentState = editorState.getCurrentContent();
+    setDescription(JSON.stringify(convertToRaw(currentContentState)));
   };
 
   function handleKeyCommand(command) {
@@ -36,11 +38,6 @@ function CreateLessonDialog(props) {
 
   function onCourseTitleChange(e) {
     setTitle(e.target.value);
-  }
-
-  function onCourseDescriptionChange(e) {
-    setDescription(e.target.value);
-
   }
 
   function onVideoUrlChange(e) {
@@ -87,9 +84,6 @@ function CreateLessonDialog(props) {
     const currentContentState = editorState.getCurrentContent();
     const descriptionJSON = JSON.stringify(convertToRaw(currentContentState));
     setDescription(descriptionJSON);
-    console.log(descriptionJSON);
-    console.log(convertToRaw(currentContentState));
-    console.log(description);
 
     const tempVideo = "";
     if (isValidTitle() && isValidDescription() && isValidYoutubeURL()) {

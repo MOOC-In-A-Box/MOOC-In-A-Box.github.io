@@ -58,17 +58,14 @@ function CourseOverview(props) {
     }
 
     function viewPublished() {
-        // ensure course overview
-        setActiveLesson(undefined);
-        setChapterInContext(undefined);
-        // navigate
         props.history.push(`/courseOverview/${course.id}`);
     }
 
 
     async function updateLesson(lessonInfo, add) {
+        setAddLesson(add);
         setIsCreateLessonDialogOpen(false);
-        await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(() => {
+        await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(async () => {
             getCourseById(id);
             // TODO (jessi): make this go to the new lesson when adding.
         }).catch((err) => { console.log(err) });
@@ -76,7 +73,6 @@ function CourseOverview(props) {
 
     async function updateCourse(courseInfo) {
         setIsEditCourseOverviewDialogOpen(false);
-        // console.log(overview)
         await FirebaseService.updateCourse(course.id, courseInfo);
         getCourseById(id);
     }
@@ -122,16 +118,35 @@ function CourseOverview(props) {
         }
     }, [id]);
 
+    useEffect(() => {
+        // after adding/editing a lesson, ensure we navigate to the freshest version
+        if (course && chapterInContext) {
+            if (!addLesson) {
+                const updatedLesson = course.chapters[chapterInContext.id].lessons.find(lesson => {
+                    if (lesson.id === activeLesson.id) {
+                        return lesson;
+                    }
+                });
+                if (updatedLesson) {
+                    setActiveLesson(updatedLesson);
+                }
+            } else {
+                const lessons = course.chapters[chapterInContext.id].lessons;
+                setActiveLesson(lessons[lessons.length - 1]);
+            }
+        }
+    }, [course]);
+
     let dialogs;
     let viewPublishedCourseButton;
     if (props.editable) {
         dialogs = <div>
             <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
             <CreateLessonDialog isOpen={isCreateLessonDialogOpen} add={addLesson} lesson={activeLesson} updateLesson={updateLesson} handleClose={handleCreateLessonDialogClose} />
-            
+
             <CreateCourseDialog
                 isOpen={isEditCourseOverviewDialogOpen}
-                handleClose={handleEditCourseOverviewDialogClose} 
+                handleClose={handleEditCourseOverviewDialogClose}
                 course={course}
                 handleSubmit={updateCourse}
             />

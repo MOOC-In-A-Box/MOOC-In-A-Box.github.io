@@ -102,7 +102,7 @@ export const getAllCourses = () => {
 
 export const createCourse = async (user, courseInfo) => {
     const userDocRef = db.doc(`Users/${user.id}`)
-        
+
     const newCourseObj = {
         owner: userDocRef,
         title: courseInfo.title,
@@ -164,7 +164,7 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
 
 
 export const updateCourse = async (courseId, updates) => {
-    if (updates.overview){
+    if (updates.overview) {
         updates.overview = JSON.stringify(updates.overview);
     }
     return db.collection('Course')
@@ -233,9 +233,6 @@ export const updateLesson = async (course, chapterInfo, lessonInfo, add) => {
             });
     } else {
         const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonInfo.id}`);
-        // if (lessonInfo.description) {
-        //     lessonInfo.description = JSON.stringify(lessonInfo.description);
-        // }
         return await lessonRef.set(lessonInfo, { merge: true });
     }
 }
