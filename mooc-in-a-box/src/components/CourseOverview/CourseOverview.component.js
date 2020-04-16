@@ -16,6 +16,7 @@ import CourseOverviewPane from './CourseOverviewPane/CourseOverviewPane.componen
 import CreateChapterDialog from './Dialogs/CreateChapterDialog/CreateChapterDialog.component';
 import CreateLessonDialog from './Dialogs/CreateLessonDialog/CreateLessonDialog.component';
 import EditCourseOverviewDialog from './Dialogs/EditCourseOverviewDialog/EditCourseOverviewDialog.component';
+import CreateCourseDialog from '../CreateCourse/CreateCourseDialog/CreateCourseDialog.component';
 
 function CourseOverview(props) {
     // Get ID from Route Params
@@ -73,10 +74,10 @@ function CourseOverview(props) {
         }).catch((err) => { console.log(err) });
     }
 
-    async function updateCourseOverview(overview) {
+    async function updateCourse(courseInfo) {
         setIsEditCourseOverviewDialogOpen(false);
-        console.log(overview)
-        await FirebaseService.updateCourseOverview(course, overview);
+        // console.log(overview)
+        await FirebaseService.updateCourse(course.id, courseInfo);
         getCourseById(id);
     }
 
@@ -127,7 +128,13 @@ function CourseOverview(props) {
         dialogs = <div>
             <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
             <CreateLessonDialog isOpen={isCreateLessonDialogOpen} add={addLesson} lesson={activeLesson} updateLesson={updateLesson} handleClose={handleCreateLessonDialogClose} />
-            <EditCourseOverviewDialog isOpen={isEditCourseOverviewDialogOpen} updateCourseOverview={updateCourseOverview} handleClose={handleEditCourseOverviewDialogClose} course={course} />
+            
+            <CreateCourseDialog
+                isOpen={isEditCourseOverviewDialogOpen}
+                handleClose={handleEditCourseOverviewDialogClose} 
+                course={course}
+                handleSubmit={updateCourse}
+            />
         </div>
 
         viewPublishedCourseButton = <Button variant="contained" color="secondary" onClick={viewPublished}> View Published Course </Button>

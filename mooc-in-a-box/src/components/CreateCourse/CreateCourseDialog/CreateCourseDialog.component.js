@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,10 +15,10 @@ import './CreateCourseDialog.css'
 
 
 function CreateCourseDialog(props) {
-  const [description, setDescription] = useState();
-  const [title, setTitle] = useState();
+  const [description, setDescription] = useState(props.course?.description);
+  const [title, setTitle] = useState(props.course?.title);
   const [editorState, setEditorState] = useState();
-  const [overview, setOverview] = useState();
+  const [overview, setOverview] = useState(props.course?.overview);
 
 
   function onCourseTitleChange(e) {
@@ -30,7 +30,13 @@ function CreateCourseDialog(props) {
 
   }
 
+  function onEditorStateChange(editorState) {
+    setEditorState(editorState);
+  };
+
+
   function handleKeyCommand(command) {
+    console.log("In here: ", command);
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
@@ -45,14 +51,28 @@ function CreateCourseDialog(props) {
 
   function handleSubmit() {
 
+    const currentContentState = editorState.getCurrentContent();
+    setOverview(convertToRaw(currentContentState));
+
     const courseDetails = {
       title,
       description,
-      overview
+      overview: convertToRaw(currentContentState)
     }
     console.log(courseDetails);
     props.handleSubmit(courseDetails);
   }
+
+
+
+  useEffect(() => {
+    if (overview) {
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(overview))));
+    }
+    else {
+      setEditorState(EditorState.createEmpty());
+    }
+  }, []);
 
 
   return (
@@ -71,6 +91,7 @@ function CreateCourseDialog(props) {
             onChange={onCourseTitleChange}
             type="text"
             color="secondary"
+            value={title}
             fullWidth
           />
           <TextField
@@ -81,6 +102,7 @@ function CreateCourseDialog(props) {
             helperText="This is the text that is shown on the Course Card in the course library"
             type="text"
             color="secondary"
+            value={description}
             fullWidth
           />
           <h4>Course Overview:</h4>
@@ -89,9 +111,8 @@ function CreateCourseDialog(props) {
               editorState={editorState}
               editorClassName="editor-textbox"
               handleKeyCommand={handleKeyCommand}
-              onEditorStateChange={setEditorState}
+              onEditorStateChange={onEditorStateChange}
               label="Course Overview"
-
             />
           </div>
         </DialogContent>

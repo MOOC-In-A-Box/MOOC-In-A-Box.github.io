@@ -53,7 +53,7 @@ function CourseOverviewPane(props) {
     let openEditCourseOverviewDialogButton;
     let addNewLessonButton;
     if (props.editable) {
-        openEditCourseOverviewDialogButton = <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Overview </Button>
+        openEditCourseOverviewDialogButton = <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Chapter Information </Button>
         addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn"> Edit Lesson </Button>
     }
 
