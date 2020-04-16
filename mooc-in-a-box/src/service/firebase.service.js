@@ -102,10 +102,7 @@ export const getAllCourses = () => {
 
 export const createCourse = async (user, courseInfo) => {
     const userDocRef = db.doc(`Users/${user.id}`)
-
-    // const lessonRef = db.doc(courseInfo.chapter.lessons);
-    // courseInfo.chapter.lessons = lessonRef;
-    
+        
     const newCourseObj = {
         owner: userDocRef,
         title: courseInfo.title,
@@ -167,7 +164,6 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
 
 
 export const updateCourse = async (courseId, updates) => {
-    console.log(updates);
     if (updates.overview){
         updates.overview = JSON.stringify(updates.overview);
     }

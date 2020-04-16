@@ -19,6 +19,8 @@ function CreateCourseDialog(props) {
   const [title, setTitle] = useState(props.course?.title);
   const [editorState, setEditorState] = useState();
   const [overview, setOverview] = useState(props.course?.overview);
+  const [isTitleError, setIsTitleError] = useState(false);
+  const [isDescriptionError, setIsDescriptionError] = useState(false);
 
 
   function onCourseTitleChange(e) {
@@ -47,22 +49,57 @@ function CreateCourseDialog(props) {
     return 'not-handled';
   };
 
+  function isValidTitle(){
+    if (title && title.length > 0) {
+      setIsTitleError(false)
+      return true;
+    } else {
+      setIsTitleError(true);
+      return false;
+    }
+
+  }
+
+  function isValidDescription(){
+    if (description && description.length > 0) {
+      setIsDescriptionError(false)
+      return true;
+    } else {
+      setIsDescriptionError(true);
+      return false;
+    }
+    
+
+  }
 
 
   function handleSubmit() {
 
-    const currentContentState = editorState.getCurrentContent();
-    setOverview(convertToRaw(currentContentState));
+    const titleIsGood = isValidTitle();
+    const descriptionIsGood = isValidDescription();
 
-    const courseDetails = {
-      title,
-      description,
-      overview: convertToRaw(currentContentState)
+    if( titleIsGood && descriptionIsGood){
+      const currentContentState = editorState.getCurrentContent();
+      setOverview(convertToRaw(currentContentState));
+
+      const courseDetails = {
+        title,
+        description,
+        overview: convertToRaw(currentContentState)
+      }
+      console.log(courseDetails);
+      props.handleSubmit(courseDetails);
     }
-    console.log(courseDetails);
-    props.handleSubmit(courseDetails);
   }
 
+  function handleClose(){
+    setIsTitleError(false)
+    setIsDescriptionError(false)
+    setDescription(props.course?.description)
+    setTitle(props.course?.title)
+    setOverview(props.course?.overview)
+    props.handleClose();
+  }
 
 
   useEffect(() => {
@@ -72,19 +109,26 @@ function CreateCourseDialog(props) {
     else {
       setEditorState(EditorState.createEmpty());
     }
-  }, []);
+  },[]);
 
 
   return (
     <div>
-      <Dialog open={props.isOpen} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Create A New Course</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Create a new course. Start by entering a title and description below!
+            { 
+              props.course ?
+              "Edit this existing courses title, description, or overview."
+              :
+              "Create a new course. Start by entering at least the title and description below."
+            }
             </DialogContentText>
           <TextField
             autoFocus
+            required
+            error={isTitleError}
             margin="dense"
             id="title"
             label="Course Title"
@@ -97,9 +141,11 @@ function CreateCourseDialog(props) {
           <TextField
             margin="dense"
             id="description"
+            error={isDescriptionError}
             label="Course Description"
+            required
             onChange={onCourseDescriptionChange}
-            helperText="This is the text that is shown on the Course Card in the course library"
+            helperText="This is a required field and is shown on the card in the Course Library"
             type="text"
             color="secondary"
             value={description}
@@ -117,7 +163,7 @@ function CreateCourseDialog(props) {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleClose} color="secondary">
+          <Button onClick={handleClose} color="secondary">
             Cancel
             </Button>
           <Button onClick={handleSubmit} color="secondary">
