@@ -5,3 +5,13 @@
 .courses-section {
     padding-bottom: 2rem;
 }
+
+.CreateCourse {
+    margin-top: 48px;
+}
+
+h2 {
+    text-align: left;
+    margin: 16px 0;
+    font-size: 20px;
+}

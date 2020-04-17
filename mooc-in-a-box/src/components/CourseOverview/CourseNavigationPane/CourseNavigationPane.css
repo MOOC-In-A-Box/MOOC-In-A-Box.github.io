@@ -2,3 +2,8 @@
     font-size: x-small;
     white-space: nowrap;
 }
+
+#course-overview > .MuiButton-label {
+    font-size: 20px!important;
+    color: #87618c;
+}

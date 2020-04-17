@@ -19,7 +19,7 @@ function CreatedCoursesComponent(props) {
 
   return (
     <div className="courses-section">
-      <h1> Courses You've Created </h1>
+      <h2> Courses You've Created </h2>
       <CoursesDropdownComponent courses={props.createdCourses} includeEditIcon={true}></CoursesDropdownComponent>
     </div>
   )
@@ -42,15 +42,7 @@ function CreateCourse(props) {
   async function handleSubmit(courseInfo) {
     courseInfo.owner = props.user.id;
 
-    // const chapter = {
-    //   id: 0,
-    //   lessons: "Course/rlfxOavBn4nPZLNTRMkL/Lessons/kL5CwNARpoUhexocK7P4",
-    //   sectionTitle: `${courseInfo.title} - Section`
-    // }
-
     courseInfo.chapters = []
-    // courseInfo.chapter = chapter;
-    // courseInfo.chapters.push(chapter);
 
     const response = await FirebaseService.createCourse(props.user, courseInfo)
     setIsCreateCourseDialogOpen(false);
@@ -70,11 +62,8 @@ function CreateCourse(props) {
 
 
   return (
-    <div className="Home">
+    <div className="CreateCourse">
       <CssBaseline />
-      <Typography className="center" variant="h3" component="h3">
-        Create A Course
-        </Typography>
       <Container className="userProfile-bottom-padding" maxWidth="lg">
         <Paper className="paper">
           {
@@ -87,7 +76,6 @@ function CreateCourse(props) {
           </span>
         </Paper>
       </Container>
-      <Divider />
 
       <CreateCourseDialog
         isOpen={isCreateCourseDialogOpen}

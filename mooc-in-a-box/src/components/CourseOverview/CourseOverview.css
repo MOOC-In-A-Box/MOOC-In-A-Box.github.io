@@ -11,4 +11,5 @@
 .edit-course {
     flex-grow: 1;
     margin-top: 24px;
+    padding: 24px 48px;
 }

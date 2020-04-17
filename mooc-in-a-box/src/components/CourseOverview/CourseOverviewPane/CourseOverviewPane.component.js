@@ -106,7 +106,6 @@ function CourseOverviewPane(props) {
         <Paper className="paper">
             {props.activeChapter ?
                 <div>
-                    <h2>Chapter: {props.activeChapter.title}</h2>
                     <CourseLesson
                         navigateToNextLesson={navigateToNextLesson}
                         navigateToPreviousLesson={navigateToPreviousLesson}

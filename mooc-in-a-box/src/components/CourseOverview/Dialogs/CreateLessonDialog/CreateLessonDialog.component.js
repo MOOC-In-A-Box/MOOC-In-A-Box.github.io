@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState, convertToRaw, RichUtils } from "draft-js";
 
+import './CreateLessonDialog.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CreateLessonDialog(props) {
@@ -85,7 +86,7 @@ function CreateLessonDialog(props) {
     const descriptionJSON = JSON.stringify(convertToRaw(currentContentState));
     setDescription(descriptionJSON);
 
-    const tempVideo = "";
+    let tempVideo = "";
     if (isValidTitle() && isValidDescription() && isValidYoutubeURL()) {
       if (video === undefined || video.length === 0) {
         setVideo(""); // So firebase won't die with undefined.
@@ -150,7 +151,7 @@ function CreateLessonDialog(props) {
 
   return (
     <div>
-      <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="md">
         <DialogTitle id="form-dialog-title">{props.add ? "Create New" : "Edit"} Lesson</DialogTitle>
         <DialogContent>
           {props.add ?
@@ -166,7 +167,7 @@ function CreateLessonDialog(props) {
           <TextField
             autoFocus
             required
-            margin="dense"
+            margin="normal"
             error={isTitleError}
             id="title"
             label="Lesson Title"
@@ -178,7 +179,7 @@ function CreateLessonDialog(props) {
             fullWidth
           />
           <TextField
-            margin="dense"
+            margin="normal"
             error={isYoutubeError}
             id="video"
             label="Video URL (optional)"
@@ -187,11 +188,11 @@ function CreateLessonDialog(props) {
             color="secondary"
             value={video}
             helperText={isYoutubeError ? "Youtube URL is malformed. It must have the form: https://www.youtube.com?v=<SomeCharacterString>" : ""}
-
             fullWidth
           />
           <Editor
             editorState={editorState}
+            wrapperClassName="editor-wrapper"
             editorClassName="editor-textbox"
             handleKeyCommand={handleKeyCommand}
             onEditorStateChange={onEditorStateChange}

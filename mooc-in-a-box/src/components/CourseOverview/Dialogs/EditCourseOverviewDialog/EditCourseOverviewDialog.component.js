@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import './EditCourseOverviewDialog.css';
 
 function EditCourseOverviewDialog(props) {
   const [contentState, setContentState] = useState(props.course.overview);

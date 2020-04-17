@@ -65,9 +65,8 @@ function CourseOverview(props) {
     async function updateLesson(lessonInfo, add) {
         setAddLesson(add);
         setIsCreateLessonDialogOpen(false);
-        await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(async () => {
+        await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(() => {
             getCourseById(id);
-            // TODO (jessi): make this go to the new lesson when adding.
         }).catch((err) => { console.log(err) });
     }
 
@@ -160,11 +159,11 @@ function CourseOverview(props) {
     if (course) {
         return (
             <div className="edit-course">
-                <Grid container spacing={3}>
-                    <Grid item xs={4}>
+                <Grid container spacing={6}>
+                    <Grid item xs={3}>
                         <CourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} chapterInContext={chapterInContext} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={9}>
                         <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} openLessonModal={openCreateLessonDialog} />
                     </Grid>
                     {viewPublishedCourseButton}

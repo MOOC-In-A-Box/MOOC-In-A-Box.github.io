@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import YouTube from 'react-youtube';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import './CourseLesson.css';
 
 // Youtube Constants
 
@@ -114,11 +115,7 @@ function EditCourseLesson(props) {
 
         return (
             <div>
-                <h3>{props.lesson.title}</h3>
-                <h6>Link: {props.lesson.video}</h6>
-                <strong>Description: </strong>
-                {/* <p>{props.lesson.description}</p> */}
-                {content}
+                <p class="class-title">{props.lesson.title}</p>
                 {
                     hasYoutubeVideo
                         ?
@@ -126,7 +123,7 @@ function EditCourseLesson(props) {
                         :
                         ""
                 }
-
+                {content}
                 {getButtonDiv()}
             </div>
         )

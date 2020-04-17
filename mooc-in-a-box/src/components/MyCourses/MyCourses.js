@@ -53,7 +53,7 @@ function CurrentCoursesComponent(props) {
 
   return (
     <div>
-      <h1> Current Courses </h1>
+      <h2> Current Courses </h2>
       <CoursesDropdownComponent courses={props.currentCourses}></CoursesDropdownComponent>
     </div>
   )
@@ -63,7 +63,7 @@ function CurrentCoursesComponent(props) {
 function PastCoursesComponent(props) {
   return (
     <div>
-      <h1> Past Courses </h1>
+      <h2> Past Courses </h2>
       <CoursesDropdownComponent courses={props.pastCourses}></CoursesDropdownComponent>
     </div>
   )
@@ -72,7 +72,7 @@ function PastCoursesComponent(props) {
 function SavedCoursesComponent(props) {
   return (
     <div>
-      <h1> Favorited Courses </h1>
+      <h2> Favorited Courses </h2>
       <CoursesDropdownComponent courses={props.savedCourses}></CoursesDropdownComponent>
     </div>
   )
@@ -81,7 +81,7 @@ function SavedCoursesComponent(props) {
 function CreatedCoursesComponent(props) {
   return (
     <div>
-      <h1> Created Courses </h1>
+      <h2> Created Courses </h2>
       <CoursesDropdownComponent courses={props.createdCourses} includeEditIcon={true}></CoursesDropdownComponent>
     </div>
   )
@@ -133,9 +133,6 @@ function MyCourses(props) {
       return (
         <div className="MyCourses">
           <CssBaseline />
-          <Typography className="center" variant="h3" component="h3">
-            My Courses
-          </Typography>
           <Container maxWidth="lg">
             <Paper className="paper">
               {
@@ -149,9 +146,6 @@ function MyCourses(props) {
       return (
         <div className="MyCourses">
           <CssBaseline />
-          <Typography className="center" variant="h3" component="h3">
-            My Courses
-            </Typography>
           <Container maxWidth="lg">
             <Paper className="paper">
               <h4>You don't have any courses saved yet!</h4>
