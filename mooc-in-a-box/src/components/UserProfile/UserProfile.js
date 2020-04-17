@@ -25,6 +25,8 @@ function UserProfile(props) {
   const [oldUserInterests, setOldUserInterests] = useState(null);
   const [isUserInterestsDialogOpen, setIsUserInterestsDialogOpen] = useState(false);
 
+  props.routeClicked("User Profile");
+
 
 
   function handleDisplayNameClose() {
