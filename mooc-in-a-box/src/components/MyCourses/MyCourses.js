@@ -92,6 +92,8 @@ function CreatedCoursesComponent(props) {
 function MyCourses(props) {
 
   const [user, setUser] = useState();
+  props.routeClicked("My Courses");
+
 
   React.useEffect(() => {
     setUser(props.user);

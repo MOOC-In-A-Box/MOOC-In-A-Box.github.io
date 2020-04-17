@@ -43,6 +43,7 @@ class CourseLibrary extends React.Component {
       organizationFilterValue:null,
       activeCourses: props.courses
     }
+    props.routeClicked("Course Library");
   }
 
   /** Search Function */

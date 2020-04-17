@@ -29,6 +29,8 @@ function CreateCourse(props) {
   const [isCreateCourseDialogOpen, setIsCreateCourseDialogOpen] = useState(false);
   const history = useHistory();
 
+  props.routeClicked("Create Course");
+
 
   function handleCreateCourseDialogClose() {
     setIsCreateCourseDialogOpen(false);

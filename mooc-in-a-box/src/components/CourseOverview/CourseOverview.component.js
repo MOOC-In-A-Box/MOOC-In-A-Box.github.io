@@ -31,6 +31,9 @@ function CourseOverview(props) {
     const [activeLesson, setActiveLesson] = useState();
     const [addLesson, setAddLesson] = useState();
 
+    props.routeClicked("Course Overview");
+
+
 
     function handleCreateChapterClose() {
         setIsCreateChapterDialogOpen(false);

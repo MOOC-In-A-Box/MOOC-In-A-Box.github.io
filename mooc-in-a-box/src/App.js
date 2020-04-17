@@ -6,7 +6,9 @@ import {
   Switch,
   Route,
   Link as RouterLink,
-  Redirect
+  Redirect,
+  withRouter,
+  browserHistory
 } from "react-router-dom";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CourseLibrary from './components/CourseLibrary/CourseLibrary';
@@ -15,9 +17,30 @@ import MyCourses from './components/MyCourses/MyCourses';
 import UserProfile from './components/UserProfile/UserProfile';
 import CreateCourse from './components/CreateCourse/CreateCourse.component';
 import CourseOverview from './components/CourseOverview/CourseOverview.component';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import * as FirebaseService from '../src/service/firebase.service'
+
+const buttonTheme = createMuiTheme({
+  palette: {
+    primary: { // peaches
+      main: '#87618c',
+    },
+    secondary: {  // purples
+      main: '#442b4a',
+    },
+  },
+  typography: {
+    useNextVariants: true
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        textTransform: 'none',
+      },
+    },
+  },
+});
 
 const theme = createMuiTheme({
   palette: {
@@ -51,7 +74,9 @@ class App extends React.Component {
       courses: [],
       users: [],
       currentUser: undefined,
-      loadingUser: true
+      loadingUser: true,
+      myCourseSelected: false,
+      allCoursesSelected: false
     };
     this.fetchCourses = this.fetchCourses.bind(this);
     this.fetchUsers = this.fetchUsers.bind(this);
@@ -59,12 +84,13 @@ class App extends React.Component {
     this.updateUser = this.updateUser.bind(this);
     this.setUser = this.setUser.bind(this);
     this.getUserOnLoad = this.getUserOnLoad.bind(this);
+    this.routeClicked = this.routeClicked.bind(this);
     this.fetchCourses().then(() => {
       this.getUserOnLoad();
     });
   }
 
-  async updateUser(userId) {
+  async updateUser(userId){
     if (!userId) {
       this.setState({ currentUser: undefined });
       this.setState({ loadingUser: false });
@@ -150,6 +176,26 @@ class App extends React.Component {
       })
   }
 
+  routeClicked(location){
+    console.log("New Location: ", location);
+    if (location === "Course Library" && !this.state.allCoursesSelected){
+      this.setState({
+        allCoursesSelected: true,
+        myCourseSelected: false
+      })
+    } else if (location === "My Courses" && !this.state.myCourseSelected){
+      this.setState({
+        allCoursesSelected: false,
+        myCourseSelected: true
+      })
+    } else if ( (location !== "Course Library" && location !== "My Courses") && (this.state.allCoursesSelected || this.state.myCourseSelected)){
+      this.setState({
+        allCoursesSelected: false,
+        myCourseSelected: false
+      })
+    }
+  }
+
   render() {
 
     // If not logged in redirect to the login page with redirect info. Url will
@@ -164,14 +210,16 @@ class App extends React.Component {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <Router>
+        <Router onChange={this.browserRouteChanged}>
           <div>
             <nav hidden={!this.state.currentUser}>
               <AppBar position="static">
                 <Toolbar>
-                  <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/courseLibrary">All Courses</Button>
-                  <Button variant="contained" color="secondary" className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
-                  <Button variant="outlined" color="secondary" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
+                  <MuiThemeProvider theme={buttonTheme}>
+                    <Button variant="contained" color={ this.state.allCoursesSelected ? "secondary" : "primary"} className="menu-button main" component={RouterLink} to="/courseLibrary">All Courses</Button>
+                    <Button variant="contained" color={ this.state.myCourseSelected ? "secondary" : "primary"} className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
+                  </MuiThemeProvider>
+                    <Button variant="outlined" color="secondary" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
                   <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
                     <AccountCircleIcon />
                   </IconButton>
@@ -183,25 +231,25 @@ class App extends React.Component {
                 renders the first one that matches the current URL. */}
             <Switch>
               <Route exact path="/login">
-                <Login completeLogin={this.setUser} user={this.state.currentUser} loadingUser={this.state.loadingUser} />
+                <Login routeClicked={this.routeClicked} completeLogin={this.setUser} user={this.state.currentUser} loadingUser={this.state.loadingUser} />
               </Route>
               <PrivateRoute path="/(courseLibrary|)">
-                <CourseLibrary courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser} />
+                <CourseLibrary routeClicked={this.routeClicked} courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser} />
               </PrivateRoute>
               <PrivateRoute path="/courseOverview/:id">
-                <CourseOverview editable={false} user={this.state.currentUser}></CourseOverview>
+                <CourseOverview routeClicked={this.routeClicked}  editable={false} user={this.state.currentUser}></CourseOverview>
               </PrivateRoute>
               <PrivateRoute path="/myCourses">
-                <MyCourses user={this.state.currentUser}></MyCourses>
+                <MyCourses routeClicked={this.routeClicked} user={this.state.currentUser}></MyCourses>
               </PrivateRoute>
               <PrivateRoute path="/profile">
-                <UserProfile user={this.state.currentUser} updateUser={this.updateUser}></UserProfile>
+                <UserProfile routeClicked={this.routeClicked} user={this.state.currentUser} updateUser={this.updateUser}></UserProfile>
               </PrivateRoute>
               <PrivateRoute path="/createCourse">
-                <CreateCourse user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
+                <CreateCourse routeClicked={this.routeClicked} user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
               </PrivateRoute>
               <PrivateRoute path="/editCourse/:id">
-                <CourseOverview editable={true} user={this.state.currentUser}></CourseOverview>
+                <CourseOverview routeClicked={this.routeClicked} editable={true} user={this.state.currentUser}></CourseOverview>
               </PrivateRoute>
             </Switch>
           </div>
@@ -210,5 +258,6 @@ class App extends React.Component {
     )
   }
 };
+
 
 export default App;
