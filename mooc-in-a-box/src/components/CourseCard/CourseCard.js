@@ -62,6 +62,7 @@ export default function CourseCard(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [isFavorited, setIsFavorited] = React.useState(false)
 
+  console.log(props.course);
 
   if ( props.isCourseAFavorite != isFavorited){
     setIsFavorited(props.isCourseAFavorite);
@@ -96,7 +97,7 @@ export default function CourseCard(props) {
       />
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
+        image={props.course.thumbnailUrl ? props.course.thumbnailUrl: "/static/images/cards/paella.jpg"}
         title="Paella dish"
       />
       <CardContent className={classes.content}>

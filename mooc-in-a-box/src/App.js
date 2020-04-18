@@ -249,7 +249,7 @@ class App extends React.Component {
                 <CreateCourse routeClicked={this.routeClicked} user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
               </PrivateRoute>
               <PrivateRoute path="/editCourse/:id">
-                <CourseOverview routeClicked={this.routeClicked} editable={true} user={this.state.currentUser}></CourseOverview>
+                <CourseOverview routeClicked={this.routeClicked} editable={true} user={this.state.currentUser} updateCourses={this.fetchCourses}></CourseOverview>
               </PrivateRoute>
             </Switch>
           </div>

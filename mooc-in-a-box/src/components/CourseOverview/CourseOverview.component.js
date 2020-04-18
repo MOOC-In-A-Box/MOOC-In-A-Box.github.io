@@ -76,6 +76,7 @@ function CourseOverview(props) {
     async function updateCourse(courseInfo) {
         setIsEditCourseOverviewDialogOpen(false);
         await FirebaseService.updateCourse(course.id, courseInfo);
+        props.updateCourses();
         getCourseById(id);
     }
 

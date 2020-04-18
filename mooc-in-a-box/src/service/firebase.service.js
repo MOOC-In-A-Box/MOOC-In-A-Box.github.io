@@ -17,6 +17,8 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+var storageRef = firebase.storage().ref();
+
 
 
 /*
@@ -85,7 +87,7 @@ export const getCourseById = courseId => {
     return db.collection('Course')
         .doc(courseId)
         .get()
-        .then(courseResult => {
+        .then(async courseResult => {
             if (courseResult.exists) {
                 const course = courseResult.data();
                 course.id = courseId;
@@ -100,6 +102,18 @@ export const getAllCourses = () => {
     return db.collection('Course').get();
 }
 
+
+export const addImage = (courseId, imageFile) => {
+    const courseImageRef = storageRef.child(`images/courses/${courseId}/${imageFile.name}`);
+    return courseImageRef.put(imageFile);
+}
+
+export const getImageUrl = (courseId, imageFile) => {
+    const courseImageRef = storageRef.child(`images/courses/${courseId}/${imageFile.name}`);
+    return courseImageRef.getDownloadURL();
+
+}
+
 export const createCourse = async (user, courseInfo) => {
     const userDocRef = db.doc(`Users/${user.id}`)
 
@@ -112,25 +126,55 @@ export const createCourse = async (user, courseInfo) => {
 
     if (courseInfo.overview) {
         newCourseObj.overview = JSON.stringify(courseInfo.overview)
-
     }
 
+    // Create Course
     return await db.collection('Course').add(newCourseObj)
         .then(async courseDoc => {
+
             let usersCreatedCourses;
             if (user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
                 usersCreatedCourses = user.createdCoursesRefs;
             } else {
                 usersCreatedCourses = []
             }
-
             const courseRef = db.doc(`Course/${courseDoc.id}`)
             usersCreatedCourses.push(courseRef);
-            const updateObject = {
-                createdCoursesRefs: usersCreatedCourses
-            }
 
-            return await updateUser(user.id, updateObject);
+            console.log('Course In Firebase Service', courseDoc);
+
+            // Check If Image Was Included
+            if(courseInfo.thumbnailFile){
+                // Upload Image
+                return await addImage(courseDoc.id, courseInfo.thumbnailFile)
+                    .then( async imageRef => {
+
+                       return await getImageUrl(courseDoc.id, courseInfo.thumbnailFile)
+                        .then( async imageUrl => {
+                            const courseUpdate = {
+                                thumbnailUrl: imageUrl
+                            };
+
+                            return await updateCourse(courseDoc.id, courseUpdate )
+                                .then( async courseDocWithImage => {                                                                
+                                    const updateObject = {
+                                        createdCoursesRefs: usersCreatedCourses
+                                    }
+
+                                return await updateUser(user.id, updateObject);
+                            })
+                        })
+                    });
+            } else {
+                // No Image
+                const courseRef = db.doc(`Course/${courseDoc.id}`)
+                usersCreatedCourses.push(courseRef);
+                
+                const updateObject = {
+                    createdCoursesRefs: usersCreatedCourses
+                }
+                return await updateUser(user.id, updateObject);
+            }
         })
 }
 
@@ -164,12 +208,31 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
 
 
 export const updateCourse = async (courseId, updates) => {
+
     if (updates.overview) {
         updates.overview = JSON.stringify(updates.overview);
     }
-    return db.collection('Course')
-        .doc(courseId)
-        .set(updates, { merge: true });
+
+    if( updates.thumbnailFile) {
+        return await addImage(courseId, updates.thumbnailFile)
+            .then( async imageRef => {
+
+           return await getImageUrl(courseId, updates.thumbnailFile)
+            .then( async imageUrl => {
+
+                delete updates.thumbnailFile;
+                updates.thumbnailUrl = imageUrl
+
+                return db.collection('Course')
+                .doc(courseId)
+                .set(updates, { merge: true });
+            })
+        })
+    } else{ 
+        return db.collection('Course')
+            .doc(courseId)
+            .set(updates, { merge: true });
+    }
 }
 
 

@@ -53,6 +53,12 @@ function CourseNavigationPane(props) {
       <Button id="course-overview" size="medium"
         onClick={courseOverviewClicked}>
         {props.course.title}
+        { 
+          props.course.thumbnailUrl ?
+            <img src={props.course.thumbnailUrl} height="100" width="100"></img>
+          :
+          ""
+        }
       </Button>
       {courseNavigationPanels}
       {addNewChapterButton}

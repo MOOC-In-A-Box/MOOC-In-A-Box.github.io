@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState, convertToRaw, RichUtils } from "draft-js";
 
-import './CreateLessonDialog.css';
+// import './CreateLessonDialog.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function CreateLessonDialog(props) {

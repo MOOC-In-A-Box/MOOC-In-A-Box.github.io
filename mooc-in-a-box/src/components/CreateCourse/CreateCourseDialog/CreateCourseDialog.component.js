@@ -6,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import InputLabel from '@material-ui/core/InputLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Input from '@material-ui/core/Input';
 import { Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { Editor } from 'react-draft-wysiwyg';
@@ -21,6 +22,8 @@ function CreateCourseDialog(props) {
   const [overview, setOverview] = useState(props.course?.overview);
   const [isTitleError, setIsTitleError] = useState(false);
   const [isDescriptionError, setIsDescriptionError] = useState(false);
+  const [thumbnailFile, setThumbnailFile] = useState();
+
 
 
   function onCourseTitleChange(e) {
@@ -35,6 +38,15 @@ function CreateCourseDialog(props) {
   function onEditorStateChange(editorState) {
     setEditorState(editorState);
   };
+
+  function onFileUploadChange({target}){
+    console.log("Upload happened");
+    // const fileReader = new FileReader();
+    // const name = target.accept.includes('image') ? 'images' : 'videos';
+    const file = target.files[0];
+    console.log(file);
+    setThumbnailFile(file);
+  }
 
 
   function handleKeyCommand(command) {
@@ -85,7 +97,8 @@ function CreateCourseDialog(props) {
       const courseDetails = {
         title,
         description,
-        overview: convertToRaw(currentContentState)
+        overview: convertToRaw(currentContentState),
+        thumbnailFile
       }
       console.log(courseDetails);
       props.handleSubmit(courseDetails);
@@ -161,6 +174,13 @@ function CreateCourseDialog(props) {
               label="Course Overview"
             />
           </div>
+          <Input
+            label="Upload Course Thumbnail"
+            type="file"
+            onChange={onFileUploadChange}
+            >
+            
+          </Input>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">

@@ -6,7 +6,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import './CourseLesson.css';
+// import './CourseLesson.css';
 
 // Youtube Constants
 
