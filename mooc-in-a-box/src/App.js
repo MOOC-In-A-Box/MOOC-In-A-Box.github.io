@@ -76,7 +76,8 @@ class App extends React.Component {
       currentUser: undefined,
       loadingUser: true,
       myCourseSelected: false,
-      allCoursesSelected: false
+      allCoursesSelected: false,
+      isDeletingCourse: false
     };
     this.fetchCourses = this.fetchCourses.bind(this);
     this.fetchUsers = this.fetchUsers.bind(this);
@@ -85,6 +86,7 @@ class App extends React.Component {
     this.setUser = this.setUser.bind(this);
     this.getUserOnLoad = this.getUserOnLoad.bind(this);
     this.routeClicked = this.routeClicked.bind(this);
+    this.deletingCourse = this.deletingCourse.bind(this);
     this.fetchCourses().then(() => {
       this.getUserOnLoad();
     });
@@ -123,6 +125,13 @@ class App extends React.Component {
         this.setState({ loadingUser: false });
 
       })
+  }
+
+  deletingCourse(value){
+    this.setState({
+        isDeletingCourse: value
+      }
+    )
   }
 
   getUserOnLoad() {
@@ -249,7 +258,7 @@ class App extends React.Component {
                 <CreateCourse routeClicked={this.routeClicked} user={this.state.currentUser} updateUser={this.updateUser} updateCourses={this.fetchCourses}></CreateCourse>
               </PrivateRoute>
               <PrivateRoute path="/editCourse/:id">
-                <CourseOverview routeClicked={this.routeClicked} editable={true} user={this.state.currentUser} updateCourses={this.fetchCourses}></CourseOverview>
+                <CourseOverview  setDeletingCourse={this.deletingCourse} isDeletingCourse={this.state.isDeletingCourse} routeClicked={this.routeClicked} editable={true}  user={this.state.currentUser} updateUser={this.updateUser}  updateCourses={this.fetchCourses}></CourseOverview>
               </PrivateRoute>
             </Switch>
           </div>

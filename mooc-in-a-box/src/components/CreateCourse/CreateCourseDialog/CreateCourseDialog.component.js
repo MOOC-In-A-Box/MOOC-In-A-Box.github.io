@@ -174,6 +174,7 @@ function CreateCourseDialog(props) {
               label="Course Overview"
             />
           </div>
+          <h4>Course Thumbnail:</h4>
           <Input
             label="Upload Course Thumbnail"
             type="file"

@@ -65,8 +65,6 @@ export default function CourseCard(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [isFavorited, setIsFavorited] = React.useState(false)
 
-  console.log(props.course);
-
   if ( props.isCourseAFavorite != isFavorited){
     setIsFavorited(props.isCourseAFavorite);
   }

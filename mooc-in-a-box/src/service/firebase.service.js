@@ -109,7 +109,7 @@ export const addImage = (courseId, imageFile) => {
 }
 
 export const getImageUrl = (courseId, imageFile) => {
-    const courseImageRef = storageRef.child(`images/courses/${courseId}/${imageFile.name}`);
+    const courseImageRef = storageRef.child(`images$s/${courseId}/${imageFile.name}`);
     return courseImageRef.getDownloadURL();
 
 }
@@ -236,6 +236,99 @@ export const updateCourse = async (courseId, updates) => {
 }
 
 
+const deleteCourseInFirebase = async (courseId) => {
+
+    return db.collection('Course').doc(courseId).delete().then( async courseDeletedResult => {
+        return await getAllUsers().then(async (queryResults) => {
+            const updateUsersPromises = []
+
+            queryResults.forEach((doc) => {
+                let updateUser = false;
+                const user = doc.data();
+                user.id = doc.id;
+                // const createdCoursesRefLength =  user.createdCoursesRefs?.length();
+                // const favoritedCourseRefs = user.favoritedCoursesRefs?.length();
+                
+                if(user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
+                    const createdCoursesRefLength =  user.createdCoursesRefs.length;
+                    user.createdCoursesRefs = user.createdCoursesRefs.filter( courseRef => courseRef.id !== courseId );
+                    if (user.createdCoursesRefs.length !== createdCoursesRefLength){
+                        updateUser = true;
+                    }
+                }
+
+                if(user.favoritedCourseRefs && user.favoritedCourseRefs.length > 0){
+                    const favoritedCourseRefs = user.favoritedCoursesRefs.length;
+                    user.favoritedCourseRefs = user.favoritedCoursesRefs.filter( courseRef => courseRef.id !== courseId);
+                    if (user.favoritedCourseRefs.length !== favoritedCourseRefs) {
+                        updateUser = true;
+                    }
+                }
+        
+                if (updateUser){
+                    updateUsersPromises.push( db.collection('Users').doc(user.id).set(user, { merge: true }) );
+                }
+            })
+
+            return await Promise.all(updateUsersPromises);
+        })
+    });
+}
+
+
+const deleteAllChapters= async (course) => {
+    console.log("Calling in here");
+    const arrayOfLessonPromises = [];
+    let deleteLessons = false;
+    for (const chapter of course.chapters) {
+        if (chapter.lessonsRef?.length > 0){
+            deleteLessons = true;
+            break;
+        }
+    }
+    if (deleteLessons){
+        console.log("IN HERE");
+        // var batch = firebase.firestore().batch()
+
+        db.collection(`/Course/${course.id}/Lessons`).get()
+            .then(queryResults => {
+                // values.map(val => {
+                //     batch.delete(val)
+                // })
+
+
+                console.log(queryResults);
+                queryResults.forEach( doc => {
+                    console.log(doc.data());
+                    arrayOfLessonPromises.push(
+                        db.collection(`/Course/${course.id}/Lessons/`).doc(doc.id).delete()
+                    )
+                })
+            })
+        
+            return await Promise.all(arrayOfLessonPromises);
+        }
+}
+
+// const deleteChapter = async (course, chapter) => {
+//     db.collection(`/Course/${course.id}/`)
+// }
+
+
+
+export const deleteCourse = async (course) => {
+    console.log(" ======= DELETE COURSE =============")
+    console.log(course);
+    console.log(course.id);
+    console.log(course.owner);
+    console.log(" ====== END DELETE");
+
+    if (course.chapters?.length > 0 ){
+        return await deleteAllChapters(course).then( async result => {
+            return await deleteCourseInFirebase(course.id);
+        })
+    }
+}
 
 
 /*

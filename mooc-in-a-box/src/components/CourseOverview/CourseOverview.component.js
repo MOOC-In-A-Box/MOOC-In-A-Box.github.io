@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './CourseOverview.css';
 import {
     Link as RouterLink,
-    useParams
+    useParams,
+    useHistory
 } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -17,6 +18,11 @@ import CreateChapterDialog from './Dialogs/CreateChapterDialog/CreateChapterDial
 import CreateLessonDialog from './Dialogs/CreateLessonDialog/CreateLessonDialog.component';
 import EditCourseOverviewDialog from './Dialogs/EditCourseOverviewDialog/EditCourseOverviewDialog.component';
 import CreateCourseDialog from '../CreateCourse/CreateCourseDialog/CreateCourseDialog.component';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeleteDialog from './Dialogs/DeleteDialog/DeleteDialog.component';
+
+
+
 
 function CourseOverview(props) {
     // Get ID from Route Params
@@ -27,9 +33,15 @@ function CourseOverview(props) {
     const [isCreateChapterDialogOpen, setIsCreateChapterDialogOpen] = useState(false);
     const [isCreateLessonDialogOpen, setIsCreateLessonDialogOpen] = useState(false);
     const [isEditCourseOverviewDialogOpen, setIsEditCourseOverviewDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [chapterInContext, setChapterInContext] = useState();
     const [activeLesson, setActiveLesson] = useState();
     const [addLesson, setAddLesson] = useState();
+    const [deleteType, setDeleteType] = useState();
+    const [objToDelete, setObjToDelete] = useState();
+    const [isDeleting, setIsDeleting] = useState(false);
+    const history = useHistory();
+
 
     props.routeClicked("Course Overview");
 
@@ -64,12 +76,41 @@ function CourseOverview(props) {
         props.history.push(`/courseOverview/${course.id}`);
     }
 
+    function openDeleteDialog(deleteType, objToDelete){
+        setIsDeleteDialogOpen(true);
+        setDeleteType(deleteType);
+        setObjToDelete(objToDelete)
+    }
+
+    function handleCloseDeleteDialog(){
+        setIsDeleteDialogOpen(false);
+    }
+
+    async function handleDeleteSubmit(){
+
+        props.setDeletingCourse(true)
+
+        if (deleteType === 'Course') {
+            console.log(deleteType);
+            console.log(objToDelete);
+            await FirebaseService.deleteCourse(objToDelete);
+            await props.updateCourses()
+            await props.updateUser(props.user.id);
+        }
+
+        history.push('/courseLibrary');
+        props.setDeletingCourse(false);
+
+    }
 
     async function updateLesson(lessonInfo, add) {
-        setAddLesson(add);
-        setIsCreateLessonDialogOpen(false);
+       
         await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(() => {
+            console.log("HERE: ", chapterInContext)
             getCourseById(id);
+            setAddLesson(add);
+            setIsCreateLessonDialogOpen(false);
+            // setChapterInContext()
         }).catch((err) => { console.log(err) });
     }
 
@@ -110,16 +151,20 @@ function CourseOverview(props) {
     }
 
     async function getCourseById(id) {
-        const course = await FirebaseService.getCourseById(id);
-        course.chapters = await resolveChapters(course.chapters);
-        setCourse(course);
+            const course = await FirebaseService.getCourseById(id);
+            course.chapters = await resolveChapters(course.chapters);
+            const chapter = course.chapters.find( chapter => chapter.title === chapterInContext );
+            setChapterInContext(chapter);
+            setCourse(course);
+
     }
 
     useEffect(() => {
-        if (id) {
+        if (id && !props.isDeletingCourse) {
+            console.log("IS DELETING", props.isDeletingCourse);
             getCourseById(id);
         }
-    }, [id]);
+    }, []);
 
     useEffect(() => {
         // after adding/editing a lesson, ensure we navigate to the freshest version
@@ -131,6 +176,7 @@ function CourseOverview(props) {
                     }
                 });
                 if (updatedLesson) {
+
                     setActiveLesson(updatedLesson);
                 }
             } else {
@@ -145,13 +191,25 @@ function CourseOverview(props) {
     if (props.editable) {
         dialogs = <div>
             <CreateChapterDialog isOpen={isCreateChapterDialogOpen} handleSubmit={addNewChapter} handleClose={handleCreateChapterClose} />
-            <CreateLessonDialog isOpen={isCreateLessonDialogOpen} add={addLesson} lesson={activeLesson} updateLesson={updateLesson} handleClose={handleCreateLessonDialogClose} />
+            <CreateLessonDialog 
+                isOpen={isCreateLessonDialogOpen} 
+                add={addLesson} 
+                lesson={activeLesson} 
+                updateLesson={updateLesson} 
+                handleClose={handleCreateLessonDialogClose} />
 
             <CreateCourseDialog
                 isOpen={isEditCourseOverviewDialogOpen}
                 handleClose={handleEditCourseOverviewDialogClose}
                 course={course}
                 handleSubmit={updateCourse}
+            />
+            <DeleteDialog
+                isOpen={isDeleteDialogOpen}
+                handleClose={handleCloseDeleteDialog}
+                handleSubmit={handleDeleteSubmit}
+                deleteType={deleteType}
+                objToDelete={objToDelete}
             />
         </div>
 
@@ -161,11 +219,23 @@ function CourseOverview(props) {
 
 
     if (course) {
+        console.log(course);
+        console.log(chapterInContext);
         return (
             <div className="edit-course">
                 <Grid container spacing={6}>
                     <Grid item xs={3}>
-                        <CourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} chapterInContext={chapterInContext} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                        <CourseNavigationPane 
+                            editable={props.editable} 
+                            activeLesson={activeLesson} 
+                            setActiveLesson={setActiveLesson} 
+                            openLessonModal={openCreateLessonDialog} 
+                            chapterInContext={chapterInContext} 
+                            setChapterInContext={setChapterInContext} 
+                            course={course} 
+                            openCreateChapterDialog={openCreateChapterDialog}
+                            openDeleteDialog={openDeleteDialog}
+                            />
                     </Grid>
                     <Grid item xs={9}>
                         <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} openLessonModal={openCreateLessonDialog} />
