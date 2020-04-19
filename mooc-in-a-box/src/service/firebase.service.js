@@ -167,9 +167,6 @@ export const createCourse = async (user, courseInfo) => {
                     });
             } else {
                 // No Image
-                const courseRef = db.doc(`Course/${courseDoc.id}`)
-                usersCreatedCourses.push(courseRef);
-                
                 const updateObject = {
                     createdCoursesRefs: usersCreatedCourses
                 }
@@ -324,10 +321,9 @@ export const deleteCourse = async (course) => {
     console.log(" ====== END DELETE");
 
     if (course.chapters?.length > 0 ){
-        return await deleteAllChapters(course).then( async result => {
-            return await deleteCourseInFirebase(course.id);
-        })
+        await deleteAllChapters(course)
     }
+    return await deleteCourseInFirebase(course.id);
 }
 
 
