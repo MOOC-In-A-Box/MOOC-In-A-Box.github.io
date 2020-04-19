@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import InputLabel from '@material-ui/core/InputLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Input from '@material-ui/core/Input';
-import { Button } from '@material-ui/core';
+import { Button, Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, convertToRaw, RichUtils } from 'draft-js';
@@ -39,7 +39,7 @@ function CreateCourseDialog(props) {
     setEditorState(editorState);
   };
 
-  function onFileUploadChange({target}){
+  function onFileUploadChange({ target }) {
     console.log("Upload happened");
     // const fileReader = new FileReader();
     // const name = target.accept.includes('image') ? 'images' : 'videos';
@@ -61,7 +61,7 @@ function CreateCourseDialog(props) {
     return 'not-handled';
   };
 
-  function isValidTitle(){
+  function isValidTitle() {
     if (title && title.length > 0) {
       setIsTitleError(false)
       return true;
@@ -72,7 +72,7 @@ function CreateCourseDialog(props) {
 
   }
 
-  function isValidDescription(){
+  function isValidDescription() {
     if (description && description.length > 0) {
       setIsDescriptionError(false)
       return true;
@@ -80,7 +80,7 @@ function CreateCourseDialog(props) {
       setIsDescriptionError(true);
       return false;
     }
-    
+
 
   }
 
@@ -90,7 +90,7 @@ function CreateCourseDialog(props) {
     const titleIsGood = isValidTitle();
     const descriptionIsGood = isValidDescription();
 
-    if( titleIsGood && descriptionIsGood){
+    if (titleIsGood && descriptionIsGood) {
       const currentContentState = editorState.getCurrentContent();
       setOverview(convertToRaw(currentContentState));
 
@@ -105,7 +105,7 @@ function CreateCourseDialog(props) {
     }
   }
 
-  function handleClose(){
+  function handleClose() {
     setIsTitleError(false)
     setIsDescriptionError(false)
     setDescription(props.course?.description)
@@ -122,27 +122,31 @@ function CreateCourseDialog(props) {
     else {
       setEditorState(EditorState.createEmpty());
     }
-  },[]);
+  }, []);
 
 
   return (
     <div>
-      <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Create A New Course</DialogTitle>
+      <Dialog open={props.isOpen} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="md">
+        <DialogTitle id="form-dialog-title">
+          {
+            props.course ? "Edit Course" : "Create A New Course"
+          }
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            { 
+            {
               props.course ?
-              "Edit this existing courses title, description, or overview."
-              :
-              "Create a new course. Start by entering at least the title and description below."
+                "Edit this existing courses title, description, or overview."
+                :
+                "Create a new course. Start by entering at least the title and description below."
             }
-            </DialogContentText>
+          </DialogContentText>
           <TextField
             autoFocus
             required
             error={isTitleError}
-            margin="dense"
+            margin="normal"
             id="title"
             label="Course Title"
             onChange={onCourseTitleChange}
@@ -151,20 +155,33 @@ function CreateCourseDialog(props) {
             value={title}
             fullWidth
           />
+
+          <Divider />
+
+          <p>Course Card</p>
+          <Input
+            label="Upload Course Thumbnail"
+            type="file"
+            onChange={onFileUploadChange}
+          >
+          </Input>
           <TextField
-            margin="dense"
+            margin="normal"
             id="description"
             error={isDescriptionError}
             label="Course Description"
             required
             onChange={onCourseDescriptionChange}
-            helperText="This is a required field and is shown on the card in the Course Library"
+            helperText="This field and is shown under the thumbnail"
             type="text"
             color="secondary"
             value={description}
             fullWidth
           />
-          <h4>Course Overview:</h4>
+
+          <Divider />
+
+          <p>Course Overview</p>
           <div className="course-overview-section">
             <Editor
               editorState={editorState}
@@ -174,13 +191,6 @@ function CreateCourseDialog(props) {
               label="Course Overview"
             />
           </div>
-          <Input
-            label="Upload Course Thumbnail"
-            type="file"
-            onChange={onFileUploadChange}
-            >
-            
-          </Input>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
