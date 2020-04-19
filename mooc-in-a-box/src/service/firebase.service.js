@@ -70,7 +70,6 @@ export const deleteUser = async () => {
         document.cookie = 'userid=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         return true;
     }).catch(function (error) {
-        console.log(error);
         return false;
     });
 }
@@ -273,7 +272,6 @@ const deleteCourseInFirebase = async (courseId) => {
 
 
 const deleteAllChapters= async (course) => {
-    console.log("Calling in here");
     const arrayOfLessonPromises = [];
     let deleteLessons = false;
     for (const chapter of course.chapters) {
@@ -283,7 +281,6 @@ const deleteAllChapters= async (course) => {
         }
     }
     if (deleteLessons){
-        console.log("IN HERE");
         // var batch = firebase.firestore().batch()
 
         db.collection(`/Course/${course.id}/Lessons`).get()
@@ -291,11 +288,7 @@ const deleteAllChapters= async (course) => {
                 // values.map(val => {
                 //     batch.delete(val)
                 // })
-
-
-                console.log(queryResults);
                 queryResults.forEach( doc => {
-                    console.log(doc.data());
                     arrayOfLessonPromises.push(
                         db.collection(`/Course/${course.id}/Lessons/`).doc(doc.id).delete()
                     )
@@ -313,11 +306,6 @@ const deleteAllChapters= async (course) => {
 
 
 export const deleteCourse = async (course) => {
-    console.log(" ======= DELETE COURSE =============")
-    console.log(course);
-    console.log(course.id);
-    console.log(course.owner);
-    console.log(" ====== END DELETE");
 
     if (course.chapters?.length > 0 ){
         await deleteAllChapters(course)
@@ -389,9 +377,7 @@ export const updateLesson = async (course, chapterInfo, lessonInfo, add) => {
 }
 
 export const deleteLesson = async (course, chapter, lesson) => {
-    console.log(course);
-    console.log(lesson);
-    console.log(chapter);
+
     const courseChapters = course.chapters.map( chapterInside => {
         if (chapterInside.title === chapter.title ) {
             const lessonsRefs = [];

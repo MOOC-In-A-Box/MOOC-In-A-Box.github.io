@@ -12,7 +12,6 @@ export default function DeleteDialog(props) {
     props.handleSubmit();
   }
 
-  console.log(props);
 
   return (
     <div>

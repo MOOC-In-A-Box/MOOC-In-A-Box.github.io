@@ -91,8 +91,6 @@ function CourseOverview(props) {
         props.setDeletingCourse(true)
 
         if (deleteType === 'Course') {
-            console.log(deleteType);
-            console.log(objToDelete);
             await FirebaseService.deleteCourse(objToDelete);
             await props.updateCourses()
             await props.updateUser(props.user.id);
@@ -114,7 +112,6 @@ function CourseOverview(props) {
     async function updateLesson(lessonInfo, add) {
        
         await FirebaseService.updateLesson(course, chapterInContext, lessonInfo, add).then(() => {
-            console.log("HERE: ", chapterInContext)
             getCourseById(id);
             setAddLesson(add);
             setIsCreateLessonDialogOpen(false);
@@ -169,7 +166,6 @@ function CourseOverview(props) {
 
     useEffect(() => {
         if (id && !props.isDeletingCourse) {
-            console.log("IS DELETING", props.isDeletingCourse);
             getCourseById(id);
         }
     }, []);
@@ -227,8 +223,6 @@ function CourseOverview(props) {
 
 
     if (course) {
-        console.log(course);
-        console.log(chapterInContext);
         return (
             <div className="edit-course">
                 <Grid container spacing={6}>

@@ -186,7 +186,6 @@ class App extends React.Component {
   }
 
   routeClicked(location){
-    console.log("New Location: ", location);
     if (location === "Course Library" && !this.state.allCoursesSelected){
       this.setState({
         allCoursesSelected: true,

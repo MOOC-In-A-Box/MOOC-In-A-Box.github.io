@@ -32,7 +32,6 @@ function CoursesDropdownComponent(props) {
                           <List dense="true">
                           {
                             props.courses.map( course => {
-                              console.log(course);
                               return (
                                 <span>
                                   <ListItem 
