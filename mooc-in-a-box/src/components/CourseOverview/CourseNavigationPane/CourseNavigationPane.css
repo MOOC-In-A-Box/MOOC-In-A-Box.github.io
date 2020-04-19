@@ -3,7 +3,8 @@
     color: #87618c;
 }
 
-#course-overview {
+#course-overview,
+#delete-button {
     margin-bottom: 16px;
 }
 

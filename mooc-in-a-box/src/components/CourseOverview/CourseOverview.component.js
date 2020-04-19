@@ -115,7 +115,6 @@ function CourseOverview(props) {
             getCourseById(id);
             setAddLesson(add);
             setIsCreateLessonDialogOpen(false);
-            // setChapterInContext()
         }).catch((err) => { console.log(err) });
     }
 
@@ -158,10 +157,11 @@ function CourseOverview(props) {
     async function getCourseById(id) {
         const course = await FirebaseService.getCourseById(id);
         course.chapters = await resolveChapters(course.chapters);
-        const chapter = course.chapters.find(chapter => chapter.title === chapterInContext);
-        setChapterInContext(chapter);
+        if (chapterInContext) {
+            const chapter = course.chapters.find(chapter => chapter.id === chapterInContext.id);
+            setChapterInContext(chapter);
+        }
         setCourse(course);
-
     }
 
     useEffect(() => {
@@ -180,7 +180,6 @@ function CourseOverview(props) {
                     }
                 });
                 if (updatedLesson) {
-
                     setActiveLesson(updatedLesson);
                 }
             } else {

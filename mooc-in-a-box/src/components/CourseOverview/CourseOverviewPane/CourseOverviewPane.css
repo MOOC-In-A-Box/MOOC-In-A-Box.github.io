@@ -14,3 +14,7 @@
     left: 0;
     position: absolute !important;
 }
+
+#edit-lesson {
+    float: right;
+}

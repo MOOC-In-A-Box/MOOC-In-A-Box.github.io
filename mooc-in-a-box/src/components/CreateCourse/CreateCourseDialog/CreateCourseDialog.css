@@ -1,10 +1,20 @@
-.course-overview-section {
-    /* border: 1px black solid; */
-}
-
 .editor-textbox {
     border: 1px solid #f1f1f1;
 }
+
 .MuiDivider-root {
     margin: 24px 0!important;
+}
+
+.section-heading {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#thumbnail-span {
+    display: flex;    
+}
+
+#thumbnail-text {
+    margin: 8px 12px 0 0;
 }

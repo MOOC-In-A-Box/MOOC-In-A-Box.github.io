@@ -116,9 +116,6 @@ function UserProfile(props) {
     return (
       <div className="userProfile">
         <CssBaseline />
-        <Typography className="center" variant="h3" component="h3">
-          User Profile
-        </Typography>
         <Container className="userProfile-bottom-padding" maxWidth="lg">
           <Paper className="paper">
 
@@ -153,9 +150,9 @@ function UserProfile(props) {
               onChange={onDisplayNameChange}
             />
             <Divider />
-            <UserProfileSection 
-              isEditable={false} 
-              displayValue="Email" 
+            <UserProfileSection
+              isEditable={false}
+              displayValue="Email"
               value={props.user.email}
             />
             <Divider />

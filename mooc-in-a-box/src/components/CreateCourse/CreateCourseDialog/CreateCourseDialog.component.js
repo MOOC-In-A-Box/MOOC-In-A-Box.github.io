@@ -78,10 +78,7 @@ function CreateCourseDialog(props) {
       setIsDescriptionError(true);
       return false;
     }
-
-
   }
-
 
   function handleSubmit() {
 
@@ -111,7 +108,6 @@ function CreateCourseDialog(props) {
     props.handleClose();
   }
 
-
   useEffect(() => {
     if (overview) {
       setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(overview))));
@@ -120,7 +116,6 @@ function CreateCourseDialog(props) {
       setEditorState(EditorState.createEmpty());
     }
   }, []);
-
 
   return (
     <div>
@@ -134,7 +129,7 @@ function CreateCourseDialog(props) {
           <DialogContentText>
             {
               props.course ?
-                "Edit this existing courses title, description, or overview."
+                "Edit the existing course's title, display card, or overview."
                 :
                 "Create a new course. Start by entering at least the title and description below."
             }
@@ -155,14 +150,16 @@ function CreateCourseDialog(props) {
 
           <Divider />
 
-          <p>Course Card</p>
-          <p>Course Thumbnail</p>
-          <Input
-            label="Upload Course Thumbnail"
-            type="file"
-            onChange={onFileUploadChange}
-          >
-          </Input>
+          <h3 class="section-heading">Course Card</h3>
+          <span id="thumbnail-span">
+            <p id="thumbnail-text">Course Thumbnail</p>
+            <Input
+              label="Upload Course Thumbnail"
+              type="file"
+              onChange={onFileUploadChange}
+            >
+            </Input>
+          </span>
           <TextField
             margin="normal"
             id="description"
@@ -170,7 +167,7 @@ function CreateCourseDialog(props) {
             label="Course Description"
             required
             onChange={onCourseDescriptionChange}
-            helperText="This field and is shown under the thumbnail"
+            helperText="This field is shown under the thumbnail"
             type="text"
             color="secondary"
             value={description}
@@ -179,7 +176,7 @@ function CreateCourseDialog(props) {
 
           <Divider />
 
-          <p>Course Overview</p>
+          <h3 class="section-heading">Course Overview</h3>
           <div className="course-overview-section">
             <Editor
               editorState={editorState}

@@ -7,7 +7,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-// import './CourseLesson.css';
+import './CourseLesson.css';
 
 // Youtube Constants
 
@@ -121,26 +121,27 @@ function EditCourseLesson(props) {
 
         return (
             <div>
-                <span className="class-title">
-                    <p> {props.lesson.title}
-                        {props.editable ?
-                            <IconButton onClick={openDeleteDialog}>
-                                <DeleteForeverIcon />
-                            </IconButton>
-                            :
-                            ''
-                        }
-                    </p>
-                </span>
-                {
-                    hasYoutubeVideo
-                        ?
-                        <YouTube videoId={youtubeConfig.videoId} opts={youtubeConfig.opts} onReady={_onReady} />
+                <div id="lesson-header">
+                    <p id="class-title"> {props.lesson.title} </p>
+                    {props.editable ?
+                        <IconButton id="delete-lesson" onClick={openDeleteDialog}>
+                            <DeleteForeverIcon />
+                        </IconButton>
                         :
-                        ""
-                }
-                {content}
-                {getButtonDiv()}
+                        ''
+                    }
+                </div>
+                <div id="content">
+                    {
+                        hasYoutubeVideo
+                            ?
+                            <YouTube videoId={youtubeConfig.videoId} opts={youtubeConfig.opts} onReady={_onReady} />
+                            :
+                            ""
+                    }
+                    {content}
+                    {getButtonDiv()}
+                </div>
             </div>
         )
     } else {

@@ -52,7 +52,7 @@ function CourseNavigationPane(props) {
   let deleteCourseButton;
   if (props.editable) {
     addNewChapterButton = <Button id="new-chapter" variant="contained" onClick={props.openCreateChapterDialog} color="secondary"> Add New Chapter </Button>
-    deleteCourseButton = <IconButton onClick={openDeleteDialog}> <DeleteForeverIcon /> </IconButton>
+    deleteCourseButton = <IconButton id="delete-button" onClick={openDeleteDialog}> <DeleteForeverIcon /> </IconButton>
   }
 
 

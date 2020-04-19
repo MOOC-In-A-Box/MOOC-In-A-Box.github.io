@@ -24,15 +24,15 @@ export default function DeleteDialog(props) {
         <DialogTitle id="alert-dialog-title">{`Delete ${props.deleteType}?`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-           Are you sure you want to delete this { props.deleteType?.toLowerCase() } ?
+            Are you sure you want to delete this {props.deleteType?.toLowerCase()}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleClose} color="secondary" autoFocus>
-            Disagree
+            Cancel
           </Button>
           <Button onClick={handleSubmit} color="secondary" >
-            Agree
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

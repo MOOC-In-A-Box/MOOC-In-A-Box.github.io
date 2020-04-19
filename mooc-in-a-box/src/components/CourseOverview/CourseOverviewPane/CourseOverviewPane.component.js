@@ -1,7 +1,8 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import CourseLesson from './CourseLesson/CourseLesson.component';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
 
@@ -51,10 +52,10 @@ function CourseOverviewPane(props) {
 
 
     let openEditCourseOverviewDialogButton;
-    let addNewLessonButton;
+    let editLessonButton;
     if (props.editable) {
         openEditCourseOverviewDialogButton = <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Course Information </Button>
-        addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="edit-lesson"> Edit Lesson </Button>
+        editLessonButton = <IconButton variant="contained" onClick={openLessonModal} color="secondary" id="edit-lesson"> <EditIcon /> </IconButton>
     }
 
     let content = undefined;
@@ -106,6 +107,7 @@ function CourseOverviewPane(props) {
         <Paper className="paper">
             {props.activeChapter ?
                 <div>
+                    {editLessonButton}
                     <CourseLesson
                         navigateToNextLesson={navigateToNextLesson}
                         navigateToPreviousLesson={navigateToPreviousLesson}
@@ -117,7 +119,6 @@ function CourseOverviewPane(props) {
                         editable={props.editable}
                         openDeleteDialog={props.openDeleteDialog}
                     />
-                    {addNewLessonButton}
                 </div> :
                 <div>
                     {content}

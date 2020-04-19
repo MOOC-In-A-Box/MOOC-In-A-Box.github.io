@@ -1,4 +1,12 @@
 #class-title {
     font-size: 20px!important;
-    text-align: left;
+    float: left;
+}
+
+#lesson-header {
+    padding-bottom: 48px;
+}
+
+#delete-lesson {
+    float: right;
 }
