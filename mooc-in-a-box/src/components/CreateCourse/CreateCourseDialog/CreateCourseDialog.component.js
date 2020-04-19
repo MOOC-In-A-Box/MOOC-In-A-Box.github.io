@@ -159,6 +159,7 @@ function CreateCourseDialog(props) {
           <Divider />
 
           <p>Course Card</p>
+          <p>Course Thumbnail</p>
           <Input
             label="Upload Course Thumbnail"
             type="file"

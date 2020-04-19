@@ -1,7 +1,9 @@
 import React from 'react';
 import './CourseNavigationPane.css';
 import Paper from '@material-ui/core/Paper';
-import { Button } from '@material-ui/core';
+import { IconButton, Button } from '@material-ui/core';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 
 import CourseChapterPanel from './CourseChapterPanel/CourseChapterPanel.component';
 
@@ -33,6 +35,11 @@ function CourseNavigationPane(props) {
     props.setChapterInContext(undefined);
   }
 
+  const openDeleteDialog = (e) => {
+    console.log("This is being called");
+    props.openDeleteDialog("Course", props.course);
+  }
+
   let courseNavigationPanels = []
   const chaptersLength = props.course?.chapters?.length;
 
@@ -43,23 +50,23 @@ function CourseNavigationPane(props) {
   }
 
   let addNewChapterButton;
+  let deleteCourseButton;
   if (props.editable) {
     addNewChapterButton = <Button id="new-chapter" variant="contained" onClick={props.openCreateChapterDialog} color="secondary"> Add New Chapter </Button>
+    deleteCourseButton = <IconButton onClick={openDeleteDialog}> <DeleteForeverIcon /> </IconButton>
   }
 
 
   return (
     <Paper className="paper">
-      <Button id="course-overview" size="medium"
-        onClick={courseOverviewClicked}>
-        {props.course.title}
-        {
-          props.course.thumbnailUrl ?
-            <img src={props.course.thumbnailUrl} id="thumbnail"></img>
-            :
-            ""
-        }
-      </Button>
+      <span>
+        <Button id="course-overview" size="medium"
+          onClick={courseOverviewClicked}>
+          {props.course.title}
+        </Button>
+        {deleteCourseButton}
+        <br />
+      </span>
       {courseNavigationPanels}
       {addNewChapterButton}
     </Paper>

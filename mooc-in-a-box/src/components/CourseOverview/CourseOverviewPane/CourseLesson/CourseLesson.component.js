@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import YouTube from 'react-youtube';
-import { Button, Typography } from '@material-ui/core';
+import { IconButton, Button, Typography } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 // import './CourseLesson.css';
 
 // Youtube Constants
@@ -30,6 +31,11 @@ function EditCourseLesson(props) {
     function _onReady(event) {
         // access to player in all event handlers via event.target
         event.target.pauseVideo();
+    }
+
+
+    function openDeleteDialog(e) {
+        props.openDeleteDialog("Lesson", props.lesson);
     }
 
 
@@ -115,7 +121,17 @@ function EditCourseLesson(props) {
 
         return (
             <div>
-                <p id="class-title">{props.lesson.title}</p>
+                <span className="class-title">
+                    <p> {props.lesson.title}
+                        {props.editable ?
+                            <IconButton onClick={openDeleteDialog}>
+                                <DeleteForeverIcon />
+                            </IconButton>
+                            :
+                            ''
+                        }
+                    </p>
+                </span>
                 {
                     hasYoutubeVideo
                         ?
