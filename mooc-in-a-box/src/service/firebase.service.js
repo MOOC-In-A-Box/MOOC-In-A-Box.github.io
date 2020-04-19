@@ -108,7 +108,7 @@ export const addImage = (courseId, imageFile) => {
 }
 
 export const getImageUrl = (courseId, imageFile) => {
-    const courseImageRef = storageRef.child(`images$s/${courseId}/${imageFile.name}`);
+    const courseImageRef = storageRef.child(`images/courses/${courseId}/${imageFile.name}`);
     return courseImageRef.getDownloadURL();
 
 }
