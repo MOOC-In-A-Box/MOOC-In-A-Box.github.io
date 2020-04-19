@@ -120,6 +120,9 @@ function CourseOverview(props) {
 
     async function updateCourse(courseInfo) {
         setIsEditCourseOverviewDialogOpen(false);
+        if (courseInfo.thumbnailFile === undefined) {
+            courseInfo.thumbnailFile = "";
+        }
         await FirebaseService.updateCourse(course.id, courseInfo);
         props.updateCourses();
         getCourseById(id);

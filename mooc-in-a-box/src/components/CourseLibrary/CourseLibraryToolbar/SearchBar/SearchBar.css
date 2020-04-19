@@ -1,19 +1,24 @@
 .search-bar {
-    margin-left: auto !important;
-    color: black;
-  }
+  margin-left: auto !important;
+  color: #87618c;
+}
   
-  .search-bar-icon {
-    color: black
-  }
-  
-  .search-bar .MuiOutlinedInput-notchedOutline {
-    border-color: black;
-  }
-  .white {
-    color: white
-  }
-  
-  #outlined-search {
-    color: black
-  }
+.search-bar-icon {
+  color: #87618c
+}
+
+.search-bar .MuiOutlinedInput-notchedOutline {
+  border-color: #87618c;
+}
+.white {
+  color: white
+}
+
+#outlined-search {
+  color: #87618c;
+  padding: 12px 14px;
+}
+
+.search-bar > .MuiFormControl-root {
+  vertical-align: middle!important;
+}

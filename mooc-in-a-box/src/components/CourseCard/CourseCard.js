@@ -16,10 +16,10 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Button } from '@material-ui/core';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-
-
+import './CourseCard.css';
+import placeholder from './placeholder.png';
 
 
 const useStyles = makeStyles(theme => ({
@@ -33,7 +33,6 @@ const useStyles = makeStyles(theme => ({
   media: {
     paddingTop: '56.25%', // 16:9
     maxWidth: '50%',
-    height: '40%',
     marginLeft: "auto",
     marginRight: "auto"
   },
@@ -54,9 +53,13 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 0,
     left: 0
-  }, 
+  },
   content: {
-    paddingBottom: '1rem'
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: '2',
+    WebkitBoxOrient: 'vertical',
   }
 }));
 
@@ -65,7 +68,7 @@ export default function CourseCard(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [isFavorited, setIsFavorited] = React.useState(false)
 
-  if ( props.isCourseAFavorite != isFavorited){
+  if (props.isCourseAFavorite != isFavorited) {
     setIsFavorited(props.isCourseAFavorite);
   }
 
@@ -82,41 +85,37 @@ export default function CourseCard(props) {
       setIsFavorited(true);
       props.favoriteClicked(props.course);
     }
-   
+
   }
 
   return (
     <Card variant="outlined" className={classes.root}>
       <CardHeader
         title={props.course.title}
-        subheader={props.course.owner.displayName}
+        subheader={props.course.owner.displayName ? props.course.owner.displayName : props.course.owner.name}
         action={
           <IconButton aria-label="add to favorites" onClick={favoriteButtonClicked}>
-           { isFavorited ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />  } 
+            {isFavorited ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
           </IconButton>
         }
       />
       <CardMedia
         className={classes.media}
-        image={props.course.thumbnailUrl ? props.course.thumbnailUrl: "/static/images/cards/paella.jpg"}
-        title="Paella dish"
+        image={props.course.thumbnailUrl ? props.course.thumbnailUrl : placeholder}
       />
-      <CardContent className={classes.content}>
-        <Typography variant="body2" color="textSecondary" component="p">
+      <CardContent>
+        <Typography variant="body2" color="textSecondary" component="p" className={classes.content}>
           {props.course.description}
-        </Typography> 
-        <Typography variant="body2" color="textSecondary" component="p">
-          {props.course.owner.displayName}
         </Typography>
       </CardContent>
-      <CardActions className={classes.actionsRow} disableSpacing>
-        <Button 
-          variant="contained" 
+      <CardActions className={classes.actionsRow} >
+        <Button
+          variant="contained"
           color="secondary"
           component={Link}
           to={`/courseOverview/${props.course.id}`}
-          >
-            Overview
+        >
+          Overview
         </Button>
       </CardActions>
     </Card>
