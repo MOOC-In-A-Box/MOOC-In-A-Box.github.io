@@ -1,3 +1,11 @@
 .lessons-list {
     width: 100% !important;
 }
+
+#add-lesson {
+    margin-top: 24px;
+}
+
+.MuiListItem-root.Mui-selected {
+    background-color: #f6eee7!important;
+}

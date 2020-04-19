@@ -44,7 +44,7 @@ function CourseNavigationPane(props) {
 
   let addNewChapterButton;
   if (props.editable) {
-    addNewChapterButton = <Button variant="contained" onClick={props.openCreateChapterDialog} color="secondary"> Add New Chapter </Button>
+    addNewChapterButton = <Button id="new-chapter" variant="contained" onClick={props.openCreateChapterDialog} color="secondary"> Add New Chapter </Button>
   }
 
 
@@ -53,11 +53,11 @@ function CourseNavigationPane(props) {
       <Button id="course-overview" size="medium"
         onClick={courseOverviewClicked}>
         {props.course.title}
-        { 
+        {
           props.course.thumbnailUrl ?
-            <img src={props.course.thumbnailUrl} height="100" width="100"></img>
-          :
-          ""
+            <img src={props.course.thumbnailUrl} id="thumbnail"></img>
+            :
+            ""
         }
       </Button>
       {courseNavigationPanels}

@@ -48,7 +48,7 @@ function CourseChapterPanel(props) {
     let addNewLessonButton;
 
     if (props.editable) {
-        addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" className="add-content-btn"> Add New Lesson </Button>
+        addNewLessonButton = <Button variant="contained" onClick={openLessonModal} color="secondary" id="add-lesson">Add New Lesson</Button>
     }
 
 

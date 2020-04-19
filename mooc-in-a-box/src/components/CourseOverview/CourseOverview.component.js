@@ -155,7 +155,7 @@ function CourseOverview(props) {
             />
         </div>
 
-        viewPublishedCourseButton = <Button variant="contained" color="secondary" onClick={viewPublished}> View Published Course </Button>
+        viewPublishedCourseButton = <Button variant="contained" color="secondary" id="view-published" onClick={viewPublished}> View Published Course </Button>
     }
 
 
@@ -166,11 +166,11 @@ function CourseOverview(props) {
                 <Grid container spacing={6}>
                     <Grid item xs={3}>
                         <CourseNavigationPane editable={props.editable} activeLesson={activeLesson} setActiveLesson={setActiveLesson} openLessonModal={openCreateLessonDialog} chapterInContext={chapterInContext} setChapterInContext={setChapterInContext} course={course} openCreateChapterDialog={openCreateChapterDialog} />
+                        {viewPublishedCourseButton}
                     </Grid>
                     <Grid item xs={9}>
                         <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} openLessonModal={openCreateLessonDialog} />
                     </Grid>
-                    {viewPublishedCourseButton}
                 </Grid>
                 {dialogs}
             </div>

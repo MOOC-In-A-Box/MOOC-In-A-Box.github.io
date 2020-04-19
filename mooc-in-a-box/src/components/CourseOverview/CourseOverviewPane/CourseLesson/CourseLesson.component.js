@@ -115,7 +115,7 @@ function EditCourseLesson(props) {
 
         return (
             <div>
-                <p class="class-title">{props.lesson.title}</p>
+                <p id="class-title">{props.lesson.title}</p>
                 {
                     hasYoutubeVideo
                         ?

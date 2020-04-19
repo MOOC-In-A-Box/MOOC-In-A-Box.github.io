@@ -1,9 +1,18 @@
-.add-content-btn .MuiButton-label {
-    font-size: x-small;
-    white-space: nowrap;
-}
-
 #course-overview > .MuiButton-label {
     font-size: 20px!important;
     color: #87618c;
+}
+
+#course-overview {
+    margin-bottom: 16px;
+}
+
+#new-chapter {
+    margin-top: 16px;
+}
+
+#thumbnail {
+    max-height: 100px;
+    height: 100%;
+    width: 100px;;
 }
