@@ -141,7 +141,6 @@ export const createCourse = async (user, courseInfo) => {
             const courseRef = db.doc(`Course/${courseDoc.id}`)
             usersCreatedCourses.push(courseRef);
 
-            console.log('Course In Firebase Service', courseDoc);
 
             // Check If Image Was Included
             if(courseInfo.thumbnailFile){
@@ -387,6 +386,40 @@ export const updateLesson = async (course, chapterInfo, lessonInfo, add) => {
         const lessonRef = db.doc(`Course/${course.id}/Lessons/${lessonInfo.id}`);
         return await lessonRef.set(lessonInfo, { merge: true });
     }
+}
+
+export const deleteLesson = async (course, chapter, lesson) => {
+    console.log(course);
+    console.log(lesson);
+    console.log(chapter);
+    const courseChapters = course.chapters.map( chapterInside => {
+        if (chapterInside.title === chapter.title ) {
+            const lessonsRefs = [];
+            chapterInside.lessonsRef.forEach( lessonRef => {
+                if (lessonRef.id !== lesson.id){
+                    lessonsRefs.push(lesson);
+                }
+            })
+            chapterInside.lessonsRef = lessonsRefs;
+
+            const lessons = []
+            chapterInside.lessons.forEach( lessonInside => {
+                if (lessonInside.id !== lesson.id){
+                    lessons.push(lesson);
+                }
+            })
+            chapterInside.lessons = lessons;
+        }
+        return chapterInside;
+    });
+
+
+    return await db.collection(`/Course/${course.id}/Lessons`).doc(lesson.id).delete().then(async result => {
+        return await updateCourse(course.id, {
+            chapters: courseChapters
+        });
+    });
+  
 }
 
 

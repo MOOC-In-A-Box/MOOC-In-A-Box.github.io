@@ -13,6 +13,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
+
+
 import './CourseChapterPanel.css';
 
 function CourseChapterPanel(props) {
@@ -30,9 +32,11 @@ function CourseChapterPanel(props) {
             const isActiveLesson = (lesson === props.activeLesson);
 
             return (
-                <ListItem selected={isActiveLesson} onClick={() => listItemClicked(lesson)} id={lesson.id} button>
-                    <ListItemText primary={lesson.title} />
-                </ListItem>
+                <span>
+                    <ListItem selected={isActiveLesson} onClick={() => listItemClicked(lesson)} id={lesson.id} button>
+                        <ListItemText primary={lesson.title} />
+                    </ListItem>
+                </span>
             )
         });
     } else {

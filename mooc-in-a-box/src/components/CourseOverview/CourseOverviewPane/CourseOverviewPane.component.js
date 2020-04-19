@@ -114,6 +114,8 @@ function CourseOverviewPane(props) {
                         prevChapter={prevChapter}
                         nextChapter={nextChapter}
                         lesson={props.activeLesson}
+                        editable={props.editable}
+                        openDeleteDialog={props.openDeleteDialog}
                     />
                     {addNewLessonButton}
                 </div> :

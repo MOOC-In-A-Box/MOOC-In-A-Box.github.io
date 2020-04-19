@@ -96,9 +96,17 @@ function CourseOverview(props) {
             await FirebaseService.deleteCourse(objToDelete);
             await props.updateCourses()
             await props.updateUser(props.user.id);
+            history.push('/courseLibrary');
+
+        } else if (deleteType === 'Lesson'){
+
+            await FirebaseService.deleteLesson(course, chapterInContext, objToDelete);
+            setActiveLesson();
+            setChapterInContext();
+            await props.updateCourses();
+            await props.updateUser(props.user.id);
         }
 
-        history.push('/courseLibrary');
         props.setDeletingCourse(false);
 
     }
@@ -238,7 +246,17 @@ function CourseOverview(props) {
                             />
                     </Grid>
                     <Grid item xs={9}>
-                        <CourseOverviewPane setActiveLesson={setActiveLesson} setChapterInContext={setChapterInContext} editable={props.editable} activeChapter={chapterInContext} activeLesson={activeLesson} course={course} openEditCourseOverviewDialog={openEditCourseOverviewDialog} openLessonModal={openCreateLessonDialog} />
+                        <CourseOverviewPane 
+                        setActiveLesson={setActiveLesson} 
+                        setChapterInContext={setChapterInContext} 
+                        editable={props.editable} 
+                        activeChapter={chapterInContext} 
+                        activeLesson={activeLesson} 
+                        course={course} 
+                        openEditCourseOverviewDialog={openEditCourseOverviewDialog} 
+                        openLessonModal={openCreateLessonDialog} 
+                        openDeleteDialog={openDeleteDialog}
+                        />
                     </Grid>
                     {viewPublishedCourseButton}
                 </Grid>
