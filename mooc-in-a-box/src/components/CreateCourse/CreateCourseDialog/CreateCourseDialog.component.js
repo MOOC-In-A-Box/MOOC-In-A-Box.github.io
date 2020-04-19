@@ -44,13 +44,11 @@ function CreateCourseDialog(props) {
     // const fileReader = new FileReader();
     // const name = target.accept.includes('image') ? 'images' : 'videos';
     const file = target.files[0];
-    console.log(file);
     setThumbnailFile(file);
   }
 
 
   function handleKeyCommand(command) {
-    console.log("In here: ", command);
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
@@ -100,7 +98,6 @@ function CreateCourseDialog(props) {
         overview: convertToRaw(currentContentState),
         thumbnailFile
       }
-      console.log(courseDetails);
       props.handleSubmit(courseDetails);
     }
   }

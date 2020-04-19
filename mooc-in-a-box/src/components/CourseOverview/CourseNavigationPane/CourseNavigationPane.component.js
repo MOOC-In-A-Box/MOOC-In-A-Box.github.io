@@ -36,7 +36,6 @@ function CourseNavigationPane(props) {
   }
 
   const openDeleteDialog = (e) => {
-    console.log("This is being called");
     props.openDeleteDialog("Course", props.course);
   }
 

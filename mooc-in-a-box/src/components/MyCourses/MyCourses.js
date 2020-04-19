@@ -91,7 +91,6 @@ function MyCourses(props) {
 
   React.useEffect(() => {
     setUser(props.user);
-
   }, [props]);
 
 
