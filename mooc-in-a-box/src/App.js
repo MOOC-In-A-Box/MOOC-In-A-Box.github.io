@@ -76,7 +76,8 @@ class App extends React.Component {
       currentUser: undefined,
       loadingUser: true,
       myCourseSelected: false,
-      allCoursesSelected: false
+      allCoursesSelected: false,
+      createCourseSelected: false,
     };
     this.fetchCourses = this.fetchCourses.bind(this);
     this.fetchUsers = this.fetchUsers.bind(this);
@@ -90,7 +91,7 @@ class App extends React.Component {
     });
   }
 
-  async updateUser(userId){
+  async updateUser(userId) {
     if (!userId) {
       this.setState({ currentUser: undefined });
       this.setState({ loadingUser: false });
@@ -151,9 +152,6 @@ class App extends React.Component {
         course.owner.get().then(user => {
           course.owner = user.data();
         })
-        // course.chapter.lessons.get().then(lesson => {
-        //   course.chapter.lessons = lesson.data();
-        // })
         course.id = courseId
         courses.push(course);
         this.setState({ courses: courses });
@@ -176,24 +174,35 @@ class App extends React.Component {
       })
   }
 
-  routeClicked(location){
+  routeClicked(location) {
     console.log("New Location: ", location);
-    if (location === "Course Library" && !this.state.allCoursesSelected){
+    if (location === "Course Library" && !this.state.allCoursesSelected) {
       this.setState({
         allCoursesSelected: true,
-        myCourseSelected: false
+        myCourseSelected: false,
+        createCourseSelected: false,
       })
-    } else if (location === "My Courses" && !this.state.myCourseSelected){
+    } else if (location === "My Courses" && !this.state.myCourseSelected) {
       this.setState({
         allCoursesSelected: false,
-        myCourseSelected: true
+        myCourseSelected: true,
+        createCourseSelected: false,
       })
-    } else if ( (location !== "Course Library" && location !== "My Courses") && (this.state.allCoursesSelected || this.state.myCourseSelected)){
+    } else if (location === "Create Course" && !this.state.createCourseSelected) {
       this.setState({
         allCoursesSelected: false,
-        myCourseSelected: false
+        myCourseSelected: false,
+        createCourseSelected: true,
+      })
+    } else if ((location !== "Course Library" && location !== "My Courses" && location !== "Create Course")
+      && (this.state.allCoursesSelected || this.state.myCourseSelected || this.state.createCourseSelected)) {
+      this.setState({
+        allCoursesSelected: false,
+        myCourseSelected: false,
+        createCourseSelected: false,
       })
     }
+
   }
 
   render() {
@@ -216,10 +225,10 @@ class App extends React.Component {
               <AppBar position="static">
                 <Toolbar>
                   <MuiThemeProvider theme={buttonTheme}>
-                    <Button variant="contained" color={ this.state.allCoursesSelected ? "secondary" : "primary"} className="menu-button main" component={RouterLink} to="/courseLibrary">All Courses</Button>
-                    <Button variant="contained" color={ this.state.myCourseSelected ? "secondary" : "primary"} className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
+                    <Button variant="contained" color={this.state.allCoursesSelected ? "secondary" : "primary"} className="menu-button main" component={RouterLink} to="/courseLibrary">All Courses</Button>
+                    <Button variant="contained" color={this.state.myCourseSelected ? "secondary" : "primary"} className="menu-button main" component={RouterLink} to="/myCourses">My Courses</Button>
+                    <Button variant="outlined" color={this.state.createCourseSelected ? "secondary" : "primary"} className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
                   </MuiThemeProvider>
-                    <Button variant="outlined" color="secondary" className="menu-button align-left" component={RouterLink} to="/createCourse">Create a Course</Button>
                   <IconButton className="menu-button profile-icon" component={RouterLink} to="/profile" color="inherit" aria-label="menu">
                     <AccountCircleIcon />
                   </IconButton>
@@ -237,7 +246,7 @@ class App extends React.Component {
                 <CourseLibrary routeClicked={this.routeClicked} courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser} />
               </PrivateRoute>
               <PrivateRoute path="/courseOverview/:id">
-                <CourseOverview routeClicked={this.routeClicked}  editable={false} user={this.state.currentUser}></CourseOverview>
+                <CourseOverview routeClicked={this.routeClicked} editable={false} user={this.state.currentUser}></CourseOverview>
               </PrivateRoute>
               <PrivateRoute path="/myCourses">
                 <MyCourses routeClicked={this.routeClicked} user={this.state.currentUser}></MyCourses>

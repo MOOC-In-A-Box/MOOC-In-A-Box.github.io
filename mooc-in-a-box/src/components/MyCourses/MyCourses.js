@@ -35,12 +35,6 @@ import CoursesDropdownComponent from '../CoursesDropdown/CoursesDropdown.compone
  * http://localhost:3000/courseOverview/rlfxOavBn4nPZLNTRMkL
  */
 
-/**
- * 
- * 
- */
-
-
 
 function generate(element) {
   return React.cloneElement(element, {
@@ -97,7 +91,6 @@ function MyCourses(props) {
 
   React.useEffect(() => {
     setUser(props.user);
-    console.log(props.user.createdCourses);
 
   }, [props]);
 
