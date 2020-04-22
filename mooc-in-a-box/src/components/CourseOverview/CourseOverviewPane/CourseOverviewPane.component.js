@@ -20,6 +20,12 @@ function CourseOverviewPane(props) {
 
     function navigateToNextLesson(lesson) {
         const indexOfCurrentLesson = props.activeChapter.lessons.indexOf(lesson);
+
+        const enrolledInCurrentCourse = props.user.enrolledCourses.find(course => {
+            return course.id === props.course.id;
+        })
+        if (enrolledInCurrentCourse) props.addCompletedLesson(props.activeChapter.lessons[indexOfCurrentLesson]);
+
         if (indexOfCurrentLesson !== props.activeChapter.lessons.length - 1) {
             props.setActiveLesson(props.activeChapter.lessons[indexOfCurrentLesson + 1]);
             return;
@@ -102,7 +108,7 @@ function CourseOverviewPane(props) {
         const enrolledInCurrentCourse = props.user.enrolledCourses.find(course => {
             return course.id === props.course.id;
         })
-        enrolledButtonText = "Unenroll";
+        enrolledButtonText = enrolledInCurrentCourse ? "Unenroll" : "Enroll";
     } else {
         enrolledButtonText = "Enroll";
     }

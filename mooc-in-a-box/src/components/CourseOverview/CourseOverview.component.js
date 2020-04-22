@@ -184,6 +184,12 @@ function CourseOverview(props) {
         props.updateUser(props.user.id);
     }
 
+    function addCompletedLesson(lesson) {
+        console.log(lesson)
+
+        // TODO(jessi): Add lesson to list of completed lessons in Firebase.
+    }
+
     useEffect(() => {
         if (id && !props.isDeletingCourse) {
             getCourseById(id);
@@ -250,6 +256,7 @@ function CourseOverview(props) {
                             editable={props.editable}
                             activeLesson={activeLesson}
                             setActiveLesson={setActiveLesson}
+                            addCompletedLesson={addCompletedLesson}
                             openLessonModal={openCreateLessonDialog}
                             chapterInContext={chapterInContext}
                             setChapterInContext={setChapterInContext}
@@ -262,6 +269,7 @@ function CourseOverview(props) {
                     <Grid item xs={9}>
                         <CourseOverviewPane
                             setActiveLesson={setActiveLesson}
+                            addCompletedLesson={addCompletedLesson}
                             setChapterInContext={setChapterInContext}
                             editable={props.editable}
                             user={props.user}
