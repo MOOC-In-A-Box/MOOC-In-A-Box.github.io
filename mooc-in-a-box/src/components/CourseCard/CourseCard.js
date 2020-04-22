@@ -52,7 +52,11 @@ const useStyles = makeStyles(theme => ({
   actionsRow: {
     position: 'absolute',
     bottom: 0,
-    left: 0
+    left: 0,
+
+    "& > *": {
+      width: '10em',
+    }
   },
   content: {
     overflow: 'hidden',
@@ -124,7 +128,7 @@ export default function CourseCard(props) {
           color="secondary"
           onClick={enrollClicked}
         >
-          {isEnrolled ? "Unenroll" : "Enroll"}
+          {isEnrolled ? "Continue" : "Enroll"}
         </Button>
       </CardActions>
     </Card>

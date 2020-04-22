@@ -1,14 +1,8 @@
 import React from 'react';
 import './CourseLibrary.css';
-import { Button } from '@material-ui/core';
 import CourseCard from '../CourseCard/CourseCard';
-import { render } from '@testing-library/react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { withRouter, Redirect } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
-import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
-import SearchBar from './CourseLibraryToolbar/SearchBar/SearchBar.component';
-import CourseLibraryMenu from './CourseLibraryToolbar/CourseLibraryToolbarMenu/CourseLibraryToolbarMenu.component'
 import CourseLibraryToolbar from './CourseLibraryToolbar/CourseLibraryToolbar.component'
 
 import * as FirebaseService from '../../service/firebase.service';
@@ -127,12 +121,12 @@ class CourseLibrary extends React.Component {
     }
 
     if (enrolled) {
-      await FirebaseService.unenrollInCourse(this.props.user, course);
+      this.props.history.push(`/courseOverview/${course.id}`);
+      // TODO(jessi): go to most recent lesson
     } else {
       await FirebaseService.enrollInCourse(this.props.user, course);
+      this.props.updateUser(this.props.user.id);
     }
-
-    this.props.updateUser(this.props.user.id);
   }
 
   buildMenuItems = () => {
@@ -273,4 +267,4 @@ class CourseLibrary extends React.Component {
   }
 }
 
-export default CourseLibrary;
+export default withRouter(CourseLibrary);
