@@ -412,7 +412,7 @@ export const deleteLesson = async (course, chapter, lesson) => {
             const lessonsRefs = [];
             chapterInside.lessonsRef.forEach(lessonRef => {
                 if (lessonRef.id !== lesson.id) {
-                    lessonsRefs.push(lesson);
+                    lessonsRefs.push(lessonRef);
                 }
             })
             chapterInside.lessonsRef = lessonsRefs;
@@ -420,7 +420,7 @@ export const deleteLesson = async (course, chapter, lesson) => {
             const lessons = []
             chapterInside.lessons.forEach(lessonInside => {
                 if (lessonInside.id !== lesson.id) {
-                    lessons.push(lesson);
+                    lessons.push(lessonInside);
                 }
             })
             chapterInside.lessons = lessons;

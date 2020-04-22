@@ -73,3 +73,11 @@ The deployment process is simple.
     * ```shell
         npm run deploy
         ```
+
+
+
+## Opening Issues / Feature Requests
+While this was a school project, if you like this and there are some enhancements you're interested in - feel free to add them under the [issues tab](https://github.com/MOOC-In-A-Box/MOOC-In-A-Box.github.io/issues).
+
+## Tracking Progress
+If you want to track what we were working on - check under the [projects tab](https://github.com/MOOC-In-A-Box/MOOC-In-A-Box.github.io/projects/1).
