@@ -1,12 +1,12 @@
 import React from 'react';
 import './CourseLibrary.css';
-import {Button} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import CourseCard from '../CourseCard/CourseCard';
 import { render } from '@testing-library/react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
-import {AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import SearchBar from './CourseLibraryToolbar/SearchBar/SearchBar.component';
 import CourseLibraryMenu from './CourseLibraryToolbar/CourseLibraryToolbarMenu/CourseLibraryToolbarMenu.component'
 import CourseLibraryToolbar from './CourseLibraryToolbar/CourseLibraryToolbar.component'
@@ -32,6 +32,7 @@ class CourseLibrary extends React.Component {
 
     this.buildMenuItems = this.buildMenuItems.bind(this);
     this.favoriteClicked = this.favoriteClicked.bind(this);
+    this.enrollClicked = this.enrollClicked.bind(this);
     this.removeFavoriteClicked = this.removeFavoriteClicked.bind(this);
     this.state = {
       searchValue: "",
@@ -40,20 +41,20 @@ class CourseLibrary extends React.Component {
       organizationElement: null,
       sortFilterValue: null,
       topicFilterValue: null,
-      organizationFilterValue:null,
+      organizationFilterValue: null,
       activeCourses: props.courses
     }
     props.routeClicked("Course Library");
   }
 
   /** Search Function */
-  handleSearchChange(e){
+  handleSearchChange(e) {
     const searchValue = e.target.value;
     const searchValueLowerCase = searchValue.toLowerCase();
-    const activeCourses = this.props.courses.filter(course => 
-      ( course.title?.toLowerCase().includes(searchValueLowerCase) 
-      || course.description?.toLowerCase().includes(searchValueLowerCase) 
-      || course.owner.displayName?.toLowerCase().includes(searchValueLowerCase) 
+    const activeCourses = this.props.courses.filter(course =>
+      (course.title?.toLowerCase().includes(searchValueLowerCase)
+        || course.description?.toLowerCase().includes(searchValueLowerCase)
+        || course.owner.displayName?.toLowerCase().includes(searchValueLowerCase)
       ))
     this.setState({
       searchValue,
@@ -61,7 +62,7 @@ class CourseLibrary extends React.Component {
     })
   }
 
-  handleSearchClicked(e){
+  handleSearchClicked(e) {
   }
 
   /** Sort By Functions */
@@ -112,10 +113,26 @@ class CourseLibrary extends React.Component {
     this.props.updateUser(this.props.user.id)
   }
 
-  async removeFavoriteClicked(course){
+  async removeFavoriteClicked(course) {
     await FirebaseService.removeFavoriteCourse(this.props.user, course);
     this.props.updateUser(this.props.user.id)
+  }
 
+  async enrollClicked(course) {
+    let enrolled = false;
+    if (this.props.user.enrolledCourses) {
+      enrolled = this.props.user.enrolledCourses.find(c => {
+        return c.id === course.id;
+      })
+    }
+
+    if (enrolled) {
+      await FirebaseService.unenrollInCourse(this.props.user, course);
+    } else {
+      await FirebaseService.enrollInCourse(this.props.user, course);
+    }
+
+    this.props.updateUser(this.props.user.id);
   }
 
   buildMenuItems = () => {
@@ -130,15 +147,15 @@ class CourseLibrary extends React.Component {
       menuOptions: [
         {
           display: "Newest",
-          associatedClickFunction:  this.sortByHandleClose
+          associatedClickFunction: this.sortByHandleClose
         },
         {
           display: "Recommended",
-          associatedClickFunction:  this.sortByHandleClose
+          associatedClickFunction: this.sortByHandleClose
         },
         {
           display: "Trending",
-          associatedClickFunction:  this.sortByHandleClose
+          associatedClickFunction: this.sortByHandleClose
         }
       ]
     }
@@ -154,19 +171,19 @@ class CourseLibrary extends React.Component {
       menuOptions: [
         {
           display: "Science",
-          associatedClickFunction:  this.topicHandleClose
+          associatedClickFunction: this.topicHandleClose
         },
         {
           display: "Technology",
-          associatedClickFunction:  this.topicHandleClose
+          associatedClickFunction: this.topicHandleClose
         },
         {
           display: "History",
-          associatedClickFunction:  this.topicHandleClose
+          associatedClickFunction: this.topicHandleClose
         },
         {
           display: "Arts",
-          associatedClickFunction:  this.topicHandleClose
+          associatedClickFunction: this.topicHandleClose
         }
       ]
     }
@@ -182,15 +199,15 @@ class CourseLibrary extends React.Component {
       menuOptions: [
         {
           display: "Required",
-          associatedClickFunction:  this.organizationHandleClosed
+          associatedClickFunction: this.organizationHandleClosed
         },
         {
           display: "Recommended",
-          associatedClickFunction:  this.organizationHandleClosed
+          associatedClickFunction: this.organizationHandleClosed
         },
         {
           display: "All Courses",
-          associatedClickFunction:  this.organizationHandleClosed
+          associatedClickFunction: this.organizationHandleClosed
         }
       ]
     }
@@ -199,14 +216,21 @@ class CourseLibrary extends React.Component {
   }
 
   isCourseAFavorite = (user, course) => {
-    
-    if( user.favoritedCourses && user.favoritedCourses.length > 0 ){
+
+    if (user.favoritedCourses && user.favoritedCourses.length > 0) {
       return user.favoritedCourses
         .find(favoritedCourse => favoritedCourse.id === course.id);
     }
     return false;
   }
 
+  isCourseEnrolled = (user, course) => {
+
+    if (user.enrolledCourses && user.enrolledCourses.length > 0) {
+      return user.enrolledCourses.find(c => c.id === course.id);
+    }
+    return false;
+  }
 
   render() {
     // Mappings
@@ -214,6 +238,8 @@ class CourseLibrary extends React.Component {
     const favoriteClicked = this.favoriteClicked;
     const isCourseAFavorite = this.isCourseAFavorite;
     const removeFavoriteClicked = this.removeFavoriteClicked
+    const enrollClicked = this.enrollClicked;
+    const isCourseEnrolled = this.isCourseEnrolled;
 
     const user = this.props.user;
     const searchInfo = {
@@ -224,26 +250,26 @@ class CourseLibrary extends React.Component {
     let listItems = []
     if (user) {
 
-      listItems = this.state.activeCourses.map(function(item) {
+      listItems = this.state.activeCourses.map(function (item) {
         return (
-            <Grid item s={4}>
-              <CourseCard course={item} favoriteClicked={favoriteClicked} removeFavoriteClicked={removeFavoriteClicked} isCourseAFavorite={isCourseAFavorite(user, item)}></CourseCard>
-            </Grid>
+          <Grid item s={4}>
+            <CourseCard course={item} enrollClicked={enrollClicked} isCourseEnrolled={isCourseEnrolled(user, item)} favoriteClicked={favoriteClicked} removeFavoriteClicked={removeFavoriteClicked} isCourseAFavorite={isCourseAFavorite(user, item)}></CourseCard>
+          </Grid>
         );
       });
     }
-    
+
     return (
       <div class="course-library">
         <CourseLibraryToolbar menuItems={menuItems} searchInfo={searchInfo}></CourseLibraryToolbar>
-          <div className="course-list">
+        <div className="course-list">
           <Grid container spacing={3}>
             {listItems}
           </Grid>
-          </div>
+        </div>
       </div>
 
-      );
+    );
   }
 }
 

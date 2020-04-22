@@ -1,7 +1,7 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import CourseLesson from './CourseLesson/CourseLesson.component';
-import { Button, IconButton } from '@material-ui/core';
+import { Button, IconButton, useRadioGroup } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertFromRaw, ContentState } from "draft-js";
@@ -54,7 +54,7 @@ function CourseOverviewPane(props) {
     let openEditCourseOverviewDialogButton;
     let editLessonButton;
     if (props.editable) {
-        openEditCourseOverviewDialogButton = <Button onClick={props.openEditCourseOverviewDialog} color="secondary" variant="contained"> Edit Course Information </Button>
+        openEditCourseOverviewDialogButton = <IconButton variant="contained" onClick={props.openEditCourseOverviewDialog} color="secondary" id="edit-lesson"> <EditIcon /> </IconButton>
         editLessonButton = <IconButton variant="contained" onClick={openLessonModal} color="secondary" id="edit-lesson"> <EditIcon /> </IconButton>
     }
 
@@ -97,6 +97,16 @@ function CourseOverviewPane(props) {
         return [prevLesson, nextLesson, prevChapter, nextChapter]
     }
 
+    let enrolledButtonText;
+    if (props.user.enrolledCourses && props.user.enrolledCourses.length > 0) {
+        const enrolledInCurrentCourse = props.user.enrolledCourses.find(course => {
+            return course.id === props.course.id;
+        })
+        enrolledButtonText = "Unenroll";
+    } else {
+        enrolledButtonText = "Enroll";
+    }
+
 
     let prevLesson, nextLesson, prevChapter, nextChapter = false;
     if (props.activeLesson) {
@@ -121,8 +131,9 @@ function CourseOverviewPane(props) {
                     />
                 </div> :
                 <div>
-                    {content}
                     {openEditCourseOverviewDialogButton}
+                    {content}
+                    <Button onClick={props.enrollInCourse} color="secondary" variant="contained"> {enrolledButtonText} </Button>
                 </div>
             }
         </Paper>

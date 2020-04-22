@@ -112,8 +112,8 @@ class App extends React.Component {
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
 
-        if (user.pastCoursesRefs && user.pastCoursesRefs.length > 0) {
-          user.pastCourses = user.pastCoursesRefs
+        if (user.enrolledCoursesRefs && user.enrolledCoursesRefs.length > 0) {
+          user.enrolledCourses = user.enrolledCoursesRefs
             .map(courseRef => this.state.courses.find(course => course.id === courseRef.id));
         }
 
@@ -184,7 +184,6 @@ class App extends React.Component {
   }
 
   routeClicked(location) {
-    console.log("New Location: ", location);
     if (location === "Course Library" && !this.state.allCoursesSelected) {
       this.setState({
         allCoursesSelected: true,

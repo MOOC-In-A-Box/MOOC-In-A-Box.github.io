@@ -167,6 +167,23 @@ function CourseOverview(props) {
         setCourse(course);
     }
 
+    async function enrollInCourse() {
+        let enrolled = false;
+        if (props.user.enrolledCourses) {
+            enrolled = props.user.enrolledCourses.find(c => {
+                return c.id === course.id;
+            })
+        }
+
+        if (enrolled) {
+            await FirebaseService.unenrollInCourse(props.user, course);
+        } else {
+            await FirebaseService.enrollInCourse(props.user, course);
+        }
+
+        props.updateUser(props.user.id);
+    }
+
     useEffect(() => {
         if (id && !props.isDeletingCourse) {
             getCourseById(id);
@@ -247,12 +264,14 @@ function CourseOverview(props) {
                             setActiveLesson={setActiveLesson}
                             setChapterInContext={setChapterInContext}
                             editable={props.editable}
+                            user={props.user}
                             activeChapter={chapterInContext}
                             activeLesson={activeLesson}
                             course={course}
                             openEditCourseOverviewDialog={openEditCourseOverviewDialog}
                             openLessonModal={openCreateLessonDialog}
                             openDeleteDialog={openDeleteDialog}
+                            enrollInCourse={enrollInCourse}
                         />
                     </Grid>
                 </Grid>

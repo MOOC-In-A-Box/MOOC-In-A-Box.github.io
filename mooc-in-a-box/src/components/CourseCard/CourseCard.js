@@ -65,17 +65,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function CourseCard(props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
   const [isFavorited, setIsFavorited] = React.useState(false)
+  const [isEnrolled, setisEnrolled] = React.useState(false)
 
   if (props.isCourseAFavorite != isFavorited) {
     setIsFavorited(props.isCourseAFavorite);
   }
 
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  if (props.isCourseEnrolled != isEnrolled) {
+    setisEnrolled(props.isCourseEnrolled);
+  }
 
   const favoriteButtonClicked = () => {
     if (isFavorited) {
@@ -85,8 +84,11 @@ export default function CourseCard(props) {
       setIsFavorited(true);
       props.favoriteClicked(props.course);
     }
-
   }
+
+  const enrollClicked = () => {
+    props.enrollClicked(props.course);
+  };
 
   return (
     <Card variant="outlined" className={classes.root}>
@@ -116,6 +118,13 @@ export default function CourseCard(props) {
           to={`/courseOverview/${props.course.id}`}
         >
           Overview
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={enrollClicked}
+        >
+          {isEnrolled ? "Unenroll" : "Enroll"}
         </Button>
       </CardActions>
     </Card>

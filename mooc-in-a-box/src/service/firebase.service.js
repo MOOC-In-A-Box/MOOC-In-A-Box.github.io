@@ -142,26 +142,26 @@ export const createCourse = async (user, courseInfo) => {
 
 
             // Check If Image Was Included
-            if(courseInfo.thumbnailFile){
+            if (courseInfo.thumbnailFile) {
                 // Upload Image
                 return await addImage(courseDoc.id, courseInfo.thumbnailFile)
-                    .then( async imageRef => {
+                    .then(async imageRef => {
 
-                       return await getImageUrl(courseDoc.id, courseInfo.thumbnailFile)
-                        .then( async imageUrl => {
-                            const courseUpdate = {
-                                thumbnailUrl: imageUrl
-                            };
+                        return await getImageUrl(courseDoc.id, courseInfo.thumbnailFile)
+                            .then(async imageUrl => {
+                                const courseUpdate = {
+                                    thumbnailUrl: imageUrl
+                                };
 
-                            return await updateCourse(courseDoc.id, courseUpdate )
-                                .then( async courseDocWithImage => {                                                                
-                                    const updateObject = {
-                                        createdCoursesRefs: usersCreatedCourses
-                                    }
+                                return await updateCourse(courseDoc.id, courseUpdate)
+                                    .then(async courseDocWithImage => {
+                                        const updateObject = {
+                                            createdCoursesRefs: usersCreatedCourses
+                                        }
 
-                                return await updateUser(user.id, updateObject);
+                                        return await updateUser(user.id, updateObject);
+                                    })
                             })
-                        })
                     });
             } else {
                 // No Image
@@ -202,28 +202,57 @@ export const removeFavoriteCourse = async (user, courseInfo) => {
 }
 
 
+export const enrollInCourse = async (user, courseInfo) => {
+    const courseRef = db.doc(`Course/${courseInfo.id}`)
+    let enrolledCourses;
+
+    if (user.enrolledCoursesRefs && user.enrolledCoursesRefs.length > 0) {
+        enrolledCourses = user.enrolledCoursesRefs;
+    } else {
+        enrolledCourses = []
+    }
+
+    enrolledCourses.push(courseRef);
+
+    const updateObject = {
+        enrolledCoursesRefs: enrolledCourses
+    }
+
+    return await updateUser(user.id, updateObject);
+}
+
+export const unenrollInCourse = async (user, courseInfo) => {
+    const enrolledCourses = user.enrolledCoursesRefs.filter(item => item.id !== courseInfo.id);
+    const updateObject = {
+        enrolledCoursesRefs: enrolledCourses
+    }
+
+    return await updateUser(user.id, updateObject);
+}
+
+
 export const updateCourse = async (courseId, updates) => {
 
     if (updates.overview) {
         updates.overview = JSON.stringify(updates.overview);
     }
 
-    if( updates.thumbnailFile) {
+    if (updates.thumbnailFile) {
         return await addImage(courseId, updates.thumbnailFile)
-            .then( async imageRef => {
+            .then(async imageRef => {
 
-           return await getImageUrl(courseId, updates.thumbnailFile)
-            .then( async imageUrl => {
+                return await getImageUrl(courseId, updates.thumbnailFile)
+                    .then(async imageUrl => {
 
-                delete updates.thumbnailFile;
-                updates.thumbnailUrl = imageUrl
+                        delete updates.thumbnailFile;
+                        updates.thumbnailUrl = imageUrl
 
-                return db.collection('Course')
-                .doc(courseId)
-                .set(updates, { merge: true });
+                        return db.collection('Course')
+                            .doc(courseId)
+                            .set(updates, { merge: true });
+                    })
             })
-        })
-    } else{ 
+    } else {
         return db.collection('Course')
             .doc(courseId)
             .set(updates, { merge: true });
@@ -233,7 +262,7 @@ export const updateCourse = async (courseId, updates) => {
 
 const deleteCourseInFirebase = async (courseId) => {
 
-    return db.collection('Course').doc(courseId).delete().then( async courseDeletedResult => {
+    return db.collection('Course').doc(courseId).delete().then(async courseDeletedResult => {
         return await getAllUsers().then(async (queryResults) => {
             const updateUsersPromises = []
 
@@ -243,25 +272,25 @@ const deleteCourseInFirebase = async (courseId) => {
                 user.id = doc.id;
                 // const createdCoursesRefLength =  user.createdCoursesRefs?.length();
                 // const favoritedCourseRefs = user.favoritedCoursesRefs?.length();
-                
-                if(user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
-                    const createdCoursesRefLength =  user.createdCoursesRefs.length;
-                    user.createdCoursesRefs = user.createdCoursesRefs.filter( courseRef => courseRef.id !== courseId );
-                    if (user.createdCoursesRefs.length !== createdCoursesRefLength){
+
+                if (user.createdCoursesRefs && user.createdCoursesRefs.length > 0) {
+                    const createdCoursesRefLength = user.createdCoursesRefs.length;
+                    user.createdCoursesRefs = user.createdCoursesRefs.filter(courseRef => courseRef.id !== courseId);
+                    if (user.createdCoursesRefs.length !== createdCoursesRefLength) {
                         updateUser = true;
                     }
                 }
 
-                if(user.favoritedCourseRefs && user.favoritedCourseRefs.length > 0){
+                if (user.favoritedCourseRefs && user.favoritedCourseRefs.length > 0) {
                     const favoritedCourseRefs = user.favoritedCoursesRefs.length;
-                    user.favoritedCourseRefs = user.favoritedCoursesRefs.filter( courseRef => courseRef.id !== courseId);
+                    user.favoritedCourseRefs = user.favoritedCoursesRefs.filter(courseRef => courseRef.id !== courseId);
                     if (user.favoritedCourseRefs.length !== favoritedCourseRefs) {
                         updateUser = true;
                     }
                 }
-        
-                if (updateUser){
-                    updateUsersPromises.push( db.collection('Users').doc(user.id).set(user, { merge: true }) );
+
+                if (updateUser) {
+                    updateUsersPromises.push(db.collection('Users').doc(user.id).set(user, { merge: true }));
                 }
             })
 
@@ -271,16 +300,16 @@ const deleteCourseInFirebase = async (courseId) => {
 }
 
 
-const deleteAllChapters= async (course) => {
+const deleteAllChapters = async (course) => {
     const arrayOfLessonPromises = [];
     let deleteLessons = false;
     for (const chapter of course.chapters) {
-        if (chapter.lessonsRef?.length > 0){
+        if (chapter.lessonsRef?.length > 0) {
             deleteLessons = true;
             break;
         }
     }
-    if (deleteLessons){
+    if (deleteLessons) {
         // var batch = firebase.firestore().batch()
 
         db.collection(`/Course/${course.id}/Lessons`).get()
@@ -288,15 +317,15 @@ const deleteAllChapters= async (course) => {
                 // values.map(val => {
                 //     batch.delete(val)
                 // })
-                queryResults.forEach( doc => {
+                queryResults.forEach(doc => {
                     arrayOfLessonPromises.push(
                         db.collection(`/Course/${course.id}/Lessons/`).doc(doc.id).delete()
                     )
                 })
             })
-        
-            return await Promise.all(arrayOfLessonPromises);
-        }
+
+        return await Promise.all(arrayOfLessonPromises);
+    }
 }
 
 // const deleteChapter = async (course, chapter) => {
@@ -307,7 +336,7 @@ const deleteAllChapters= async (course) => {
 
 export const deleteCourse = async (course) => {
 
-    if (course.chapters?.length > 0 ){
+    if (course.chapters?.length > 0) {
         await deleteAllChapters(course)
     }
     return await deleteCourseInFirebase(course.id);
@@ -378,19 +407,19 @@ export const updateLesson = async (course, chapterInfo, lessonInfo, add) => {
 
 export const deleteLesson = async (course, chapter, lesson) => {
 
-    const courseChapters = course.chapters.map( chapterInside => {
-        if (chapterInside.title === chapter.title ) {
+    const courseChapters = course.chapters.map(chapterInside => {
+        if (chapterInside.title === chapter.title) {
             const lessonsRefs = [];
-            chapterInside.lessonsRef.forEach( lessonRef => {
-                if (lessonRef.id !== lesson.id){
+            chapterInside.lessonsRef.forEach(lessonRef => {
+                if (lessonRef.id !== lesson.id) {
                     lessonsRefs.push(lesson);
                 }
             })
             chapterInside.lessonsRef = lessonsRefs;
 
             const lessons = []
-            chapterInside.lessons.forEach( lessonInside => {
-                if (lessonInside.id !== lesson.id){
+            chapterInside.lessons.forEach(lessonInside => {
+                if (lessonInside.id !== lesson.id) {
                     lessons.push(lesson);
                 }
             })
@@ -405,7 +434,7 @@ export const deleteLesson = async (course, chapter, lesson) => {
             chapters: courseChapters
         });
     });
-  
+
 }
 
 
