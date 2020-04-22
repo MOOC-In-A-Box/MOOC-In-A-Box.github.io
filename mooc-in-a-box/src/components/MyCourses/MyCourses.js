@@ -54,11 +54,11 @@ function CurrentCoursesComponent(props) {
 }
 
 
-function PastCoursesComponent(props) {
+function EnrolledCoursesComponent(props) {
   return (
     <div>
-      <h2> Past Courses </h2>
-      <CoursesDropdownComponent courses={props.pastCourses}></CoursesDropdownComponent>
+      <h2> Current Courses </h2>
+      <CoursesDropdownComponent courses={props.enrolledCourses}></CoursesDropdownComponent>
     </div>
   )
 }
@@ -105,8 +105,8 @@ function MyCourses(props) {
       hasCourses = true;
     }
 
-    if (user.pastCourses && user.pastCourse.length > 0) {
-      const element = <PastCoursesComponent pastCourses={user.pastCourses}></PastCoursesComponent>
+    if (user.enrolledCourses && user.enrolledCourses.length > 0) {
+      const element = <EnrolledCoursesComponent enrolledCourses={user.enrolledCourses}></EnrolledCoursesComponent>
       courseComponentList.push(element);
       hasCourses = true;
 
