@@ -289,6 +289,14 @@ const deleteCourseInFirebase = async (courseId) => {
                     }
                 }
 
+                if (user.enrolledCourseRefs && user.enrolledCourseRefs.length > 0) {
+                    const enrolledCourseRefs = user.enrolledCoursesRefs.length;
+                    user.enrolledCourseRefs = user.enrolledCoursesRefs.filter(courseRef => courseRef.id !== courseId);
+                    if (user.enrolledCourseRefs.length !== enrolledCourseRefs) {
+                        updateUser = true;
+                    }
+                }
+
                 if (updateUser) {
                     updateUsersPromises.push(db.collection('Users').doc(user.id).set(user, { merge: true }));
                 }

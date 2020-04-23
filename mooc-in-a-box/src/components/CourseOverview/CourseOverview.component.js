@@ -185,8 +185,6 @@ function CourseOverview(props) {
     }
 
     function addCompletedLesson(lesson) {
-        console.log(lesson)
-
         // TODO(jessi): Add lesson to list of completed lessons in Firebase.
     }
 
