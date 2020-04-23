@@ -254,7 +254,7 @@ class App extends React.Component {
                 <CourseLibrary routeClicked={this.routeClicked} courses={this.state.courses} user={this.state.currentUser} updateUser={this.updateUser} />
               </PrivateRoute>
               <PrivateRoute path="/courseOverview/:id">
-                <CourseOverview routeClicked={this.routeClicked} editable={false} user={this.state.currentUser}></CourseOverview>
+                <CourseOverview routeClicked={this.routeClicked} editable={false} user={this.state.currentUser} updateUser={this.updateUser}></CourseOverview>
               </PrivateRoute>
               <PrivateRoute path="/myCourses">
                 <MyCourses routeClicked={this.routeClicked} user={this.state.currentUser}></MyCourses>

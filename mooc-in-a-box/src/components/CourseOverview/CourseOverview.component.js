@@ -181,7 +181,7 @@ function CourseOverview(props) {
             await FirebaseService.enrollInCourse(props.user, course);
         }
 
-        props.updateUser(props.user.id);
+        await props.updateUser(props.user.id);
     }
 
     function addCompletedLesson(lesson) {
