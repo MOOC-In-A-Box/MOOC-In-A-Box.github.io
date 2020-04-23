@@ -281,18 +281,18 @@ const deleteCourseInFirebase = async (courseId) => {
                     }
                 }
 
-                if (user.favoritedCourseRefs && user.favoritedCourseRefs.length > 0) {
+                if (user.favoritedCoursesRefs && user.favoritedCoursesRefs.length > 0) {
                     const favoritedCourseRefs = user.favoritedCoursesRefs.length;
-                    user.favoritedCourseRefs = user.favoritedCoursesRefs.filter(courseRef => courseRef.id !== courseId);
-                    if (user.favoritedCourseRefs.length !== favoritedCourseRefs) {
+                    user.favoritedCoursesRefs = user.favoritedCoursesRefs.filter(courseRef => courseRef.id !== courseId);
+                    if (user.favoritedCoursesRefs.length !== favoritedCourseRefs) {
                         updateUser = true;
                     }
                 }
 
-                if (user.enrolledCourseRefs && user.enrolledCourseRefs.length > 0) {
-                    const enrolledCourseRefs = user.enrolledCoursesRefs.length;
-                    user.enrolledCourseRefs = user.enrolledCoursesRefs.filter(courseRef => courseRef.id !== courseId);
-                    if (user.enrolledCourseRefs.length !== enrolledCourseRefs) {
+                if (user.enrolledCoursesRefs && user.enrolledCoursesRefs.length > 0) {
+                    const enrolledCoursesRefs = user.enrolledCoursesRefs.length;
+                    user.enrolledCoursesRefs = user.enrolledCoursesRefs.filter(courseRef => courseRef.id !== courseId);
+                    if (user.enrolledCoursesRefs.length !== enrolledCoursesRefs) {
                         updateUser = true;
                     }
                 }
